@@ -7,14 +7,9 @@
 #include <avr/io.h>
 #include <util/delay.h>
 
-#define PINTO 3
-
 void main(){
-	PORTA.DIR |= (1 << PINTO);
-	while(1){
-		//DDxn 1, PORTxn 0 || 1, idc
-		PORTA.OUT ^=(1 << PINTO);
+	DDRA |= (1 << PA0);
 
-		_delay_ms(500);
-	}
+	//DDxn 1, PORTxn 0 || 1, idc
+	PORTA |= (1 << PA0) ;
 }
