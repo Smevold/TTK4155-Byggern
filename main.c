@@ -1,5 +1,3 @@
-#include<avr/io.h>
-#include<util/delay.h>
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -7,7 +5,8 @@
 #define UART_BAUDRATE 9600
 #define BAUD_PRESCALE (((F_CPU / (UART_BAUDRATE * 16UL))) - 1)	
 
-
+#include<avr/io.h>
+#include<util/delay.h>
 
 void UART_Init( unsigned int ubrr)
 {
@@ -21,7 +20,7 @@ void UART_Init( unsigned int ubrr)
     
     UCSRC = (1 << URSEL) | (1 << UCSZO) | (3 << UCSZ0);
 }
-void UART_Transicver ( unsigned char data )
+void UART_Transmitter ( unsigned char data )
 {
     // Data register empty
     while ( !(UCSRA &(1 << UDRE)) )
@@ -30,18 +29,18 @@ void UART_Transicver ( unsigned char data )
     UDR = data; 
 }
 
-void UART_Receiver()
+unsigned char UART_Receiver()
 {
-    while (( UCSRA &(1 << RXC)) == 0); // wait for data
+    while (( UCSRA & (1 << RXC)) == 0); // wait for data
     return (UDR);
 }
-void send (char *str)
+void UART_SendString (char *str)
 {
     unsigned char j = 0;
 
-    while (str[j]! = 0)
+    while (str[j] != 0)
     {
-        UART_Transicver(str[j]);
+        UART_Transmitter(str[j]);
         j++;
     }
 }
