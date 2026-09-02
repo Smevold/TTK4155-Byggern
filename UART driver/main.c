@@ -19,9 +19,9 @@ void UART_Init( unsigned int ubrr)
 
     // fram = 8 data, 2 stop
     
-    UCSRC = (1 << URSEL0) | (1 << USB0) | (3 << UCSZ00);
+    UCSRC = (1 << URSEL) | (1 << USBS) | (3 << UCSZ0);
 }
-void UART_Transicver ( unsigned char dataL)
+void UART_Transicver ( unsigned char data)
 {
     // Data register empty
     while ( !(UCSRA &(1 << UDRE)) )
