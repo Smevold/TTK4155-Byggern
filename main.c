@@ -48,24 +48,20 @@ void UART_Send (char *str)
     }
 }
 
-void UART_Printf() {
-    fdevopen(&UART_Transmitter, &UART_Receiver);
-}
-
 void main (void)
 {
-    char c = 'c';
+    //char c = 'c';
     
     UART_Init (BAUD_PRESCALE);
-    UART_Printf();
-
+    fdevopen(UART_Transmitter, UART_Receiver);
     
     while (1)
     {
         //UART_Send("\n\t E");
         //c = UART_Receiver();
         //UART_Transmitter(c); 
-        printf(c);
+        printf("Hello");
+        
         _delay_ms(100);
     }
 
