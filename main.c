@@ -11,7 +11,7 @@
 
 void UART_Init( unsigned int ubrr)
 {
-    UBRR0H = (uns>>>>>>> ebcd8f178575c7adf84f2afc26bd021f91601408igned char)(ubrr>>8);
+    UBRR0H = (unsigned char)(ubrr>>8);
     UBRR0L = (unsigned char) ubrr;
     //Transmit enable
     // receiver enable
