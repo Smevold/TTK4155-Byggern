@@ -19,9 +19,9 @@ void UART_Init( unsigned int ubrr)
 
     // fram = 8 data, 2 stop
     
-    UCSRC = (1 << URSEL) | (1 << UCSZO) | (3 << UCSZ0);
+    UCSRC = (1 << URSEL0) | (1 << USB0) | (3 << UCSZ00);
 }
-void UART_Transicver ( unsigned char data )
+void UART_Transicver ( unsigned char dataL)
 {
     // Data register empty
     while ( !(UCSRA &(1 << UDRE)) )
@@ -35,17 +35,17 @@ void UART_Receiver()
     while (( UCSRA &(1 << RXC)) == 0); // wait for data
     return (UDR);
 }
+
 void send (char *str)
 {
     unsigned char j = 0;
 
-    while (str[j]! = 0)
+    while (str[j] != 0)
     {
         UART_Transicver(str[j]);
         j++;
     }
 }
-
 
 void main (void)
 {
