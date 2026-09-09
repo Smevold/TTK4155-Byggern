@@ -23,6 +23,8 @@ OBJECT_FILES = $(SOURCE_FILES:%.c=$(BUILD_DIR)/%.o)
 
 $(BUILD_DIR):
 	mkdir $(BUILD_DIR)
+	mkdir $(BUILD_DIR)/tests
+	mkdir $(BUILD_DIR)/Drivers
 
 $(BUILD_DIR)/%.o: %.c | $(BUILD_DIR)
 	$(CC) $(CFLAGS) -c $< -o $@

@@ -11,7 +11,7 @@
 #include "tests/sram_test.h"
 
 void pin_init(){
-    //MCUCR = (1 << SRE);
+    MCUCR = (1 << SRE);
     DDRA = 0b11111111;
     DDRA |= (1 << DDA3) | (1 << DDA2) | (1 << DDA1) | (1 << DDA0);
     DDRE |= (1 << DDE1);
