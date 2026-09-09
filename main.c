@@ -6,63 +6,35 @@
 #include <stdio.h>
 
 #define UART_BAUDRATE 9600
-#define BAUD_PRESCALE (((F_CPU / (UART_BAUDRATE * 16UL))) - 1)	
+#define BAUD_PRESCALE (((F_CPU / (UART_BAUDRATE * 16UL))) - 1)
 
-
-void UART_Init( unsigned int ubrr)
-{
-    UBRR0H = (unsigned char)(ubrr>>8);
-    UBRR0L = (unsigned char) ubrr;
-    //Transmit enable
-    // receiver enable
-    UCSR0B = (1 << RXEN0)|(1 << TXEN0);
-
-    // frame = 8 data, 2 stop
-    
-    UCSR0C = (1 << URSEL0) | (1 << USBS0) | (3 << UCSZ00);
+void pin_init(){
+    //MCUCR = (1 << SRE);
+    DDRA = (1 << DDA7) | (1 << DDA6) | (1 << DDA5) | (1 << DDA4) | (1 << DDA3) | (1 << DDA2) | (1 << DDA1) | (1 << DDA0);
+    DDRE |= (1 << DDE1);
+   
 }
 
-void UART_Transmitter( unsigned char data)
-{
-    // Data register empty
-    while ( !(UCSR0A &(1 << UDRE0)) );
-
-    // UDR to transfer to transmit data buffer reg
-    UDR0 = data; 
+void pin_set(){
+    PORTA = (1 << PA7) | (1 << PA6) | (1 << PA5) | (1 << PA4) | (1 << PA3) | (1 << PA2) | (1 << PA1) | (1 << PA0);
+   // PORTE = (1 << PE1);
 }
 
-unsigned char UART_Receiver()
-{
-    while (( UCSR0A &(1 << RXC0)) == 0); // wait for data
-    return (UDR0);
-}
+void main(){
+    pin_init();
+    pin_set();
 
-void UART_Send (char *str)
-{
-    unsigned char j = 0;
-
-    while (str[j] != 0)
-    {
-        UART_Transmitter(str[j]);
-        j++;
+    while(1){
+        PORTE |= (1 << PE1);
+        PORTA = 0b11110000;
+        PORTE &= (0 << PE1);
+        //PORTA = (1 << PA7) | (1 << PA6) | (1 << PA5) | (1 << PA4) | (1 << PA3) | (1 << PA2) | (1 << PA1) | (1 << PA0);
+        _delay_ms(1000);
+        //PORTA = (0 << PA7) | (0 << PA6) | (0 << PA5) | (0 << PA4) | (0 << PA3) | (0 << PA2) | (0 << PA1) | (0 << PA0);
+        //_delay_ms(1000);
+        PORTE |= (1 << PE1);
+        PORTA = 0b00001111;
+        PORTE &= (0 << PE1);
+        _delay_ms(1000);
     }
-}
-
-void main (void)
-{
-    //char c = 'c';
-    
-    UART_Init (BAUD_PRESCALE);
-    fdevopen(UART_Transmitter, UART_Receiver);
-    
-    while (1)
-    {
-        //UART_Send("\n\t E");
-        //c = UART_Receiver();
-        //UART_Transmitter(c); 
-        printf("Hello");
-        
-        _delay_ms(100);
-    }
-
 }
