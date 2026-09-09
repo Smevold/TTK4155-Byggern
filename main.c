@@ -1,4 +1,4 @@
-#define F_CPU 4915200UL		/* Define frequency here its 8MHz */
+#define F_CPU 4915200UL
 
 #include<avr/io.h>
 #include<util/delay.h>
@@ -12,7 +12,7 @@
 #include "Drivers/UART_driver.h"
 
 void pin_init(){
-    MCUCR = (1 << SRE);
+    MCUCR |= (1 << SRE);
     //DDRA = 0b11111111;
     //DDRA |= (1 << DDA3) | (1 << DDA2) | (1 << DDA1) | (1 << DDA0);
     //DDRE |= (1 << DDE1);
