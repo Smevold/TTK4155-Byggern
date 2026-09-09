@@ -1,3 +1,5 @@
+#include "UART_driver.h"
+
 #define F_CPU 4915200UL		/* Define frequency here its 8MHz */
 
 #include<avr/io.h>
@@ -48,6 +50,7 @@ void UART_Send (char *str)
     }
 }
 
+/*
 void main (void)
 {
     char c;
@@ -69,3 +72,4 @@ void main (void)
     }
 
 }
+*/

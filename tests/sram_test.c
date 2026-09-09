@@ -1,5 +1,8 @@
+#include <stdint.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include "sram_test.h"
+#include "../Drivers/UART_driver.h"
 
 void SRAM_test(void)
     {
