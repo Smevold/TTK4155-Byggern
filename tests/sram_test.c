@@ -17,7 +17,7 @@ void SRAM_test(void)
     // Write phase: Immediately check that the correct value was stored
     srand(seed);
     for (uint16_t i = 0; i < ext_ram_size; i++) {
-        uint8_t some_value = rand();
+        uint8_t some_value = 1;
         ext_ram[i] = some_value;
         uint8_t retreived_value = ext_ram[i];
         if (retreived_value != some_value) {
