@@ -9,6 +9,7 @@
 #define BAUD_PRESCALE (((F_CPU / (UART_BAUDRATE * 16UL))) - 1)
 
 #include "tests/sram_test.h"
+#include "Drivers/UART_driver.h"
 
 void pin_init(){
     MCUCR = (1 << SRE);
