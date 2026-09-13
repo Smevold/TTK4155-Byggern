@@ -35,6 +35,13 @@ void main(){
     UART_Init (BAUD_PRESCALE);
     fdevopen(UART_Transmitter, UART_Receiver);
     
-    SRAM_test();
-    //pin_test();
+    volatile char *ext_adc = (char *) 0x1000; // Start address for the ADC
+    volatile char *ext_ram = (char *) 0x1800; // Start address for the SRAM
+
+    while(1){
+        ext_adc[0] = 0x02;
+        ext_ram[0] = 0x04;
+        printf("SRAM 0x1800: %2X", ext_ram[0]);
+        _delay_ms(100);
+    }
 }
