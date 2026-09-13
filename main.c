@@ -41,7 +41,7 @@ void main(){
     while(1){
         ext_adc[0] = 0x02;
         ext_ram[0] = 0x04;
-        printf("SRAM 0x1400: %2X", ext_ram[0]);
+        printf("SRAM 0x1400: %2X\n", ext_ram[0]);
         _delay_ms(100);
     }
 }

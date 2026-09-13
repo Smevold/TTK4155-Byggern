@@ -1,0 +1,5 @@
+# all object files
+*.o
+
+# all hex files
+*.hex
