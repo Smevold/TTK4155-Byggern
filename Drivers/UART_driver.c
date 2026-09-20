@@ -22,6 +22,8 @@ void UART_Init( unsigned int ubrr)
     // frame = 8 data, 2 stop
     
     UCSR0C = (1 << URSEL0) | (1 << USBS0) | (3 << UCSZ00);
+
+    fdevopen(UART_Transmitter, UART_Receiver);
 }
 
 void UART_Transmitter( unsigned char data)

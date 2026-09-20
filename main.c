@@ -33,7 +33,7 @@ void pin_set(){
 void main(){
     pin_init();
     UART_Init (BAUD_PRESCALE);
-    fdevopen(UART_Transmitter, UART_Receiver);
+    
     
     volatile char *ext_adc = (char *) 0x1000; // Start address for the ADC
     volatile char *ext_ram = (char *) 0x1400; // Start address for the SRAM
