@@ -4,7 +4,11 @@
 #include "UART_driver.h"
 #include "IO_driver"
 
-void adc_init() {
+#define ADC_CHANNEL_NUM 4
+#define ADC_CLK_HZ 4000000UL // May be subject to change
+#define ADC_CONV_TIME_US ((9UL * ADC_CHANNEL_NUM * 2UL * 1000000UL) / ADC_CLK_HZ + 5) // Should change to polling or interrupts
+
+void ADC_init() {
     // Set PD5 as timer output for the ADC clc
     DDRD |= (1 << DDD5);
 
@@ -25,3 +29,19 @@ void adc_init() {
     // Toggles every cycle
     OCR2 = 0;
 }
+
+io_pos_t ADC_read() [
+    io_pos_t pos;
+
+    EXT_ADC = 0x00;
+
+    _delay_us(ADC_CONV_TIME_US); // Should change to polling or interrupts
+
+    // Should automatically change address for reading
+    pos.joy_x = EXT_ADC;
+    pos.joy_y = EXT_ADC;
+    pos.pad_x = EXT_ADC;
+    pos.pad_y = EXT_ADC;
+
+    return pos;
+]

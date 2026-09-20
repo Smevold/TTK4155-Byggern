@@ -8,11 +8,15 @@
 #define UART_BAUDRATE 9600
 #define BAUD_PRESCALE (((F_CPU / (UART_BAUDRATE * 16UL))) - 1)
 
+#define EXT_ADC 0x1000
+#define EXT_RAM 0x1400
+
 #include "tests/sram_test.h"
 #include "tests/pin_test.h"
 #include "Drivers/UART_driver.h"
+#include "Drivers/IO_driver.h"
 
-void pin_init(){
+void pin_init(){ // Is probably only ext ram init
     MCUCR |= (1 << SRE);
     //DDRA = 0b11111111;
     //DDRA |= (1 << DDA3) | (1 << DDA2) | (1 << DDA1) | (1 << DDA0);
@@ -33,15 +37,10 @@ void pin_set(){
 void main(){
     pin_init();
     UART_Init (BAUD_PRESCALE);
-    
-    
-    volatile char *ext_adc = (char *) 0x1000; // Start address for the ADC
-    volatile char *ext_ram = (char *) 0x1400; // Start address for the SRAM
+    ADC_init();
 
-    while(1){
-        ext_adc[0] = 0x02;
-        ext_ram[0] = 0x04;
-        printf("SRAM 0x1400: %2X\n", ext_ram[0]);
-        _delay_ms(100);
-    }
+    io_pos_t pos = ADC_read();
+    printf("Joy_x: %2X, Joy_y: %2X, Pad_x: %2X, Pad_y: %2X\n", pos.joy_x, pos.joy_y, pos.pad_x, pos.pad_y);
+
+    _delay_ms(20);
 }
