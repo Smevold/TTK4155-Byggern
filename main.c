@@ -8,9 +8,6 @@
 #define UART_BAUDRATE 9600
 #define BAUD_PRESCALE (((F_CPU / (UART_BAUDRATE * 16UL))) - 1)
 
-#define EXT_ADC 0x1000
-#define EXT_RAM 0x1400
-
 #include "tests/sram_test.h"
 #include "tests/pin_test.h"
 #include "Drivers/UART_driver.h"
@@ -39,8 +36,10 @@ void main(){
     UART_Init (BAUD_PRESCALE);
     ADC_init();
 
-    io_pos_t pos = ADC_read();
-    printf("Joy_x: %2X, Joy_y: %2X, Pad_x: %2X, Pad_y: %2X\n", pos.joy_x, pos.joy_y, pos.pad_x, pos.pad_y);
-
-    _delay_ms(20);
+    while(1) {
+        io_pos_t pos = ADC_read();
+        printf("Joy_x: %2X, Joy_y: %2X, Pad_x: %2X, Pad_y: %2X\n", pos.joy_x, pos.joy_y, pos.pad_x, pos.pad_y);
+    
+        _delay_ms(20);
+    }
 }

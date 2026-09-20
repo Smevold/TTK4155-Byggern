@@ -1,8 +1,12 @@
-#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include<avr/io.h>
+
+#define F_CPU 4915200UL
+#include<util/delay.h>
+
 #include "UART_driver.h"
-#include "IO_driver"
+#include "IO_driver.h"
 
 #define ADC_CHANNEL_NUM 4
 #define ADC_CLK_HZ 4000000UL // May be subject to change
@@ -14,7 +18,7 @@ void ADC_init() {
 
     // Clear WGM00 and set WGM01 for CTC
     TCCR0 |= (1 << WGM01);
-    TCCR0 &= ~(1 << WGM01);
+    TCCR0 &= ~(1 << WGM00);
 
     // Set COM00 and clear COM01 for "toggle OC0 on Compare Match"
     TCCR0 |= (1 << COM00); 
@@ -30,18 +34,19 @@ void ADC_init() {
     OCR2 = 0;
 }
 
-io_pos_t ADC_read() [
+io_pos_t ADC_read() {
     io_pos_t pos;
 
-    EXT_ADC = 0x00;
+    *EXT_ADC = 0x00;
 
     _delay_us(ADC_CONV_TIME_US); // Should change to polling or interrupts
 
     // Should automatically change address for reading
-    pos.joy_x = EXT_ADC;
-    pos.joy_y = EXT_ADC;
-    pos.pad_x = EXT_ADC;
-    pos.pad_y = EXT_ADC;
+    pos.joy_x = *EXT_ADC;
+    pos.joy_y = *EXT_ADC;
+    pos.pad_x = *EXT_ADC;
+    pos.pad_y = *EXT_ADC;
 
     return pos;
-]
+}
+
