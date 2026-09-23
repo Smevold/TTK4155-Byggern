@@ -15,7 +15,7 @@ void SPI_Init() {
     DDRB |= (1 << DDB5) | (1 << DDB7);
 
     // Set SS_AVR, SS_OLED, SS_EMPTY as output
-    DDRB |= (1 << DB4) | (1 << DB3) | (1 << DB2);
+    DDRB |= (1 << DDB4) | (1 << DDB3) | (1 << DDB2);
 
     // Deselect all SS
     PORTB |= (1 << PB4) | (1 << PB3) | (1 << PB2);

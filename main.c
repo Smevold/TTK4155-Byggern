@@ -13,7 +13,7 @@
 #include "Drivers/UART_driver.h"
 #include "Drivers/IO_driver.h"
 #include "Drivers/SPI_driver.h"
-#include "Drivers/OLED_driver.h" 
+//#include "Drivers/OLED_driver.h" 
 
 void PIN_Init(){ // Is probably only ext ram init
     MCUCR |= (1 << SRE);
@@ -37,10 +37,13 @@ void main(){
     PIN_Init();
     UART_Init (BAUD_PRESCALE);
     ADC_Init();
+    SPI_Init();
+
+    SPI_SlaveSelect(SS_IO_AVR);
 
     while(1) {
-        io_pos_t pos = ADC_Read();
-        printf("Joy_x: %2X, Joy_y: %2X, Pad_x: %2X, Pad_y: %2X\n", pos.joy_x, pos.joy_y, pos.pad_x, pos.pad_y);
+        char a[] = "FredErDum";
+        SPI_Transmit_n_Bytes(&a, 9);
     
         _delay_ms(20);
     }
