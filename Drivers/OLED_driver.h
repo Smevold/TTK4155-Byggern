@@ -2,6 +2,11 @@
 
 #include <stdint.h>
 
+typedef struct {
+    uint8_t column;
+    uint8_t line;
+} cursor_t;
+
 void OLED_Init() ;
 
 void OLED_Home(cursor_t* cursor) ;
@@ -18,7 +23,3 @@ void OLED_Pos(cursor_t* cursor, uint8_t line, uint8_t column ) ;
 
 //char print;
 
-typedef struct {
-    uint8_t column;
-    uint8_t line;
-} cursor_t;

@@ -41,6 +41,8 @@ void main(){
 
     OLED_Init();
 
+    SPI_Transmit(0xA5);
+
     while(1) {
         
     
