@@ -31,19 +31,19 @@ void OLED_Home(cursor_t* cursor) {
 
 }
 
-void OLED_Goto_Line(cursor_t* cursor, uint8_t line) {
+void OLED_Goto_Line(cursor_t cursor, uint8_t line) {
     *cursor.line = line;
 }
 
-void OLED_Goto_Column(cursor_t* cursor, uint8_t column) {
+void OLED_Goto_Column(cursor_t cursor, uint8_t column) {
     *cursor.column = column;
 }
 
-void OLED_Clear(cursor_t* cursor, uint8_t line) {
+void OLED_Clear(cursor_t cursor, uint8_t line) {
 
 }
 
-void OLED_Pos(cursor_t* cursor, uint8_t line, uint8_t column ) {
+void OLED_Pos(cursor_t cursor, uint8_t line, uint8_t column ) {
     *cursor.line = line;
     *cursor.column = column;
 }
