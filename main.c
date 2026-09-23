@@ -12,6 +12,7 @@
 #include "tests/pin_test.h"
 #include "Drivers/UART_driver.h"
 #include "Drivers/IO_driver.h"
+#include "Drivers/SPI_driver.h"
 
 void pin_init(){ // Is probably only ext ram init
     MCUCR |= (1 << SRE);
