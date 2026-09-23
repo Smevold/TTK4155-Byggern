@@ -1,4 +1,5 @@
 #include "OLED_driver.h"
+#include "SPI_driver.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -12,8 +13,14 @@ void OLED_Init() {
     // CS active low PB3 
     // reset low init of chip high normal to button 
     // HIGH interpreted data, LOW CMD REG PB1
-    DDRB |= ( 1 << DDB1)
+    DDRB |= ( 1 << DDB1) | ( 1 << DDB0);
 
+    PORTB &= ~(1 << PORTB0);
+    _delay_us(5);
+    PORTB |= (1 << PORTB0);
+    _delay_us(3);
+    SPI_SlaveSelect(SS_OLED);
+    SPI_Transmit(0xAF);
    // PORTB &= ~(1 << PORTB1)
 
 }
