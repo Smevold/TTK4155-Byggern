@@ -2,7 +2,7 @@
 
 #include <stdint.h>
 
-#define EXT_ADC ((volatile uint8_t *) 0x1000)
+//#define EXT_ADC ((volatile uint8_t *) 0x1000)
 #define EXT_RAM ((volatile uint8_t *) 0x1400)
 
 typedef struct {

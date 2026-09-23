@@ -16,36 +16,39 @@ void ADC_init() {
     // Set PD5 as timer output for the ADC clc
     DDRD |= (1 << DDD5);
 
-    // Clear WGM00 and set WGM01 for CTC
-    TCCR0 |= (1 << WGM01);
-    TCCR0 &= ~(1 << WGM00);
+    // Clear WGM13, WGM11 and WGM10, and set WGM12 for CTC
+    TCCR1B |= (1 << WGM12);
+    TCCR1B &= ~(1 << WGM13);
+    TCCR1A &= ~(1 << WGM11) & ~(1 << WGM10);
 
     // Set COM00 and clear COM01 for "toggle OC0 on Compare Match"
-    TCCR0 |= (1 << COM00); 
-    TCCR0 &= ~(1 << COM01);
+    TCCR1A |= (1 << COM1A0); 
+    TCCR1A &= ~(1 << COM1A1);
 
     // Set clk select for clk without prescaler
-    TCCR0 |= (1 << CS00);
-    TCCR0 &= ~(1 << CS01) & ~(1 << CS02); 
+    TCCR1B |= (1 << CS10);
+    TCCR1B &= ~(1 << CS12) & ~(1 << CS11); 
 
     // Want 5 MHz clk signal according to data sheet
 
     // Toggles every cycle
-    OCR2 = 0;
+    OCR1AL = 0;
+    OCR1AH = 0;
 }
 
 io_pos_t ADC_read() {
     io_pos_t pos;
+    volatile char *ext_adc = (char *) 0x1000; // Start address for the SRAM
 
-    *EXT_ADC = 0x00;
+    ext_adc[0] = 0x01;
 
     _delay_us(ADC_CONV_TIME_US); // Should change to polling or interrupts
 
     // Should automatically change address for reading
-    pos.joy_x = *EXT_ADC;
-    pos.joy_y = *EXT_ADC;
-    pos.pad_x = *EXT_ADC;
-    pos.pad_y = *EXT_ADC;
+    pos.joy_y = ext_adc[0];
+    pos.joy_x = ext_adc[0];
+    pos.pad_y = ext_adc[0];
+    pos.pad_x = ext_adc[0];
 
     return pos;
 }
