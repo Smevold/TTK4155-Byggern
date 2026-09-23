@@ -8,11 +8,11 @@ void OLED_Goto_Line(cursor_t* cursor, uint8_t line);
 
 void OLED_Goto_Column(cursor_t* cursor, uint8_t column); 
 
-void OLED_clear(cursor_t* cursor, uint8_t line) ;
+void OLED_Clear(cursor_t* cursor, uint8_t line) ;
 
-void oled_pos(cursor_t* cursor, uint8_t line, uint8_t column ) ;
+void OLED_Pos(cursor_t* cursor, uint8_t line, uint8_t column ) ;
 
-void oled_print (char* print) ;
+void OLED_Print (char* print) ;
 
 char print;
 
