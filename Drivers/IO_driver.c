@@ -12,7 +12,7 @@
 #define ADC_CLK_HZ 4000000UL // May be subject to change
 #define ADC_CONV_TIME_US ((9UL * ADC_CHANNEL_NUM * 2UL * 1000000UL) / ADC_CLK_HZ + 5) // Should change to polling or interrupts
 
-void ADC_init() {
+void ADC_Init() {
     // Set PD5 as timer output for the ADC clc
     DDRD |= (1 << DDD5);
 
@@ -36,7 +36,7 @@ void ADC_init() {
     OCR1AH = 0;
 }
 
-io_pos_t ADC_read() {
+io_pos_t ADC_Read() {
     io_pos_t pos;
     volatile char *ext_adc = (char *) 0x1000; // Start address for the SRAM
 

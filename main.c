@@ -15,7 +15,7 @@
 #include "Drivers/SPI_driver.h"
 #include "Drivers/OLED_driver.h" 
 
-void pin_init(){ // Is probably only ext ram init
+void PIN_Init(){ // Is probably only ext ram init
     MCUCR |= (1 << SRE);
     //DDRA = 0b11111111;
     //DDRA |= (1 << DDA3) | (1 << DDA2) | (1 << DDA1) | (1 << DDA0);
@@ -34,12 +34,12 @@ void pin_set(){
 
 
 void main(){
-    pin_init();
+    PIN_Init();
     UART_Init (BAUD_PRESCALE);
-    ADC_init();
+    ADC_Init();
 
     while(1) {
-        io_pos_t pos = ADC_read();
+        io_pos_t pos = ADC_Read();
         printf("Joy_x: %2X, Joy_y: %2X, Pad_x: %2X, Pad_y: %2X\n", pos.joy_x, pos.joy_y, pos.pad_x, pos.pad_y);
     
         _delay_ms(20);

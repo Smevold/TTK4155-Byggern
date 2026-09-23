@@ -12,6 +12,6 @@ typedef struct {
     uint8_t pad_y;
 } io_pos_t;
 
-void ADC_init();
+void ADC_Init();
 
-io_pos_t ADC_read();
+io_pos_t ADC_Read();
