@@ -26,6 +26,10 @@ void OLED_Fill(cursor_t* cursor);
 
 void OLED_Clear_Line(cursor_t* cursor);
 
+void OLED_Print (uint8_t** bitmap, cursor_t* cursor);
+
+void OLED_Print_Char (uint8_t** font, char* character, uint8_t size);
+
 //void OLED_Print (char* print) ;
 
 //char print;

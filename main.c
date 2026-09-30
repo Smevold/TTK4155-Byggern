@@ -15,6 +15,7 @@
 #include "Drivers/SPI_driver.h"
 #include "Drivers/OLED_driver.h" 
 #include "Graphics/OLED_graphics.h"
+#include "Graphics/fonts.h"
 
 void PIN_Init(){ // Is probably only ext ram init
     MCUCR |= (1 << SRE);
@@ -73,6 +74,10 @@ void main(){
 
     OLED_Home(&cursor);
     OLED_Print(&OV_logo, &cursor);
+
+    _delay_ms(3000);
+    char aye = 'a';
+    OLED_Print_Char(&font8, &aye, LARGE_FONT);
 
     //cursor.line_start = 5;
     //OLED_Clear_Line(&cursor);

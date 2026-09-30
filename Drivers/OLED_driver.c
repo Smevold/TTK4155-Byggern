@@ -1,6 +1,7 @@
 #include "OLED_driver.h"
 #include "SPI_driver.h"
 #include "../Graphics/OLED_graphics.h"
+#include "../Graphics/fonts.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -97,7 +98,7 @@ void OLED_Clear_Line(cursor_t* cursor) {
 }
 
 
-void OLED_Print (uint8_t* bitmap, cursor_t* cursor){
+void OLED_Print (uint8_t** bitmap, cursor_t* cursor){
     OLED_Goto_Pos(cursor);
 
     // Change to data-mode
@@ -105,8 +106,21 @@ void OLED_Print (uint8_t* bitmap, cursor_t* cursor){
     char byte = 0x00;
     for (int i = 0; i <= (cursor->line_end >> 3); i++) {
         for (int j = 0; j <= cursor->column_end; j++){
-            byte = pgm_read_byte(&(OV_logo[i][j]));
+            byte = pgm_read_byte(&(bitmap[i][j]));
             SPI_Transmit(byte);
         }
     }
 }
+
+void OLED_Print_Char (uint8_t** font, char* character, uint8_t size){
+    // Change to data-mode
+    PORTB |= (1 << PORTB1); 
+    uint8_t index_character = (int)*character - 32;
+
+    char byte = 0x00;
+    for (int j = 0; j < size; j++){
+            byte = pgm_read_byte(&(font[index_character][j]));
+            SPI_Transmit(byte);
+    }
+}
+
