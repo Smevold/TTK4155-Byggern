@@ -4,8 +4,10 @@
 #include <avr/pgmspace.h>
 
 typedef struct {
-    uint8_t column;
-    uint8_t line;
+    uint8_t column_start;
+    uint8_t column_end;
+    uint8_t line_start;
+    uint8_t line_end;
 } cursor_t;
 
 void OLED_Init() ;
@@ -16,11 +18,11 @@ void OLED_Goto_Line(cursor_t* cursor, uint8_t line);
 
 void OLED_Goto_Column(cursor_t* cursor, uint8_t column); 
 
+void OLED_Goto_Pos(cursor_t* cursor);
+
 void OLED_Clear();
 
 void OLED_Clear_Line(cursor_t* cursor, uint8_t line);
-
-void OLED_Pos(cursor_t* cursor, uint8_t line, uint8_t column ) ;
 
 void OLED_Draw_OV();
 
