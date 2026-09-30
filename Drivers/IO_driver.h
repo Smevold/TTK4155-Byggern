@@ -12,6 +12,35 @@ typedef struct {
     uint8_t pad_y;
 } io_pos_t;
 
+typedef struct {
+    uint8_t x_max;
+    uint8_t x_min;
+    uint8_t y_max;
+    uint8_t y_min;
+} io_joy_extreme_t;
+
+typedef struct {
+    uint8_t x;
+    uint8_t y;
+} joy_readable;
+
+typedef enum {
+    UP, DOWN, LEFT, RIGHT, NEUTRAL
+} direction;
+
 void ADC_Init();
 
+void Joy_Init();
+
 io_pos_t ADC_Read();
+
+uint8_t Joy_Readable_X(uint8_t joy_x);
+
+uint8_t Joy_Readable_Y(uint8_t joy_y);
+
+joy_readable Joy_Readable_Pos();
+
+direction Joy_Direction();
+
+void Calibrate_Joy();
+

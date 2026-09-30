@@ -12,6 +12,8 @@
 #define ADC_CLK_HZ 4000000UL // May be subject to change
 #define ADC_CONV_TIME_US ((9UL * ADC_CHANNEL_NUM * 2UL * 1000000UL) / ADC_CLK_HZ + 5) // Should change to polling or interrupts
 
+io_joy_extreme_t* joy_extreme;
+
 void ADC_Init() {
     // Set PD5 as timer output for the ADC clc
     DDRD |= (1 << DDD5);
@@ -36,6 +38,14 @@ void ADC_Init() {
     OCR1AH = 0;
 }
 
+void Joy_Init() {
+    joy_extreme->x_max = 0x80;
+    joy_extreme->x_min = 0x80;
+    joy_extreme->y_max = 0x80;
+    joy_extreme->y_min = 0x80;
+}
+
+
 io_pos_t ADC_Read() {
     io_pos_t pos;
     volatile char *ext_adc = (char *) 0x1000; // Start address for the SRAM
@@ -53,3 +63,85 @@ io_pos_t ADC_Read() {
     return pos;
 }
 
+uint8_t Joy_Readable_X(uint8_t joy_x) {
+    uint8_t joy_readable_x = (joy_x - joy_extreme->x_min) * 100 / (joy_extreme->x_max - joy_extreme->x_min);
+
+    return joy_readable_x;
+}
+
+uint8_t Joy_Readable_Y(uint8_t joy_y) {
+    uint8_t joy_readable_y = (joy_y - joy_extreme->y_min) * 100 / (joy_extreme->y_max - joy_extreme->y_min);
+
+    return joy_readable_y;
+}
+
+joy_readable Joy_Readable_Pos() {
+    joy_readable joy_pos;
+    io_pos_t pos = ADC_Read();
+
+    joy_pos.x = Joy_Readable_X(pos.joy_x);
+    joy_pos.y = Joy_Readable_Y(pos.joy_y); 
+
+    return joy_pos;
+}
+
+direction Joy_Direction() {
+    joy_readable joy_pos = Joy_Readable_Pos();
+
+    // Percentile size of square area giving neutral direction
+    uint8_t neutral_size = 10;
+
+    // Check if neutral
+    if ((joy_pos.x < 50 + neutral_size || joy_pos.x < 50 - neutral_size)
+        && (joy_pos.x < 50 + neutral_size || joy_pos.x < 50 - neutral_size)) {
+            return NEUTRAL;
+    }
+
+    // Check which quadrant the joystick is in
+    // After given quadrant is determined, logic to determine direction
+    if (joy_pos.x > 50) {
+        if (joy_pos.y > 50) {
+            if (joy_pos.x > joy_pos.y) {
+                return RIGHT;
+            } else {
+                return UP;
+            }
+        } else {
+            if (joy_pos.y < 100 - joy_pos.x) {
+                return DOWN;
+            } else {
+                return RIGHT;
+            }
+        }
+    } else {
+        if (joy_pos.y < 50) {
+            if (joy_pos.x < joy_pos.y) {
+                return LEFT;
+            } else {
+                return DOWN;
+            }
+        } else {
+            if (joy_pos.y > 100 - joy_pos.x) {
+                return UP;
+            } else {
+                return LEFT;
+            }
+        }
+    }
+}
+
+void Calibrate_Joy() {
+    io_pos_t pos = ADC_Read();
+
+    if (pos.joy_x < joy_extreme->x_min) {
+        joy_extreme->x_min = pos.joy_x;
+    } else if (pos.joy_x > joy_extreme->x_max) {
+        joy_extreme->x_max = pos.joy_x;
+    }
+
+    if (pos.joy_y < joy_extreme->y_min) {
+        joy_extreme->y_min = pos.joy_y;
+    } else if (pos.joy_y > joy_extreme->y_max) {
+        joy_extreme->y_max = pos.joy_y;
+    }
+}
