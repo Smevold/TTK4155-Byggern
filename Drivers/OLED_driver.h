@@ -26,8 +26,6 @@ void OLED_Fill(cursor_t* cursor);
 
 void OLED_Clear_Line(cursor_t* cursor);
 
-void OLED_Draw_OV();
-
 //void OLED_Print (char* print) ;
 
 //char print;

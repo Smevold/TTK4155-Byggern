@@ -91,37 +91,22 @@ void OLED_Clear_Line(cursor_t* cursor) {
     PORTB |= (1 << PORTB1); 
     for (int i = 0; i < 128; i++) { // Clear all COL
             SPI_Transmit(0x00 + (1 << ((cursor->line_start % 8) - 1)));
-            _delay_ms(100);
     }
 
 
 }
 
-void OLED_Draw_OV() {
-    // Set command-mode
-    PORTB &= ~(1 << PORTB1);
-    
 
-    SPI_Transmit(0x21); // Set Column Address
-    SPI_Transmit(0); // Set Column Start Address
-    SPI_Transmit(127); // Set Column End Address
-
-    SPI_Transmit(0x22); // Set Page Address
-    SPI_Transmit(0); // Set Page Start Address
-    SPI_Transmit(7); // Set Page End Address
+void OLED_Print (uint8_t* bitmap, cursor_t* cursor){
+    OLED_Goto_Pos(cursor);
 
     // Change to data-mode
     PORTB |= (1 << PORTB1); 
     char byte = 0x00;
-    for (int i = 0; i < 8; i++) {
-        for (int j = 0; j < 128; j++){
+    for (int i = 0; i <= (cursor->line_end >> 3); i++) {
+        for (int j = 0; j <= cursor->column_end; j++){
             byte = pgm_read_byte(&(OV_logo[i][j]));
             SPI_Transmit(byte);
         }
     }
-}
-
-
-void OLED_Print (char* print){
-    
 }
