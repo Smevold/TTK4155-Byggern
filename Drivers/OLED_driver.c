@@ -148,7 +148,7 @@ void OLED_Draw_OV() {
 
     // Change to data-mode
     PORTB |= (1 << PORTB1); 
-    //char byte = 0x00;
+    char byte = 0x00;
     for (int i = 0; i < 1024; i++) {
             byte = pgm_read_byte(&(logo_128x64_h[i]));
             SPI_Transmit(byte);
