@@ -24,7 +24,7 @@ void OLED_Pos(cursor_t* cursor, uint8_t line, uint8_t column ) ;
 
 void OLED_Draw_OV();
 
-
+const uint8_t logo_128x64_h[8][128] PROGMEM;
 
 //void OLED_Print (char* print) ;
 
