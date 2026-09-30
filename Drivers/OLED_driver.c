@@ -40,15 +40,26 @@ void OLED_Goto_Column(cursor_t* cursor, uint8_t column) {
 }
 
 void OLED_Clear() {
+    // Set command-mode
+    PORTB &= ~(1 << PORTB1);
+    SPI_Transmit(0x20); // Set Memory Addressing Mode
+    SPI_Transmit(0b00); // Set Horizontal Addressing Mode
+
+    SPI_Transmit(0x21); // Set Column Address
+    SPI_Transmit(0); // Set Column Start Address
+    SPI_Transmit(127); // Set Column End Address
+
+    SPI_Transmit(0x22); // Set Page Address
+    SPI_Transmit(0); // Set Page Start Address
+    SPI_Transmit(7); // Set Page End Address
+
     // Change to data-mode
-    PORTB |= (1 << PORTB1); page start address (Dotted line in Figure 10-3
+    PORTB |= (1 << PORTB1); 
     for (int i = 0; i < 128; i++) {
-        SPI_Transmit(0x00);
-        _delay_ms(10);
-    }
-    for (int i = 0; i < 128; i++) {
-        SPI_Transmit(0x00);
-        _delay_ms(100);
+        for (int j = 0; j < 8; j++) {
+            SPI_Transmit(0x00);
+            _delay_ms(100);
+        }
     }
 
 }

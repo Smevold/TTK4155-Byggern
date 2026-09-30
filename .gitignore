@@ -1,5 +1,5 @@
 # all object files
-build/*
+build/**
 
 # all hex files
 *.hex
