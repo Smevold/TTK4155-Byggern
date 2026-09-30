@@ -133,12 +133,14 @@ direction Joy_Direction() {
 void Calibrate_Joy() {
     io_pos_t pos = ADC_Read();
 
+    // Compare and change in x direction
     if (pos.joy_x < joy_extreme->x_min) {
         joy_extreme->x_min = pos.joy_x;
     } else if (pos.joy_x > joy_extreme->x_max) {
         joy_extreme->x_max = pos.joy_x;
     }
 
+    // Compare and change in y direction
     if (pos.joy_y < joy_extreme->y_min) {
         joy_extreme->y_min = pos.joy_y;
     } else if (pos.joy_y > joy_extreme->y_max) {
