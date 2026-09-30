@@ -12,7 +12,7 @@
 #define ADC_CLK_HZ 4000000UL // May be subject to change
 #define ADC_CONV_TIME_US ((9UL * ADC_CHANNEL_NUM * 2UL * 1000000UL) / ADC_CLK_HZ + 5) // Should change to polling or interrupts
 
-io_joy_extreme_t* joy_extreme;
+
 
 void ADC_Init() {
     // Set PD5 as timer output for the ADC clc
@@ -38,7 +38,7 @@ void ADC_Init() {
     OCR1AH = 0;
 }
 
-void Joy_Init() {
+void Joy_Init(io_joy_extreme_t* joy_extreme) {
     joy_extreme->x_max = 0x80;
     joy_extreme->x_min = 0x80;
     joy_extreme->y_max = 0x80;
@@ -63,30 +63,30 @@ io_pos_t ADC_Read() {
     return pos;
 }
 
-uint8_t Joy_Readable_X(uint8_t joy_x) {
+uint8_t Joy_Readable_X(io_joy_extreme_t* joy_extreme, uint8_t joy_x) {
     uint8_t joy_readable_x = (joy_x - joy_extreme->x_min) * 100 / (joy_extreme->x_max - joy_extreme->x_min);
 
     return joy_readable_x;
 }
 
-uint8_t Joy_Readable_Y(uint8_t joy_y) {
+uint8_t Joy_Readable_Y(io_joy_extreme_t* joy_extreme, uint8_t joy_y) {
     uint8_t joy_readable_y = (joy_y - joy_extreme->y_min) * 100 / (joy_extreme->y_max - joy_extreme->y_min);
 
     return joy_readable_y;
 }
 
-joy_readable Joy_Readable_Pos() {
+joy_readable Joy_Readable_Pos(io_joy_extreme_t* joy_extreme) {
     joy_readable joy_pos;
     io_pos_t pos = ADC_Read();
 
-    joy_pos.x = Joy_Readable_X(pos.joy_x);
-    joy_pos.y = Joy_Readable_Y(pos.joy_y); 
+    joy_pos.x = Joy_Readable_X(&joy_extreme, pos.joy_x);
+    joy_pos.y = Joy_Readable_Y(&joy_extreme, pos.joy_y); 
 
     return joy_pos;
 }
 
-direction Joy_Direction() {
-    joy_readable joy_pos = Joy_Readable_Pos();
+direction Joy_Direction(io_joy_extreme_t* joy_extreme) {
+    joy_readable joy_pos = Joy_Readable_Pos(&joy_extreme);
 
     // Percentile size of square area giving neutral direction
     uint8_t neutral_size = 10;
@@ -130,7 +130,7 @@ direction Joy_Direction() {
     }
 }
 
-void Calibrate_Joy() {
+void Joy_Calibrate(io_joy_extreme_t* joy_extreme) {
     io_pos_t pos = ADC_Read();
 
     // Compare and change in x direction

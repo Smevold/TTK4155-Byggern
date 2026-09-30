@@ -41,13 +41,26 @@ void main(){
 
     OLED_Init();
 
-    _delay_ms(1000);
-
     OLED_Clear();
 
-    while(1) {
-        
+    io_joy_extreme_t* joy_extreme;
+
+    Joy_Init(&joy_extreme);
     
-        _delay_ms(20);
+    printf("Test please work");
+    
+
+    
+    printf("Calibrating...");
+    volatile int i = 0;
+    while(i < 5) {
+        Joy_Calibrate(&joy_extreme);
+        _delay_ms(1000);
+        i++;
+        printf("%2X seconds passed", i);
     }
+    printf("Done calibrating !!!!!!!");
+
+    printf("x_max: %2X, x_min: %2X, y_max: %2X, y_min: %2X", joy_extreme->x_max, joy_extreme->x_min, joy_extreme->y_max, joy_extreme->y_min);
+    
 }

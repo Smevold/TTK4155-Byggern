@@ -34,22 +34,21 @@ typedef enum {
 
 void ADC_Init();
 
-void Joy_Init();
+void Joy_Init(io_joy_extreme_t* joy_extreme);
 
 io_pos_t ADC_Read();
 
 // Return percentile of joystick position in x direction
-uint8_t Joy_Readable_X(uint8_t joy_x);
+uint8_t Joy_Readable_X(io_joy_extreme_t* joy_extreme, uint8_t joy_x);
 
 // Return percentile of joystick position in y direction
-uint8_t Joy_Readable_Y(uint8_t joy_y);
+uint8_t Joy_Readable_Y(io_joy_extreme_t* joy_extreme, uint8_t joy_y);
 
 // Return struct with percentile in both axis'
-joy_readable Joy_Readable_Pos();
+joy_readable Joy_Readable_Pos(io_joy_extreme_t* joy_extreme);
 
 // Return direction of joystick
-direction Joy_Direction();
+direction Joy_Direction(io_joy_extreme_t* joy_extreme);
 
 // Change extremes of digital value of joystick position or calibrate joystick
-void Calibrate_Joy();
-
+void Joy_Calibrate(io_joy_extreme_t* joy_extreme);
