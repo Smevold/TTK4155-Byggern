@@ -38,7 +38,7 @@ void ADC_Init() {
     OCR1AH = 0;
 }
 
-void Joy_Init(io_joy_extreme_t* joy_extreme) {
+void JOY_Init(io_joy_t* joy_extreme) {
     joy_extreme->x_max = 0x80;
     joy_extreme->x_min = 0x80;
     joy_extreme->y_max = 0x80;
@@ -63,87 +63,75 @@ io_pos_t ADC_Read() {
     return pos;
 }
 
-uint8_t Joy_Readable_X(io_joy_extreme_t* joy_extreme, uint8_t joy_x) {
-    uint8_t joy_readable_x = (joy_x - joy_extreme->x_min) * 100 / (joy_extreme->x_max - joy_extreme->x_min);
-
-    return joy_readable_x;
+void JOY_Readable_X(io_joy_t* joy, uint8_t* x_digital) {
+    joy->x = (*x_digital - joy->x_min) * 100 / (joy->x_max - joy->x_min);
 }
 
-uint8_t Joy_Readable_Y(io_joy_extreme_t* joy_extreme, uint8_t joy_y) {
-    uint8_t joy_readable_y = (joy_y - joy_extreme->y_min) * 100 / (joy_extreme->y_max - joy_extreme->y_min);
-
-    return joy_readable_y;
+void JOY_Readable_Y(io_joy_t* joy, uint8_t* y_digital) {
+    joy->y = (*y_digital - joy->y_min) * 100 / (joy->y_max - joy->y_min);
 }
 
-joy_readable Joy_Readable_Pos(io_joy_extreme_t* joy_extreme) {
-    joy_readable joy_pos;
-    io_pos_t pos = ADC_Read();
-
-    joy_pos.x = Joy_Readable_X(&joy_extreme, pos.joy_x);
-    joy_pos.y = Joy_Readable_Y(&joy_extreme, pos.joy_y); 
-
-    return joy_pos;
+void JOY_Readable_Pos(io_joy_t* joy, io_pos_t* joy_digital) {
+    JOY_Readable_X(&joy, &(joy_digital->joy_x));
+    JOY_Readable_Y(&joy, &(joy_digital->joy_y));
 }
 
-direction Joy_Direction(io_joy_extreme_t* joy_extreme) {
-    joy_readable joy_pos = Joy_Readable_Pos(&joy_extreme);
-
+void JOY_Direction(io_joy_t* joy) {
     // Percentile size of square area giving neutral direction
-    uint8_t neutral_size = 10;
-
+    const uint8_t neutral_size = 10;
+    
     // Check if neutral
-    if ((joy_pos.x < 50 + neutral_size || joy_pos.x < 50 - neutral_size)
-        && (joy_pos.x < 50 + neutral_size || joy_pos.x < 50 - neutral_size)) {
+    if ((joy->x < 50 + neutral_size && joy->x > 50 - neutral_size)
+        && (joy->y < 50 + neutral_size && joy->y > 50 - neutral_size)) {
             return NEUTRAL;
     }
 
     // Check which quadrant the joystick is in
     // After given quadrant is determined, logic to determine direction
-    if (joy_pos.x > 50) {
-        if (joy_pos.y > 50) {
-            if (joy_pos.x > joy_pos.y) {
-                return RIGHT;
+    if (joy->x > 50) {
+        if (joy->y > 50) {
+            if (joy->x > joy->y) {
+                joy->dir = RIGHT;
             } else {
-                return UP;
+                joy->dir =  UP;
             }
         } else {
-            if (joy_pos.y < 100 - joy_pos.x) {
-                return DOWN;
+            if (joy->y < 100 - joy->x) {
+                joy->dir =  DOWN;
             } else {
-                return RIGHT;
+                joy->dir =  RIGHT;
             }
         }
     } else {
-        if (joy_pos.y < 50) {
-            if (joy_pos.x < joy_pos.y) {
-                return LEFT;
+        if (joy->y < 50) {
+            if (joy->x < joy->y) {
+                joy->dir =  LEFT;
             } else {
-                return DOWN;
+                joy->dir =  DOWN;
             }
         } else {
-            if (joy_pos.y > 100 - joy_pos.x) {
-                return UP;
+            if (joy->y > 100 - joy->x) {
+                joy->dir =  UP;
             } else {
-                return LEFT;
+                joy->dir =  LEFT;
             }
         }
     }
 }
 
-void Joy_Calibrate(io_joy_extreme_t* joy_extreme) {
-    io_pos_t pos = ADC_Read();
-
+void JOY_Calibrate(io_joy_t* joy, io_pos_t* joy_digital) {
+    
     // Compare and change in x direction
-    if (pos.joy_x < joy_extreme->x_min) {
-        joy_extreme->x_min = pos.joy_x;
-    } else if (pos.joy_x > joy_extreme->x_max) {
-        joy_extreme->x_max = pos.joy_x;
+    if (joy_digital->joy_x < joy->x_min) {
+        joy->x_min = joy_digital->joy_x;
+    } else if (joy_digital->joy_x > joy->x_max) {
+        joy->x_max = joy_digital->joy_x;
     }
 
     // Compare and change in y direction
-    if (pos.joy_y < joy_extreme->y_min) {
-        joy_extreme->y_min = pos.joy_y;
-    } else if (pos.joy_y > joy_extreme->y_max) {
-        joy_extreme->y_max = pos.joy_y;
+    if (joy_digital->joy_y < joy->y_min) {
+        joy->y_min = joy_digital->joy_y;
+    } else if (joy_digital->joy_y > joy->y_max) {
+        joy->y_max = joy_digital->joy_y;
     }
 }
