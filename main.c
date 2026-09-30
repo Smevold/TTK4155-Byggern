@@ -65,5 +65,12 @@ void main(){
     printf("Done calibrating !!!!!!!");
 
     printf("x_max: %2X, x_min: %2X, y_max: %2X, y_min: %2X", joy->x_max, joy->x_min, joy->y_max, joy->y_min);
+    _delay_ms(500);
+
+    OLED_Draw_OV();
+
+    while(1) {
+        _delay_ms(20);
+    }
     
 }

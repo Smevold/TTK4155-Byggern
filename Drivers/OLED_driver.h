@@ -1,6 +1,7 @@
 #pragma once
 
 #include <stdint.h>
+#include <avr/pgmspace.h>
 
 typedef struct {
     uint8_t column;
@@ -20,6 +21,10 @@ void OLED_Clear();
 void OLED_Clear_Line(cursor_t* cursor, uint8_t line);
 
 void OLED_Pos(cursor_t* cursor, uint8_t line, uint8_t column ) ;
+
+void OLED_Draw_OV();
+
+
 
 //void OLED_Print (char* print) ;
 
