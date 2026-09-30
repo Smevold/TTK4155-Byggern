@@ -39,7 +39,21 @@ void OLED_Goto_Column(cursor_t* cursor, uint8_t column) {
     cursor->column = column;
 }
 
-void OLED_Clear(cursor_t* cursor, uint8_t line) {
+void OLED_Clear() {
+    // Change to data-mode
+    PORTB |= (1 << PORTB1); page start address (Dotted line in Figure 10-3
+    for (int i = 0; i < 128; i++) {
+        SPI_Transmit(0x00);
+        _delay_ms(10);
+    }
+    for (int i = 0; i < 128; i++) {
+        SPI_Transmit(0x00);
+        _delay_ms(100);
+    }
+
+}
+
+OLED_Clear_Line(cursor_t* cursor, uint8_t line) {
 
 }
 
