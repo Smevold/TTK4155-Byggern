@@ -1,6 +1,6 @@
 #include "OLED_driver.h"
 #include "SPI_driver.h"
-#include "../Graphics/OLED_graphics.c"
+#include "../Graphics/OLED_graphics.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -32,18 +32,18 @@ void OLED_Init() {
 
 void OLED_Home(cursor_t* cursor) {
     cursor->line_start = 0;
-    cursor->line_end = 64;
+    cursor->line_end = 63;
     cursor->column_start = 0;
-    cursor->column_end = 128;
-    OLED_Goto_Pos(&cursor);
+    cursor->column_end = 127;
+    OLED_Goto_Pos(cursor);
 }
 
 void OLED_Goto_Page(cursor_t* cursor) {
     // Set command-mode
     PORTB &= ~(1 << PORTB1);
     SPI_Transmit(0x22); // Set Page Address
-    SPI_Transmit(cursor->line_start >> 3); // Set Page Start Address
-    SPI_Transmit(cursor->line_end >> 3); // Set Page End Address
+    SPI_Transmit((cursor->line_start >> 3)); // Set Page Start Address
+    SPI_Transmit((cursor->line_end >> 3)); // Set Page End Address
 }
 
 void OLED_Goto_Column(cursor_t* cursor) {
@@ -55,12 +55,12 @@ void OLED_Goto_Column(cursor_t* cursor) {
 }
 
 void OLED_Goto_Pos(cursor_t* cursor) {
-    OLED_Goto_Column(&cursor);
-    OLED_Goto_Page(&cursor);
+    OLED_Goto_Column(cursor);
+    OLED_Goto_Page(cursor);
 }
 
 void OLED_Clear(cursor_t* cursor) {
-    OLED_Home(&cursor);
+    OLED_Home(cursor);
 
     // Change to data-mode
     PORTB |= (1 << PORTB1); 
@@ -72,7 +72,7 @@ void OLED_Clear(cursor_t* cursor) {
 }
 
 void OLED_Fill(cursor_t* cursor) {
-    OLED_Home(&cursor);
+    OLED_Home(cursor);
 
     // Change to data-mode
     PORTB |= (1 << PORTB1); 
@@ -84,13 +84,14 @@ void OLED_Fill(cursor_t* cursor) {
 }
 
 // Will always clear line_start
-OLED_Clear_Line(cursor_t* cursor) {
-    OLED_Goto_Pos(&cursor);
+void OLED_Clear_Line(cursor_t* cursor) {
+    OLED_Goto_Pos(cursor);
 
     // Change to data-mode
     PORTB |= (1 << PORTB1); 
     for (int i = 0; i < 128; i++) { // Clear all COL
-            SPI_Transmit(0x00 + (cursor->line_start % 8));
+            SPI_Transmit(0x00 + (1 << ((cursor->line_start % 8) - 1)));
+            _delay_ms(100);
     }
 
 
@@ -122,5 +123,5 @@ void OLED_Draw_OV() {
 
 
 void OLED_Print (char* print){
-
+    
 }

@@ -72,8 +72,8 @@ void JOY_Readable_Y(io_joy_t* joy, uint8_t* y_digital) {
 }
 
 void JOY_Readable_Pos(io_joy_t* joy, io_pos_t* joy_digital) {
-    JOY_Readable_X(&joy, &(joy_digital->joy_x));
-    JOY_Readable_Y(&joy, &(joy_digital->joy_y));
+    JOY_Readable_X(joy, &(joy_digital->joy_x));
+    JOY_Readable_Y(joy, &(joy_digital->joy_y));
 }
 
 void JOY_Direction(io_joy_t* joy) {
@@ -83,7 +83,7 @@ void JOY_Direction(io_joy_t* joy) {
     // Check if neutral
     if ((joy->x < 50 + neutral_size && joy->x > 50 - neutral_size)
         && (joy->y < 50 + neutral_size && joy->y > 50 - neutral_size)) {
-            return NEUTRAL;
+            joy->dir = NEUTRAL;
     }
 
     // Check which quadrant the joystick is in

@@ -42,7 +42,7 @@ void main(){
 
     OLED_Init();
 
-    cursor_t* cursor;
+    cursor_t cursor;
 
     OLED_Clear(&cursor);
 
@@ -71,11 +71,13 @@ void main(){
     printf("x_max: %2X, x_min: %2X, y_max: %2X, y_min: %2X", joy->x_max, joy->x_min, joy->y_max, joy->y_min);
     */
 
-    _delay_ms(500);
+    _delay_ms(3000);
 
     OLED_Fill(&cursor);
 
-    cursor->line_start = 5;
+    _delay_ms(3000);
+
+    cursor.line_start = 5;
     OLED_Clear_Line(&cursor);
 
     while(1) {

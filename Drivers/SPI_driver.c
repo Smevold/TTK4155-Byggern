@@ -50,7 +50,7 @@ void SPI_Transmit_n_Bytes(char* data, uint8_t n) {
 // Write "char* data[n];" to create input for this function
 void SPI_Receive_n_Bytes(char* data, uint8_t n) {
     for (uint8_t i = 0; i < n; i++) {
-        data[i] = SPI_Receive;
+        data[i] = SPI_Receive();
     }
 }
 
