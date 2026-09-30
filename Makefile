@@ -25,6 +25,7 @@ $(BUILD_DIR):
 	mkdir $(BUILD_DIR)
 	mkdir $(BUILD_DIR)/tests
 	mkdir $(BUILD_DIR)/Drivers
+	mkdir $(BUILD_DIR)/Graphics
 
 $(BUILD_DIR)/%.o: %.c | $(BUILD_DIR)
 	$(CC) $(CFLAGS) -c $< -o $@
