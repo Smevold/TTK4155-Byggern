@@ -20,8 +20,12 @@ void OLED_Init() {
     PORTB |= (1 << PORTB0);
     _delay_us(3);
     SPI_SlaveSelect(SS_OLED);
-    SPI_Transmit(0xAF);
-   // PORTB &= ~(1 << PORTB1)
+    SPI_Transmit(0xAF); // Display ON
+
+    // Set command-mode
+    PORTB &= ~(1 << PORTB1);
+    SPI_Transmit(0x20); // Set Memory Addressing Mode
+    SPI_Transmit(0b00); // Set Horizontal Addressing Mode
 
 }
 
@@ -42,8 +46,7 @@ void OLED_Goto_Column(cursor_t* cursor, uint8_t column) {
 void OLED_Clear() {
     // Set command-mode
     PORTB &= ~(1 << PORTB1);
-    SPI_Transmit(0x20); // Set Memory Addressing Mode
-    SPI_Transmit(0b00); // Set Horizontal Addressing Mode
+    
 
     SPI_Transmit(0x21); // Set Column Address
     SPI_Transmit(0); // Set Column Start Address
@@ -55,10 +58,9 @@ void OLED_Clear() {
 
     // Change to data-mode
     PORTB |= (1 << PORTB1); 
-    for (int i = 0; i < 128; i++) {
-        for (int j = 0; j < 8; j++) {
+    for (int j = 0; j < 8; j++) { // Clear all Pages
+        for (int i = 0; i < 128; i++) { // Clear all COL
             SPI_Transmit(0x00);
-            _delay_ms(100);
         }
     }
 
