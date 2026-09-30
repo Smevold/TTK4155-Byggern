@@ -14,15 +14,17 @@ void OLED_Init() ;
 
 void OLED_Home(cursor_t* cursor) ;
 
-void OLED_Goto_Line(cursor_t* cursor, uint8_t line); 
+void OLED_Goto_Page(cursor_t* cursor); 
 
-void OLED_Goto_Column(cursor_t* cursor, uint8_t column); 
+void OLED_Goto_Column(cursor_t* cursor); 
 
 void OLED_Goto_Pos(cursor_t* cursor);
 
-void OLED_Clear();
+void OLED_Clear(cursor_t* cursor);
 
-void OLED_Clear_Line(cursor_t* cursor, uint8_t line);
+void OLED_Fill(cursor_t* cursor);
+
+void OLED_Clear_Line(cursor_t* cursor);
 
 void OLED_Draw_OV();
 

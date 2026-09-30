@@ -14,6 +14,7 @@
 #include "Drivers/IO_driver.h"
 #include "Drivers/SPI_driver.h"
 #include "Drivers/OLED_driver.h" 
+#include "Graphics/OLED_graphics.h"
 
 void PIN_Init(){ // Is probably only ext ram init
     MCUCR |= (1 << SRE);
@@ -41,8 +42,11 @@ void main(){
 
     OLED_Init();
 
-    OLED_Clear();
+    cursor_t* cursor;
 
+    OLED_Clear(&cursor);
+
+    /*
     io_joy_t* joy;
     io_pos_t* pos;
 
@@ -65,12 +69,16 @@ void main(){
     printf("Done calibrating !!!!!!!");
 
     printf("x_max: %2X, x_min: %2X, y_max: %2X, y_min: %2X", joy->x_max, joy->x_min, joy->y_max, joy->y_min);
+    */
+
     _delay_ms(500);
 
-    OLED_Draw_OV();
+    OLED_Fill(&cursor);
+
+    cursor->line_start = 5;
+    OLED_Clear_Line(&cursor);
 
     while(1) {
         _delay_ms(20);
     }
-    
 }

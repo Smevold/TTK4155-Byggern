@@ -31,44 +31,36 @@ void OLED_Init() {
 }
 
 void OLED_Home(cursor_t* cursor) {
-    SPI_Transmit(0x21); // Set Column Address
-    SPI_Transmit(0); // Set Column Start Address
-    SPI_Transmit(127); // Set Column End Address
-
-    SPI_Transmit(0x22); // Set Page Address
-    SPI_Transmit(0); // Set Page Start Address
-    SPI_Transmit(7); // Set Page End Address
+    cursor->line_start = 0;
+    cursor->line_end = 64;
+    cursor->column_start = 0;
+    cursor->column_end = 128;
+    OLED_Goto_Pos(&cursor);
 }
 
-void OLED_Goto_Line(cursor_t* cursor) {
+void OLED_Goto_Page(cursor_t* cursor) {
+    // Set command-mode
+    PORTB &= ~(1 << PORTB1);
     SPI_Transmit(0x22); // Set Page Address
     SPI_Transmit(cursor->line_start >> 3); // Set Page Start Address
     SPI_Transmit(cursor->line_end >> 3); // Set Page End Address
 }
 
 void OLED_Goto_Column(cursor_t* cursor) {
+    // Set command-mode
+    PORTB &= ~(1 << PORTB1);
     SPI_Transmit(0x21); // Set Column Address
     SPI_Transmit(cursor->column_start); // Set Column Start Address
     SPI_Transmit(cursor->column_end); // Set Column End Address
 }
 
-OLED_Goto_Pos(cursor_t* cursor) {
+void OLED_Goto_Pos(cursor_t* cursor) {
     OLED_Goto_Column(&cursor);
-    OLED_Goto_Line(&cursor);
+    OLED_Goto_Page(&cursor);
 }
 
-void OLED_Clear() {
-    // Set command-mode
-    PORTB &= ~(1 << PORTB1);
-    
-
-    SPI_Transmit(0x21); // Set Column Address
-    SPI_Transmit(0); // Set Column Start Address
-    SPI_Transmit(127); // Set Column End Address
-
-    SPI_Transmit(0x22); // Set Page Address
-    SPI_Transmit(0); // Set Page Start Address
-    SPI_Transmit(7); // Set Page End Address
+void OLED_Clear(cursor_t* cursor) {
+    OLED_Home(&cursor);
 
     // Change to data-mode
     PORTB |= (1 << PORTB1); 
@@ -77,6 +69,30 @@ void OLED_Clear() {
             SPI_Transmit(0x00);
         }
     }
+}
+
+void OLED_Fill(cursor_t* cursor) {
+    OLED_Home(&cursor);
+
+    // Change to data-mode
+    PORTB |= (1 << PORTB1); 
+    for (int j = 0; j < 8; j++) { // Clear all Pages
+        for (int i = 0; i < 128; i++) { // Clear all COL
+            SPI_Transmit(0xFF);
+        }
+    }
+}
+
+// Will always clear line_start
+OLED_Clear_Line(cursor_t* cursor) {
+    OLED_Goto_Pos(&cursor);
+
+    // Change to data-mode
+    PORTB |= (1 << PORTB1); 
+    for (int i = 0; i < 128; i++) { // Clear all COL
+            SPI_Transmit(0x00 + (cursor->line_start % 8));
+    }
+
 
 }
 
@@ -104,9 +120,6 @@ void OLED_Draw_OV() {
     }
 }
 
-OLED_Clear_Line(cursor_t* cursor, uint8_t line) {
-
-}
 
 void OLED_Print (char* print){
 
