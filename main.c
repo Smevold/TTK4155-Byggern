@@ -51,10 +51,12 @@ void main(){
     OLED_Clear(&cursor);
     OLED_Print(OV_logo, &cursor);
 
-    _delay_ms(2000);
+    //_delay_ms(2000);
 
-    OLED_Clear(&cursor);
-    Interface_Startup(&cursor, &joy, &joy_digital);
+    //OLED_Clear(&cursor);
+    //Interface_Startup(&cursor, &joy, &joy_digital);
+
+    BTN_Read();
 
     uint8_t menu_option = 0;
 
