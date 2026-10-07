@@ -16,6 +16,7 @@
 #include "Drivers/OLED_driver.h" 
 #include "Graphics/OLED_graphics.h"
 #include "Graphics/fonts.h"
+#include "Interface/Game_menu.h"
 
 void PIN_Init(){ // Is probably only ext ram init
     MCUCR |= (1 << SRE);
