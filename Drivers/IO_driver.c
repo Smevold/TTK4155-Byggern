@@ -7,6 +7,7 @@
 
 #include "UART_driver.h"
 #include "IO_driver.h"
+#include "SPI_driver.h"
 
 #define ADC_CHANNEL_NUM 4
 #define ADC_CLK_HZ 4000000UL // May be subject to change
@@ -135,3 +136,33 @@ void JOY_Calibrate(io_joy_t* joy, io_pos_t* joy_digital) {
         joy->y_max = joy_digital->joy_y;
     }
 }
+
+void Read_Buttons(){
+
+    PORTB &= ~(1 << PORTB1);
+    SPI_SlaveSelect(SS_IO_AVR);
+    SPI_Transmit(0x04);
+    
+    _delay_us(40);
+
+    Buttons btns;
+    volatile char *btns_in = (uint8_t *)&btns; //  0x1000 kanskje? 
+
+    btns_in[0] = SPI_Receive(0x00);
+    btns_in[1] = SPI_Receive(0x00);
+    btns_in[2] = SPI_Receive(0x00);
+
+}
+
+void set_led(uint8_t led_n, uint8_t on){
+
+    PORTB &= ~(1 << PORTB1);
+    SPI_SlaveSelect(SS_IO_AVR);
+    
+    SPI_Transmit(0x05);
+
+    SPI_Transmit(led_n); 
+    SPI_Transmit('on'); // off = 0 on = everything else
+    
+}
+
