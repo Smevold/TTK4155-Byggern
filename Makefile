@@ -1,5 +1,5 @@
 # List all source files to be compiled; separate with space
-SOURCE_FILES := main.c tests/sram_test.c tests/pin_test.c Drivers/IO_driver.c Drivers/OLED_driver.c Drivers/SPI_driver.c Drivers/UART_driver.c Graphics/OLED_graphics.c Graphics/fonts.c
+SOURCE_FILES := main.c tests/sram_test.c tests/pin_test.c Drivers/IO_driver.c Drivers/OLED_driver.c Drivers/SPI_driver.c Drivers/UART_driver.c Graphics/OLED_graphics.c Graphics/fonts.c Interface/Game_menu.c
 
 # Set this flag to "yes" (no quotes) to use JTAG; otherwise ISP (SPI) is used
 PROGRAM_WITH_JTAG := yes
@@ -26,6 +26,7 @@ $(BUILD_DIR):
 	mkdir $(BUILD_DIR)/tests
 	mkdir $(BUILD_DIR)/Drivers
 	mkdir $(BUILD_DIR)/Graphics
+	mkdir $(BUILD_DIR)/Interface
 
 $(BUILD_DIR)/%.o: %.c | $(BUILD_DIR)
 	$(CC) $(CFLAGS) -c $< -o $@

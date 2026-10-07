@@ -134,12 +134,13 @@ void OLED_Print_Char(const uint8_t* font, char character, uint8_t size){
     }
 }
 
-void OLED_Print_Str(const uint8_t* font, char* str, uint8_t size) {
+void OLED_Print_Str(const uint8_t* font, char str[], uint8_t size) {
     uint8_t str_length = strlen(str);
     char letter;
 
-    for (int i = 0; 0 < str_length; i++) {
+    for (int i = 0; i < str_length; i++) {
         char letter = str[i];
+        printf("%s", letter);
         OLED_Print_Char(font, letter, size);
     }
 }

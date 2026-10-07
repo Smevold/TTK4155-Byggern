@@ -32,7 +32,7 @@ void OLED_Print(const uint8_t (*font)[128], cursor_t* cursor);
 
 void OLED_Print_Char (const uint8_t* font, char character, uint8_t size);
 
-void OLED_Print_Str(const uint8_t* font, char* str, uint8_t size);
+void OLED_Print_Str(const uint8_t* font, char str[], uint8_t size);
 
 //char print;
 
