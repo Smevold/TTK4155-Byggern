@@ -137,7 +137,7 @@ void JOY_Calibrate(io_joy_t* joy, io_pos_t* joy_digital) {
     }
 }
 
-void Read_Buttons(){
+void BTN_Read(){
 
     PORTB &= ~(1 << PORTB1);
     SPI_SlaveSelect(SS_IO_AVR);
@@ -152,9 +152,11 @@ void Read_Buttons(){
     btns_in[1] = SPI_Receive(0x00);
     btns_in[2] = SPI_Receive(0x00);
 
+    printf("1: %2X, 2: %2X, 3: %2X\n", btns_in[0], btns_in[1], btns_in[2]);
+
 }
 
-void set_led(uint8_t led_n, uint8_t on){
+void LED_Set(uint8_t led_n, uint8_t on){
 
     PORTB &= ~(1 << PORTB1);
     SPI_SlaveSelect(SS_IO_AVR);

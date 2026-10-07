@@ -24,7 +24,7 @@ void Interface_Startup(cursor_t* cursor, io_joy_t* joy, io_pos_t* joy_digital) {
     OLED_Goto_Pos(cursor);
     char str_holdright[] = "Hold joystick right";
 
-
+    /*
     // SHOULD SWITCH TO TIMER INTERRUPT
     clock_t begin;
     double time_spent;
@@ -41,6 +41,7 @@ void Interface_Startup(cursor_t* cursor, io_joy_t* joy, io_pos_t* joy_digital) {
     OLED_Clear_Line(cursor);
     char str_goodwork = "Good Work, August!";
     OLED_Print_Str(font5, str_goodwork, MEDIUM_FONT);
+    */
 }
 
 void Interface_Print_Menu(cursor_t* cursor) {
