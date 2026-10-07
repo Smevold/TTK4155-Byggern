@@ -145,7 +145,8 @@ void Read_Buttons(){
     
     _delay_us(40);
 
-    Buttons btns;
+    Buttons btns = {0};
+    //Buttons btns;
     volatile char *btns_in = (uint8_t *)&btns; //  0x1000 kanskje? 
 
     btns_in[0] = SPI_Receive(0x00);
