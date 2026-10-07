@@ -48,6 +48,11 @@ void OLED_Goto_Page(cursor_t* cursor) {
     SPI_Transmit((cursor->line_end >> 3)); // Set Page End Address
 }
 
+void OLED_Goto_Next_Page(cursor_t* cursor) {
+    cursor->line_start += 8;
+    OLED_Goto_Page(cursor);
+}
+
 void OLED_Goto_Column(cursor_t* cursor) {
     // Set command-mode
     PORTB &= ~(1 << PORTB1);
