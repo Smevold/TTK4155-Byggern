@@ -45,6 +45,8 @@ void main(){
     OLED_Init();
 
     cursor_t cursor;
+    io_joy_t joy;
+    io_pos_t joy_digital;
 
     OLED_Clear(&cursor);
     OLED_Print(OV_logo, &cursor);
@@ -52,7 +54,7 @@ void main(){
     _delay_ms(2000);
 
     OLED_Clear(&cursor);
-    Interface_Print_Menu(&cursor);
+    Interface_Startup(&cursor, &joy, &joy_digital);
 
     uint8_t menu_option = 0;
 
