@@ -16,6 +16,8 @@ void OLED_Home(cursor_t* cursor) ;
 
 void OLED_Goto_Page(cursor_t* cursor); 
 
+void OLED_Goto_Next_Page(cursor_t* cursor);
+
 void OLED_Goto_Column(cursor_t* cursor); 
 
 void OLED_Goto_Pos(cursor_t* cursor);
