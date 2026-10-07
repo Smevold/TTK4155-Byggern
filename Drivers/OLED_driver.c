@@ -1,10 +1,12 @@
 #include "OLED_driver.h"
 #include "SPI_driver.h"
 #include "../Graphics/OLED_graphics.h"
+#include "../Graphics/fonts.h"
 
 #include <stdio.h>
 #include <stdlib.h>
 #include<avr/io.h>
+#include <string.h>
 
 #define F_CPU 4915200UL
 #include<util/delay.h>
@@ -44,6 +46,11 @@ void OLED_Goto_Page(cursor_t* cursor) {
     SPI_Transmit(0x22); // Set Page Address
     SPI_Transmit((cursor->line_start >> 3)); // Set Page Start Address
     SPI_Transmit((cursor->line_end >> 3)); // Set Page End Address
+}
+
+void OLED_Goto_Next_Page(cursor_t* cursor) {
+    cursor->line_start += 8;
+    OLED_Goto_Page(cursor);
 }
 
 void OLED_Goto_Column(cursor_t* cursor) {
@@ -97,7 +104,7 @@ void OLED_Clear_Line(cursor_t* cursor) {
 }
 
 
-void OLED_Print (uint8_t* bitmap, cursor_t* cursor){
+void OLED_Print(const uint8_t (*bitmap)[128], cursor_t* cursor){
     OLED_Goto_Pos(cursor);
 
     // Change to data-mode
@@ -105,8 +112,35 @@ void OLED_Print (uint8_t* bitmap, cursor_t* cursor){
     char byte = 0x00;
     for (int i = 0; i <= (cursor->line_end >> 3); i++) {
         for (int j = 0; j <= cursor->column_end; j++){
-            byte = pgm_read_byte(&(OV_logo[i][j]));
+            byte = pgm_read_byte(&(bitmap[i][j]));
             SPI_Transmit(byte);
         }
+    }
+}
+
+void OLED_Print_Char(const uint8_t* font, char character, uint8_t size){
+    // Change to data-mode
+    PORTB |= (1 << PORTB1); 
+
+    uint8_t index = (uint8_t)character - 32;
+    //printf("char, %2D, index: %2D", character, index);
+    const uint8_t *glyph = font + (uint16_t)index * size;
+
+
+    char byte = 0x00;
+    for (int j = 0; j < size; j++){
+            byte = pgm_read_byte(&glyph[j]);
+            SPI_Transmit(byte);
+    }
+}
+
+void OLED_Print_Str(const uint8_t* font, char str[], uint8_t size) {
+    uint8_t str_length = strlen(str);
+    char letter;
+
+    for (int i = 0; i < str_length; i++) {
+        char letter = str[i];
+        printf("%s", letter);
+        OLED_Print_Char(font, letter, size);
     }
 }

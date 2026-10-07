@@ -15,6 +15,8 @@
 #include "Drivers/SPI_driver.h"
 #include "Drivers/OLED_driver.h" 
 #include "Graphics/OLED_graphics.h"
+#include "Graphics/fonts.h"
+#include "Interface/Game_menu.h"
 
 void PIN_Init(){ // Is probably only ext ram init
     MCUCR |= (1 << SRE);
@@ -45,37 +47,14 @@ void main(){
     cursor_t cursor;
 
     OLED_Clear(&cursor);
+    OLED_Print(OV_logo, &cursor);
 
-    /*
-    io_joy_t* joy;
-    io_pos_t* pos;
+    _delay_ms(2000);
 
-    *pos = ADC_Read();
+    OLED_Clear(&cursor);
+    Interface_Print_Menu(&cursor);
 
-    JOY_Init(&joy);
-    
-    printf("Test please work");
-    
-
-    
-    printf("Calibrating...");
-    volatile int i = 0;
-    while(i < 5) {
-        JOY_Calibrate(&joy, &pos);
-        _delay_ms(1000);
-        i++;
-        printf("%2X seconds passed", i);
-    }
-    printf("Done calibrating !!!!!!!");
-
-    printf("x_max: %2X, x_min: %2X, y_max: %2X, y_min: %2X", joy->x_max, joy->x_min, joy->y_max, joy->y_min);
-    */
-
-    OLED_Home(&cursor);
-    OLED_Print(&OV_logo, &cursor);
-
-    //cursor.line_start = 5;
-    //OLED_Clear_Line(&cursor);
+    uint8_t menu_option = 0;
 
     while(1) {
         _delay_ms(20);
