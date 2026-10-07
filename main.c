@@ -78,7 +78,7 @@ void main(){
     _delay_ms(3000);
     //char aye = 'a';
     //OLED_Print_Char((const uint8_t*)font8, aye, LARGE_FONT);
-    char* str = "Hello World!";
+    char str[] = "Hello, World!";
     OLED_Print_Str(font8, str, LARGE_FONT);
 
     //cursor.line_start = 5;
