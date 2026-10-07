@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include<avr/io.h>
+#include <string.h>
 
 #define F_CPU 4915200UL
 #include<util/delay.h>
@@ -98,7 +99,7 @@ void OLED_Clear_Line(cursor_t* cursor) {
 }
 
 
-void OLED_Print (const uint8_t (*bitmap)[128], cursor_t* cursor){
+void OLED_Print(const uint8_t (*bitmap)[128], cursor_t* cursor){
     OLED_Goto_Pos(cursor);
 
     // Change to data-mode
@@ -112,15 +113,28 @@ void OLED_Print (const uint8_t (*bitmap)[128], cursor_t* cursor){
     }
 }
 
-void OLED_Print_Char (uint8_t** font, char* character, uint8_t size){
+void OLED_Print_Char(const uint8_t* font, char character, uint8_t size){
     // Change to data-mode
     PORTB |= (1 << PORTB1); 
-    uint8_t index_character = (int)*character - 32;
+
+    uint8_t index = (uint8_t)character - 32;
+    //printf("char, %2D, index: %2D", character, index);
+    const uint8_t *glyph = font + (uint16_t)index * size;
+
 
     char byte = 0x00;
     for (int j = 0; j < size; j++){
-            byte = pgm_read_byte(&(font[index_character][j]));
+            byte = pgm_read_byte(&glyph[j]);
             SPI_Transmit(byte);
     }
 }
 
+void OLED_Print_Str(const uint8_t* font, char* str, uint8_t size) {
+    uint8_t str_length = strlen(str);
+    char letter;
+
+    for (int i = 0; 0 < str_length; i++) {
+        char letter = str[i];
+        OLED_Print_Char(font, letter, size);
+    }
+}

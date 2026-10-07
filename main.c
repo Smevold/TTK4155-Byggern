@@ -73,11 +73,13 @@ void main(){
     */
 
     OLED_Home(&cursor);
-    OLED_Print(&OV_logo, &cursor);
+    //OLED_Print(OV_logo, &cursor);
 
     _delay_ms(3000);
-    char aye = 'a';
-    OLED_Print_Char(&font8, &aye, LARGE_FONT);
+    //char aye = 'a';
+    //OLED_Print_Char((const uint8_t*)font8, aye, LARGE_FONT);
+    char* str = "Hello World!";
+    OLED_Print_Str(font8, str, LARGE_FONT);
 
     //cursor.line_start = 5;
     //OLED_Clear_Line(&cursor);
