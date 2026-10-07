@@ -39,6 +39,8 @@ void ADC_Init() {
     OCR1AH = 0;
 }
 
+// Initialise maximum and minimums of the joystick
+// Some value has been chosen, approx midway between max and min
 void JOY_Init(io_joy_t* joy_extreme) {
     joy_extreme->x_max = 0x80;
     joy_extreme->x_min = 0x80;
@@ -46,9 +48,7 @@ void JOY_Init(io_joy_t* joy_extreme) {
     joy_extreme->y_min = 0x80;
 }
 
-
-io_pos_t ADC_Read() {
-    io_pos_t pos;
+void ADC_Read(io_joy_t* joy, io_pad_t* pad) {
     volatile char *ext_adc = (char *) 0x1000; // Start address for the SRAM
 
     ext_adc[0] = 0x01;
@@ -56,25 +56,23 @@ io_pos_t ADC_Read() {
     _delay_us(ADC_CONV_TIME_US); // Should change to polling or interrupts
 
     // Should automatically change address for reading
-    pos.joy_y = ext_adc[0];
-    pos.joy_x = ext_adc[0];
-    pos.pad_y = ext_adc[0];
-    pos.pad_x = ext_adc[0];
-
-    return pos;
+    joy->y_dig = ext_adc[0];
+    joy->x_dig = ext_adc[0];
+    pad->pad_y = ext_adc[0];
+    pad->pad_x = ext_adc[0];
 }
 
-void JOY_Readable_X(io_joy_t* joy, uint8_t* x_digital) {
-    joy->x = (*x_digital - joy->x_min) * 100 / (joy->x_max - joy->x_min);
+void JOY_Readable_X(io_joy_t* joy) {
+    joy->x = (joy->x_dig - joy->x_min) * 100 / (joy->x_max - joy->x_min);
 }
 
-void JOY_Readable_Y(io_joy_t* joy, uint8_t* y_digital) {
-    joy->y = (*y_digital - joy->y_min) * 100 / (joy->y_max - joy->y_min);
+void JOY_Readable_Y(io_joy_t* joy) {
+    joy->y = (joy->y_dig - joy->y_min) * 100 / (joy->y_max - joy->y_min);
 }
 
-void JOY_Readable_Pos(io_joy_t* joy, io_pos_t* joy_digital) {
-    JOY_Readable_X(joy, &(joy_digital->joy_x));
-    JOY_Readable_Y(joy, &(joy_digital->joy_y));
+void JOY_Readable_Pos(io_joy_t* joy) {
+    JOY_Readable_X(joy);
+    JOY_Readable_Y(joy);
 }
 
 void JOY_Direction(io_joy_t* joy) {
@@ -85,55 +83,40 @@ void JOY_Direction(io_joy_t* joy) {
     if ((joy->x < 50 + neutral_size && joy->x > 50 - neutral_size)
         && (joy->y < 50 + neutral_size && joy->y > 50 - neutral_size)) {
             joy->dir = NEUTRAL;
+            return;
     }
 
-    // Check which quadrant the joystick is in
-    // After given quadrant is determined, logic to determine direction
-    if (joy->x > 50) {
-        if (joy->y > 50) {
-            if (joy->x > joy->y) {
-                joy->dir = RIGHT;
-            } else {
-                joy->dir =  UP;
-            }
+    // Determine direction of joystick
+    // Logic is: think of position in a coordinate, divide sections with diagonals, setup expressions, voila
+    if (joy->y > joy->x) {
+        if (joy->y > 100 - joy->x) {
+            joy->dir = UP;
         } else {
-            if (joy->y < 100 - joy->x) {
-                joy->dir =  DOWN;
-            } else {
-                joy->dir =  RIGHT;
-            }
+            joy->dir = LEFT;
         }
     } else {
-        if (joy->y < 50) {
-            if (joy->x < joy->y) {
-                joy->dir =  LEFT;
-            } else {
-                joy->dir =  DOWN;
-            }
+        if (joy->y > 100 - joy->x) {
+            joy->dir = RIGHT;
         } else {
-            if (joy->y > 100 - joy->x) {
-                joy->dir =  UP;
-            } else {
-                joy->dir =  LEFT;
-            }
+            joy->dir = DOWN;
         }
     }
 }
 
-void JOY_Calibrate(io_joy_t* joy, io_pos_t* joy_digital) {
+void JOY_Calibrate(io_joy_t* joy) {
     
     // Compare and change in x direction
-    if (joy_digital->joy_x < joy->x_min) {
-        joy->x_min = joy_digital->joy_x;
-    } else if (joy_digital->joy_x > joy->x_max) {
-        joy->x_max = joy_digital->joy_x;
+    if (joy->x_dig < joy->x_min) {
+        joy->x_min = joy->x_dig;
+    } else if (joy->x_dig > joy->x_max) {
+        joy->x_max = joy->x_dig;
     }
 
     // Compare and change in y direction
-    if (joy_digital->joy_y < joy->y_min) {
-        joy->y_min = joy_digital->joy_y;
-    } else if (joy_digital->joy_y > joy->y_max) {
-        joy->y_max = joy_digital->joy_y;
+    if (joy->y_dig < joy->y_min) {
+        joy->y_min = joy->y_dig;
+    } else if (joy->y_dig > joy->y_max) {
+        joy->y_max = joy->y_dig;
     }
 }
 

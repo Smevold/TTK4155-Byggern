@@ -7,11 +7,9 @@
 
 // Digital value of IO devices
 typedef struct {
-    uint8_t joy_x;
-    uint8_t joy_y;
     uint8_t pad_x;
     uint8_t pad_y;
-} io_pos_t;
+} io_pad_t;
 
 // Directions for joystick
 typedef enum {
@@ -20,12 +18,21 @@ typedef enum {
 
 // Functional values for joystick
 typedef struct {
+    // Percentile of x and y position from 0 - 100
     uint8_t x;
     uint8_t y;
+
+    // Digital value of voltage in x and y direction
+    uint8_t x_dig;
+    uint8_t y_dig;
+
+    // Maximums and minimums of x and y digital voltage value
     uint8_t x_max;
     uint8_t x_min;
     uint8_t y_max;
     uint8_t y_min;
+
+    // Enum of direction 
     direction_t dir;
 } io_joy_t;
 
@@ -70,22 +77,22 @@ void ADC_Init();
 
 void JOY_Init(io_joy_t* joy_extreme);
 
-io_pos_t ADC_Read();
+void ADC_Read(io_joy_t* joy, io_pad_t* pad);
 
 // Return percentile of joystick position in x direction
-void JOY_Readable_X(io_joy_t* joy, uint8_t* x_digital);
+void JOY_Readable_X(io_joy_t* joy);
 
 // Return percentile of joystick position in y direction
-void JOY_Readable_Y(io_joy_t* joy, uint8_t* y_digital);
+void JOY_Readable_Y(io_joy_t* joy);
 
 // Return struct with percentile in both axis'
-void JOY_Readable_Pos(io_joy_t* joy, io_pos_t* joy_digital);
+void JOY_Readable_Pos(io_joy_t* joy);
 
 // Return direction of joystick
 void JOY_Direction(io_joy_t* joy);
 
 // Change extremes of digital value of joystick position or calibrate joystick
-void JOY_Calibrate(io_joy_t* joy, io_pos_t* joy_digital);
+void JOY_Calibrate(io_joy_t* joy);
 
 void BTN_Read();
 
