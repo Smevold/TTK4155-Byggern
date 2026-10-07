@@ -47,43 +47,14 @@ void main(){
     cursor_t cursor;
 
     OLED_Clear(&cursor);
+    OLED_Print(OV_logo, &cursor);
 
-    /*
-    io_joy_t* joy;
-    io_pos_t* pos;
+    _delay_ms(2000);
 
-    *pos = ADC_Read();
+    OLED_Clear(&cursor);
+    Interface_Print_Menu(&cursor);
 
-    JOY_Init(&joy);
-    
-    printf("Test please work");
-    
-
-    
-    printf("Calibrating...");
-    volatile int i = 0;
-    while(i < 5) {
-        JOY_Calibrate(&joy, &pos);
-        _delay_ms(1000);
-        i++;
-        printf("%2X seconds passed", i);
-    }
-    printf("Done calibrating !!!!!!!");
-
-    printf("x_max: %2X, x_min: %2X, y_max: %2X, y_min: %2X", joy->x_max, joy->x_min, joy->y_max, joy->y_min);
-    */
-
-    OLED_Home(&cursor);
-    //OLED_Print(OV_logo, &cursor);
-
-    _delay_ms(3000);
-    //char aye = 'a';
-    //OLED_Print_Char((const uint8_t*)font8, aye, LARGE_FONT);
-    char str[] = "Hello, World!";
-    OLED_Print_Str(font8, str, LARGE_FONT);
-
-    //cursor.line_start = 5;
-    //OLED_Clear_Line(&cursor);
+    uint8_t menu_option = 0;
 
     while(1) {
         _delay_ms(20);

@@ -109,7 +109,7 @@ const uint8_t PROGMEM font8[95][8] = {
 };
 
 // Font 5x7 - normal
-const unsigned char PROGMEM font5[95][5] = {
+const uint8_t PROGMEM font5[95][5] = {
 	{0b00000000,0b00000000,0b00000000,0b00000000,0b00000000}, //
 	{0b00000000,0b00000000,0b01011111,0b00000000,0b00000000}, // !
 	{0b00000000,0b00000111,0b00000000,0b00000111,0b00000000}, // "
@@ -208,7 +208,7 @@ const unsigned char PROGMEM font5[95][5] = {
 	};
 
 // Font 4x6 - Small
-const unsigned char PROGMEM font4[95][4] = {
+const uint8_t PROGMEM font4[95][4] = {
 		{0b00000000,0b00000000,0b00000000,0b00000000}, //
 		{0b00000000,0b01011100,0b00000000,0b00000000}, // !
 		{0b00001100,0b00000000,0b00001100,0b00000000}, // "

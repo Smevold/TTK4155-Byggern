@@ -16,9 +16,9 @@
 
 extern const uint8_t PROGMEM font8[95][8];
 
-extern const unsigned char PROGMEM font5[95][5];
+extern const uint8_t PROGMEM font5[95][5];
 
-extern const unsigned char PROGMEM font4[95][4];
+extern const uint8_t PROGMEM font4[95][4];
 
 
 //#endif /* FONTS_H_ */
