@@ -8,7 +8,7 @@
 
 void SPI_Init();
 
-void SPI_Transmit(char cData);
+void SPI_Transmit(char data);
 
 char SPI_Receive();
 
