@@ -144,15 +144,15 @@ void BTN_Read(){
     
     _delay_us(40);
 
-    Buttons btns = {0};
+    //Buttons btns = {0};
     //Buttons btns;
-    uint8_t *btns_in = (uint8_t *)&btns; //  0x1000 kanskje? 
+    uint8_t btns_in[3];  //(uint8_t *)&btns; //  0x1000 kanskje? 
 
-    btns_in[0] = SPI_Receive(0x00);
+    btns_in[0] = SPI_Receive();
     _delay_us(2);
-    btns_in[1] = SPI_Receive(0x00);
+    btns_in[1] = SPI_Receive();
     _delay_us(2);
-    btns_in[2] = SPI_Receive(0x00);
+    btns_in[2] = SPI_Receive();
 
     printf("1: %2X, 2: %2X, 3: %2X\n", btns_in[0], btns_in[1], btns_in[2]);
 

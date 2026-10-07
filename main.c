@@ -56,11 +56,11 @@ void main(){
     //OLED_Clear(&cursor);
     //Interface_Startup(&cursor, &joy, &joy_digital);
 
-    BTN_Read();
-
+    
     uint8_t menu_option = 0;
-
+    
     while(1) {
-        _delay_ms(20);
+        BTN_Read();
+        _delay_ms(1000);
     }
 }
