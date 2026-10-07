@@ -12,4 +12,7 @@
 // OV LOGO
 extern const uint8_t PROGMEM OV_logo[8][128];
 
+// Fred oko
+extern const uint8_t PROGMEM Fred__ko[8][128];
+
 #endif /* OLED_GRAPHICS_H*/

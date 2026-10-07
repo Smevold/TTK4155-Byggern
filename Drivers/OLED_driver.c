@@ -97,7 +97,7 @@ void OLED_Clear_Line(cursor_t* cursor) {
 }
 
 
-void OLED_Print (uint8_t* bitmap, cursor_t* cursor){
+void OLED_Print (const uint8_t (*bitmap)[128], cursor_t* cursor){
     OLED_Goto_Pos(cursor);
 
     // Change to data-mode
