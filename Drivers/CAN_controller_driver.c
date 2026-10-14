@@ -10,13 +10,21 @@
 #include "SPI_driver.h"
 #include "CAN_controller_driver.h"
 
+
+//RTS 
+#define MCP_RTS      0x80
+#define MCP_RTS_TX0  0x01
+#define MCP_RTS_TX1  0x02
+#define MCP_RTS_TX2  0x04
+
+
 // The MCP2515 expects the first byte after
 //lowering CS to be the instruction/
 //command byte. This implies that CS must
 //be raised and then lowered again to
 //invoke another command.
 
-void CAN_Read_Controller(char address){
+void CAN_Read_Controller(uint8_t address){
     PORTB &= ~(1 << PB2); 
     SPI_Transmit(0b00000011);
     SPI_Transmit(adresss);
@@ -25,24 +33,26 @@ void CAN_Read_Controller(char address){
     SPI_SlaveDeselectAll();
 }
 
-void CAN_Write_Controller(char adress, char data){
+void CAN_Write_Controller(uint8_t adress, uint8_t data){
     PORTB &= ~(1 << PB2); 
     SPI_Transmit(0b00000010);
     SPI_Transmit(adress);
     SPI_Transmit(data);
 
      // CS HIGH
-    PORTB |= ~(1 << PB2); 
+    PORTB |= (1 << PB2); 
     
     SPI_SlaveDeselectAll();
 }
 
 
 // RTS
-void CAN_Request_To_Send(char TXREQ_bit){ 
+void CAN_Request_To_Send(uint8_t TXREQ_mask){ 
     PORTB &= ~(1 << PB2); 
-    char cmd_byte = 0b100;
-    SPI_Transmit(cmd_byte);
+    SPI_Transmit(MCP_RTS | (txb_mask & 0x07));
+
+
+    PORTB |= (1 << PB2); 
     
     // This command will set the TxBnCTRL.TXREQ bit for
     //the respective buffer(s)
@@ -58,7 +68,7 @@ void CAN_Read_Status(){
     SPI_SlaveDeselectAll();    
 }
 
-void CAN_Bit_Modify(char address, char mask_byte, char data){
+void CAN_Bit_Modify(uint8_t address, uint8_t mask_byte, uint8_t data){
     PORTB &= ~(1 << PB2); 
     SPI_Transmit(0b00000101);
     SPI_Transmit(address);
@@ -71,9 +81,9 @@ void CAN_Bit_Modify(char address, char mask_byte, char data){
 void CAN_Controller_RST(){
     PORTB &= ~(1 << PB2); 
     SPI_Transmit(0b11000000);
-    
+
     // CS HIGH
-    PORTB   = ~(1 << PB2);
+    PORTB   = (1 << PB2);
 
     SPI_SlaveDeselectAll();
 }
