@@ -27,16 +27,16 @@
 void CAN_Read_Controller(uint8_t address){
     PORTB &= ~(1 << PB2); 
     SPI_Transmit(0b00000011);
-    SPI_Transmit(adresss);
+    SPI_Transmit(address);
     SPI_Receive();
     
     SPI_SlaveDeselectAll();
 }
 
-void CAN_Write_Controller(uint8_t adress, uint8_t data){
+void CAN_Write_Controller(uint8_t address, uint8_t data){
     PORTB &= ~(1 << PB2); 
     SPI_Transmit(0b00000010);
-    SPI_Transmit(adress);
+    SPI_Transmit(address);
     SPI_Transmit(data);
 
      // CS HIGH
