@@ -15,7 +15,7 @@
 #include<util/delay.h>
 #include "Game_menu.h"
 
-void Interface_Startup(cursor_t* cursor, io_joy_t* joy) {
+void Interface_Startup(cursor_t* cursor, io_joy_t* joy, io_pad_t* pad) {
     OLED_Clear(cursor);
     OLED_Home(cursor);
     char str_calibrating[] = "Calibrating...";
@@ -29,7 +29,10 @@ void Interface_Startup(cursor_t* cursor, io_joy_t* joy) {
     // Reset timer
     TCNT3 = 0x0000;
     loop = 1;
-    while(loop) {JOY_Calibrate(joy);}
+    while(loop) {
+        ADC_Read(joy, pad);
+        JOY_Calibrate(joy);
+    }
 
     // Reset clock
     // TCNT0 = 0x00;

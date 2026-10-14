@@ -29,16 +29,16 @@ void CAN_init(){
 void CAN_Read_Controller(char address){
     CAN_init();
     SPI_Transmit(0b00000011);
-    SPI_Transmit(adresss);
+    SPI_Transmit(address);
     SPI_Receive();
     
     SPI_SlaveDeselectAll();
 }
 
-void CAN_Write_Controller(char adress, char data){
+void CAN_Write_Controller(char address, char data){
     CAN_init();
     SPI_Transmit(0b00000010);
-    SPI_Transmit(adress);
+    SPI_Transmit(address);
     SPI_Transmit(data);
 
      // CS HIGH
@@ -78,7 +78,7 @@ void CAN_Bit_Modify(char address, char mask_byte, char data){
     SPI_SlaveDeselectAll();
 }
 
-void CAN_Controller_RST(){
+void CAN_Controller_RTS(){
     CAN_init();
     SPI_Transmit(0b11000000);
     // CS HIGH
