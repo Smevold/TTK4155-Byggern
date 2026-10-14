@@ -14,7 +14,7 @@ void SPI_Init() {
     // Set MOSI and SCK as output
     DDRB |= (1 << DDB5) | (1 << DDB7);
 
-    // Set SS_AVR, SS_OLED, SS_EMPTY as output
+    // Set SS_AVR, SS_OLED, SS_CAN as output
     DDRB |= (1 << DDB4) | (1 << DDB3) | (1 << DDB2);
 
     // Deselect all SS
@@ -67,7 +67,7 @@ void SPI_SlaveSelect(uint8_t slave) {
             PORTB |= (1 << PB4) | (1 << PB2);
             PORTB &= ~(1 << PB3); 
             break;
-        case SS_EMPTY: 
+        case SS_CAN: 
             PORTB |= (1 << PB4) | (1 << PB3);
             PORTB &= ~(1 << PB2); 
             break;
