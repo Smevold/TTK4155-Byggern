@@ -17,8 +17,14 @@ void CAN_init(){
     // CS low
     PORTB &= ~(1 << PB2); 
     //Reset pin HIGH HUSKER IKKE PIN LOL
-    PORTB |= ~(1 << PB2); 
+    SPI_Transmit(0xC0);
     // clk out 1, clk out disable, osm disable, abat request, loop back mode
     SPI_Transmit(0b00001010);
 
+    PORTB |= (1 << PB2); 
+
+    uint8_t stat = CAN_Read_Controller(0x0E);
+    if ((stat & 0xE0) != 0x40) {
+        // failed
+    }
 }
