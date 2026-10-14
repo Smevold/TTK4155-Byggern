@@ -16,18 +16,8 @@
 //be raised and then lowered again to
 //invoke another command.
 
-void CAN_init(){
-    // Slave select
-    SPI_SlaveSelect(SS_CAN);
-    
-    // CS low
-    PORTB &= ~(1 << PB2); 
-    //Reset pin low elns
-    PORTB &= ~(1 << PB2); 
-}
-
 void CAN_Read_Controller(char address){
-    CAN_init();
+    PORTB &= ~(1 << PB2); 
     SPI_Transmit(0b00000011);
     SPI_Transmit(address);
     SPI_Receive();
@@ -35,14 +25,14 @@ void CAN_Read_Controller(char address){
     SPI_SlaveDeselectAll();
 }
 
-void CAN_Write_Controller(char address, char data){
-    CAN_init();
+void CAN_Write_Controller(char adress, char data){
+    PORTB &= ~(1 << PB2); 
     SPI_Transmit(0b00000010);
     SPI_Transmit(address);
     SPI_Transmit(data);
 
      // CS HIGH
-    PORTB &= ~(1 << PB2); 
+    PORTB |= ~(1 << PB2); 
     
     SPI_SlaveDeselectAll();
 }
@@ -50,7 +40,7 @@ void CAN_Write_Controller(char address, char data){
 
 // RTS
 void CAN_Request_To_Send(char TXREQ_bit){ 
-    CAN_init();
+    PORTB &= ~(1 << PB2); 
     char cmd_byte = 0b100;
     SPI_Transmit(cmd_byte);
     
@@ -61,7 +51,7 @@ void CAN_Request_To_Send(char TXREQ_bit){
 }
 
 void CAN_Read_Status(){
-    CAN_init();
+    PORTB &= ~(1 << PB2); 
     SPI_Transmit(0b10100000);
     SPI_Receive();
 
@@ -69,7 +59,7 @@ void CAN_Read_Status(){
 }
 
 void CAN_Bit_Modify(char address, char mask_byte, char data){
-    CAN_init();
+    PORTB &= ~(1 << PB2); 
     SPI_Transmit(0b00000101);
     SPI_Transmit(address);
     SPI_Transmit(mask_byte);
@@ -78,11 +68,12 @@ void CAN_Bit_Modify(char address, char mask_byte, char data){
     SPI_SlaveDeselectAll();
 }
 
-void CAN_Controller_RTS(){
-    CAN_init();
+void CAN_Controller_RST(){
+    PORTB &= ~(1 << PB2); 
     SPI_Transmit(0b11000000);
+    
     // CS HIGH
-    PORTB &= ~(1 << PB2);
+    PORTB   = ~(1 << PB2);
 
     SPI_SlaveDeselectAll();
 }
