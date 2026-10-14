@@ -1,6 +1,7 @@
 #include "../Drivers/OLED_driver.h"
 #include "../Drivers/SPI_driver.h"
 #include "../Drivers/IO_driver.h"
+#include "../Drivers/ISR_driver.h"
 #include "../Graphics/OLED_graphics.h"
 #include "../Graphics/fonts.h"
 
@@ -14,7 +15,7 @@
 #include<util/delay.h>
 #include "Game_menu.h"
 
-void Interface_Startup(cursor_t* cursor, io_joy_t* joy, io_pos_t* joy_digital) {
+void Interface_Startup(cursor_t* cursor, io_joy_t* joy) {
     OLED_Clear(cursor);
     OLED_Home(cursor);
     char str_calibrating[] = "Calibrating...";
@@ -22,26 +23,21 @@ void Interface_Startup(cursor_t* cursor, io_joy_t* joy, io_pos_t* joy_digital) {
 
     cursor->line_start = 8;
     OLED_Goto_Pos(cursor);
-    char str_holdright[] = "Hold joystick right";
+    char str_holdright[] = "Spin joystick now!";
+    OLED_Print_Str(font5, str_holdright, MEDIUM_FONT);
 
-    /*
-    // SHOULD SWITCH TO TIMER INTERRUPT
-    clock_t begin;
-    double time_spent;
-    unsigned int i;
-    begin = clock();
+    // Reset timer
+    TCNT3 = 0x0000;
+    loop = 1;
+    while(loop) {JOY_Calibrate(joy);}
 
-    while(1) {
-        JOY_Calibrate(joy, joy_digital);
-
-        time_spent = (double)(clock() - begin) / CLOCKS_PER_SEC; // SHOULD SWITCH TO TIMER INTERRUPT
-        if (time_spent>=3.0) {break;}
-    }
+    // Reset clock
+    // TCNT0 = 0x00;
 
     OLED_Clear_Line(cursor);
-    char str_goodwork = "Good Work, August!";
+    char str_goodwork[] = "Good Work, August!";
     OLED_Print_Str(font5, str_goodwork, MEDIUM_FONT);
-    */
+    
 }
 
 void Interface_Print_Menu(cursor_t* cursor) {

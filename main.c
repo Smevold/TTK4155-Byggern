@@ -14,53 +14,49 @@
 #include "Drivers/IO_driver.h"
 #include "Drivers/SPI_driver.h"
 #include "Drivers/OLED_driver.h" 
+#include "Drivers/ISR_driver.h"
 #include "Graphics/OLED_graphics.h"
 #include "Graphics/fonts.h"
 #include "Interface/Game_menu.h"
 
-void PIN_Init(){ // Is probably only ext ram init
-    MCUCR |= (1 << SRE);
-    //DDRA = 0b11111111;
-    //DDRA |= (1 << DDA3) | (1 << DDA2) | (1 << DDA1) | (1 << DDA0);
-    //DDRE |= (1 << DDE1);
-    SFIOR |= (1 << XMM2);
-    SFIOR &= ~((1 << XMM1) | (1 << XMM0));
-}
-
-/*
-void pin_set(){
-    PORTA = (1 << PA7) | (1 << PA6) | (1 << PA5) | (1 << PA4) | (1 << PA3) | (1 << PA2) | (1 << PA1) | (1 << PA0);
-   // PORTE = (1 << PE1);
-}
-   */
-
-
 
 void main(){
-    PIN_Init();
+    sei();
+    EXTRAM_Init();
     UART_Init (BAUD_PRESCALE);
+    JOY_Init(&joy);
     ADC_Init();
     SPI_Init();
 
     OLED_Init();
+    ISR_Init();
 
     cursor_t cursor;
-    io_joy_t joy;
-    io_pos_t joy_digital;
 
     OLED_Clear(&cursor);
     OLED_Print(OV_logo, &cursor);
 
-    //_delay_ms(2000);
+    _delay_ms(2000);
 
-    //OLED_Clear(&cursor);
-    //Interface_Startup(&cursor, &joy, &joy_digital);
+    Interface_Startup(&cursor, &joy);
 
-    BTN_Read();
+    _delay_ms(2000);
 
+    OLED_Clear(&cursor);
+    Interface_Print_Menu(&cursor);
+
+    
     uint8_t menu_option = 0;
-
+    //printf("Checkpoint\n");
+    Buttons btns;
     while(1) {
-        _delay_ms(20);
+        btns = BTN_Read();
+        if (btns.R1 == 1) {
+            LED_Set(1, 1);
+        }
+
+        printf("1: %2X, 2: %2X, 3: %2X\n", btns.right, btns.left, btns.nav);
+        _delay_ms(1000);
     }
 }
+
