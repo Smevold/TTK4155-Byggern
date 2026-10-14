@@ -74,8 +74,9 @@ void main(){
                 cursor.line_start = 16;
         }
 
+        OLED_Print_Char(font5, ' X', MEDIUM_FONT);
+        /*
         if (PIND & (1 << PIND7)) {
-            OLED_Print_Char(font5, ' X', MEDIUM_FONT);
         } else {
             OLED_Print_Char(font5, '|X|', MEDIUM_FONT);
         }
@@ -86,6 +87,7 @@ void main(){
         }
 
         // printf("1: %2X, 2: %2X, 3: %2X\n", btns.right, btns.left, btns.nav);
+        */
         _delay_ms(10);
         
     }
