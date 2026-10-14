@@ -46,7 +46,6 @@ void main(){
 
     cursor_t cursor;
     io_joy_t joy;
-    io_pos_t joy_digital;
 
     OLED_Clear(&cursor);
     OLED_Print(OV_logo, &cursor);
