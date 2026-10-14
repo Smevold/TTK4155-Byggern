@@ -4,7 +4,7 @@
 
 #define SS_IO_AVR 0
 #define SS_OLED 1
-#define SS_EMPTY 2
+#define SS_CAN 2
 
 void SPI_Init();
 

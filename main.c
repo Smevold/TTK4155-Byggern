@@ -56,22 +56,22 @@ void main(){
         JOY_Readable_Pos(&joy);
         JOY_Direction(&joy);
 
-        if (cursor->dir == DOWN && menu_option > 0) {
+        if (joy.dir == DOWN && menu_option > 0) {
             menu_option--;
-        } else if (cursor->dir == UP && menu_option < 3) {
+        } else if (joy.dir == UP && menu_option < 3) {
             menu_option++;
         }
 
         OLED_Clear(&cursor);
         Interface_Print_Menu(&cursor);
-        cursor->column_start = 0;
+        cursor.column_start = 0;
         switch (menu_option) {
             case 0:
-                cursor->line_start = 0;
+                cursor.line_start = 0;
             case 1:
-                cursor->line_start = 8;
+                cursor.line_start = 8;
             case 2:
-                cursor->line_start = 16;
+                cursor.line_start = 16;
         }
 
         if (PIND & (1 << PIND7)) {
