@@ -25,16 +25,19 @@ void SPI_Init() {
     SPCR |= (1 << SPE) | (1 << MSTR) | (1 << SPR0);
 }
 
-void SPI_Transmit(char data) {
+char SPI_Transmit(char data) {
     // Start transmission
     SPDR = data;
 
     // Wait for transmission completion
     // SPIF is set when transmission is complete
     while (!(SPSR & (1 << SPIF))){;}
+
+    return SPDR;
 }
 
 char SPI_Receive() {
+    SPDR = 0x00; // Dummy byte to start SCK
     // Wait for receive completion
     while(!(SPSR & (1 << SPIF))){;}
 
@@ -69,4 +72,8 @@ void SPI_SlaveSelect(uint8_t slave) {
             PORTB &= ~(1 << PB2); 
             break;
     }
+}
+
+void SPI_SlaveDeselectAll() {
+    PORTB |= (1 << PB4) | (1 << PB3) | (1 << PB2); // Deselect all
 }
