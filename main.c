@@ -86,7 +86,7 @@ void main(){
         }
 
         // printf("1: %2X, 2: %2X, 3: %2X\n", btns.right, btns.left, btns.nav);
-        // _delay_ms(1000);
+        _delay_ms(10);
         
     }
 }
