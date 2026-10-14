@@ -34,6 +34,9 @@ typedef struct {
 
     // Enum of direction 
     direction_t dir;
+
+    // Button
+    uint8_t btn;
 } io_joy_t;
 
 // button
