@@ -20,9 +20,6 @@
 #include "Interface/Game_menu.h"
 
 
-int loop = 1;
-io_joy_t joy;
-
 void main(){
     sei();
     EXTRAM_Init();
@@ -39,7 +36,9 @@ void main(){
     OLED_Clear(&cursor);
     OLED_Print(OV_logo, &cursor);
 
-    //_delay_ms(2000);
+    _delay_ms(2000);
+
+    Interface_Startup(&cursor, &joy);
 
     //OLED_Clear(&cursor);
     //Interface_Startup(&cursor, &joy, &joy_digital);
@@ -58,3 +57,4 @@ void main(){
         _delay_ms(1000);
     }
 }
+

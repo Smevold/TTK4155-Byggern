@@ -13,7 +13,8 @@
 #define ADC_CLK_HZ 4000000UL // May be subject to change
 #define ADC_CONV_TIME_US ((9UL * ADC_CHANNEL_NUM * 2UL * 1000000UL) / ADC_CLK_HZ + 5) // Should change to polling or interrupts
 
-
+io_joy_t joy;
+io_pad_t pad;
 
 void EXTRAM_Init(){ 
     MCUCR |= (1 << SRE);

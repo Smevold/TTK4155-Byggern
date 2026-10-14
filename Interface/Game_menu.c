@@ -1,6 +1,7 @@
 #include "../Drivers/OLED_driver.h"
 #include "../Drivers/SPI_driver.h"
 #include "../Drivers/IO_driver.h"
+#include "../Drivers/ISR_driver.h"
 #include "../Graphics/OLED_graphics.h"
 #include "../Graphics/fonts.h"
 
@@ -22,18 +23,19 @@ void Interface_Startup(cursor_t* cursor, io_joy_t* joy) {
 
     cursor->line_start = 8;
     OLED_Goto_Pos(cursor);
-    char str_holdright[] = "Spin joystick now";
+    char str_holdright[] = "Spin joystick now!";
+    OLED_Print_Str(font5, str_holdright, MEDIUM_FONT);
 
     // Reset timer
     TCNT3 = 0x0000;
     loop = 1;
-    while(loop) {JOY_Calibrate(joy, joy_digital);}
+    while(loop) {JOY_Calibrate(joy);}
 
     // Reset clock
     // TCNT0 = 0x00;
 
     OLED_Clear_Line(cursor);
-    char str_goodwork = "Good Work, August!";
+    char str_goodwork[] = "Good Work, August!";
     OLED_Print_Str(font5, str_goodwork, MEDIUM_FONT);
     
 }

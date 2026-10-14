@@ -14,8 +14,7 @@ void ISR_Init(){
     TCCR3B &= ~(1 << WGM33); // WGM33
 
     // Normal Pin operation on OC3A and OC3B
-    TCCR3A &= ~(1 << COM01) & ~(1 << COM00);
-    TCCR3B &= ~(1 << COM01) & ~(1 << COM00);
+    TCCR3A &= ~((1 << COM3A1) | (1 << COM3A0) | (1 << COM3B1) | (1 << COM3B0));
 
     // Set clk_IO/1024
     TCCR3B |= (1 << CS32) | (1 << CS30);
@@ -26,15 +25,15 @@ void ISR_Init(){
     // Can use OCR3BH/L for a second compare?
     OCR3A = 0x1C1F;
 
-    // Enable timer overflow interrupt on Timer/Counter3
-    ETIMSK |= (1 << TOIE3);
+    // Enable timer compare interrupt on Timer/Counter3
+    ETIMSK |= (1 << OCIE3A);
 }
 
 
 // To find the interrupt vectors, look up page Table 24 and 25 on page 57 and 58 in ATmega162 datasheet
 // Also look at lab manual to see how interrupts 
 
-
+/*
 // Interrupt handler to update Joystick position and direction
 ISR(TIMER1_OVF_vect){
     // Read from the ADC to update values
@@ -46,12 +45,20 @@ ISR(TIMER1_OVF_vect){
     // Update direction of joystick
     JOY_Direction(&joy);
 }
+    */
+
+// External variable 
+volatile int loop = 1;
 
 // Interrupt handler to calibrate joystick
-ISR(TIMER0_OVF_vect){
+ISR(TIMER3_COMPA_vect){
+    /*
     // Update positional data
     ADC_Read(&joy, &pad);
 
     // Calibrate extremes of position
     JOY_Calibrate(&joy);
+    */
+
+    loop = 0;
 }

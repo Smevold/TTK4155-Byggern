@@ -3,8 +3,11 @@
 #pragma once
 
 #include <stdint.h>
+#include <avr/interrupt.h>
 
 void ISR_Init();
 
+extern volatile int loop;
+
 // Interrupt handler for joystick reading
-ISR(TIMER1_OVF_vect);
+ISR(TIMER3_OVF_vect);

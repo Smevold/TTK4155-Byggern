@@ -73,6 +73,9 @@ typedef struct __attribute__((packed)) {
     };
 } Buttons;
 
+extern io_joy_t joy;
+extern io_pad_t pad;
+
 void EXTRAM_Init();
 
 void ADC_Init();
