@@ -22,26 +22,20 @@ void Interface_Startup(cursor_t* cursor, io_joy_t* joy) {
 
     cursor->line_start = 8;
     OLED_Goto_Pos(cursor);
-    char str_holdright[] = "Hold joystick right";
+    char str_holdright[] = "Spin joystick now";
 
-    /*
-    // SHOULD SWITCH TO TIMER INTERRUPT
-    clock_t begin;
-    double time_spent;
-    unsigned int i;
-    begin = clock();
+    // Reset timer
+    TCNT3 = 0x0000;
+    loop = 1;
+    while(loop) {JOY_Calibrate(joy, joy_digital);}
 
-    while(1) {
-        JOY_Calibrate(joy, joy_digital);
-
-        time_spent = (double)(clock() - begin) / CLOCKS_PER_SEC; // SHOULD SWITCH TO TIMER INTERRUPT
-        if (time_spent>=3.0) {break;}
-    }
+    // Reset clock
+    // TCNT0 = 0x00;
 
     OLED_Clear_Line(cursor);
     char str_goodwork = "Good Work, August!";
     OLED_Print_Str(font5, str_goodwork, MEDIUM_FONT);
-    */
+    
 }
 
 void Interface_Print_Menu(cursor_t* cursor) {

@@ -14,24 +14,27 @@
 #include "Drivers/IO_driver.h"
 #include "Drivers/SPI_driver.h"
 #include "Drivers/OLED_driver.h" 
+#include "Drivers/ISR_driver.h"
 #include "Graphics/OLED_graphics.h"
 #include "Graphics/fonts.h"
 #include "Interface/Game_menu.h"
 
 
-
-
+int loop = 1;
+io_joy_t joy;
 
 void main(){
+    sei();
     EXTRAM_Init();
     UART_Init (BAUD_PRESCALE);
+    JOY_Init(&joy);
     ADC_Init();
     SPI_Init();
 
     OLED_Init();
+    ISR_Init();
 
     cursor_t cursor;
-    io_joy_t joy;
 
     OLED_Clear(&cursor);
     OLED_Print(OV_logo, &cursor);
