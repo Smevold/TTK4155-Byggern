@@ -40,8 +40,10 @@ void main(){
 
     Interface_Startup(&cursor, &joy);
 
-    //OLED_Clear(&cursor);
-    //Interface_Startup(&cursor, &joy, &joy_digital);
+    _delay_ms(2000);
+
+    OLED_Clear(&cursor);
+    Interface_Print_Menu(&cursor);
 
     
     uint8_t menu_option = 0;
