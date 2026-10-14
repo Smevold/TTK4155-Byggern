@@ -73,6 +73,8 @@ typedef struct __attribute__((packed)) {
     };
 } Buttons;
 
+void EXTRAM_Init();
+
 void ADC_Init();
 
 void JOY_Init(io_joy_t* joy_extreme);

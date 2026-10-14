@@ -15,6 +15,12 @@
 
 
 
+void EXTRAM_Init(){ 
+    MCUCR |= (1 << SRE);
+    SFIOR |= (1 << XMM2);
+    SFIOR &= ~((1 << XMM1) | (1 << XMM0));
+}
+
 void ADC_Init() {
     // Set PD5 as timer output for the ADC clc
     DDRD |= (1 << DDD5);
