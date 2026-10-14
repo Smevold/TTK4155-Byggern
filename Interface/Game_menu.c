@@ -14,7 +14,7 @@
 #include<util/delay.h>
 #include "Game_menu.h"
 
-void Interface_Startup(cursor_t* cursor, io_joy_t* joy, io_pos_t* joy_digital) {
+void Interface_Startup(cursor_t* cursor, io_joy_t* joy) {
     OLED_Clear(cursor);
     OLED_Home(cursor);
     char str_calibrating[] = "Calibrating...";

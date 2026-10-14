@@ -46,7 +46,6 @@ void main(){
 
     cursor_t cursor;
     io_joy_t joy;
-    io_pos_t joy_digital;
 
     OLED_Clear(&cursor);
     OLED_Print(OV_logo, &cursor);
@@ -58,9 +57,15 @@ void main(){
 
     
     uint8_t menu_option = 0;
-    
+    //printf("Checkpoint\n");
+    Buttons btns;
     while(1) {
-        BTN_Read();
+        btns = BTN_Read();
+        if (btns.R1 == 1) {
+            LED_Set(1, 1);
+        }
+
+        printf("1: %2X, 2: %2X, 3: %2X\n", btns.right, btns.left, btns.nav);
         _delay_ms(1000);
     }
 }

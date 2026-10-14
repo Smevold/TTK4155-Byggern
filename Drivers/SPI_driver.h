@@ -8,7 +8,7 @@
 
 void SPI_Init();
 
-void SPI_Transmit(char data);
+char SPI_Transmit(char data);
 
 char SPI_Receive();
 
@@ -18,3 +18,5 @@ void SPI_Transmit_n_Bytes(char* data, uint8_t n);
 void SPI_Receive_n_Bytes(char* data, uint8_t n);
 
 void SPI_SlaveSelect(uint8_t slave);
+
+void SPI_SlaveDeselectAll();

@@ -94,6 +94,6 @@ void JOY_Direction(io_joy_t* joy);
 // Change extremes of digital value of joystick position or calibrate joystick
 void JOY_Calibrate(io_joy_t* joy);
 
-void BTN_Read();
+Buttons BTN_Read();
 
 void LED_Set(uint8_t led_n, uint8_t on);
