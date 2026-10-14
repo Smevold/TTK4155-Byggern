@@ -23,7 +23,7 @@ void ISR_Init(){
     // Set Output Compare for 3 seconds
     // Need to set both high and low
     // Can use OCR3BH/L for a second compare?
-    OCR3A = 0x1C1F;
+    OCR3A = 0x383E;
 
     // Enable timer compare interrupt on Timer/Counter3
     ETIMSK |= (1 << OCIE3A);
