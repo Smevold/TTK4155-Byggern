@@ -43,8 +43,6 @@ void Interface_Startup(cursor_t* cursor, io_joy_t* joy) {
 void Interface_Print_Menu(cursor_t* cursor) {
     OLED_Home(cursor);
 
-    OLED_Print_Char(font5, 'X', MEDIUM_FONT);
-
     cursor->column_start = 8;
     OLED_Goto_Pos(cursor);
     char line1[] = "Option 1";

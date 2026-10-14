@@ -37,7 +37,7 @@ $(BUILD_DIR)/main.hex: $(OBJECT_FILES) | $(BUILD_DIR)
 
 .PHONY: flash
 flash: $(BUILD_DIR)/main.hex
-	avrdude -p $(TARGET_DEVICE) -c $(PROGRAMMER) -U flash:w:$(BUILD_DIR)/main.hex:i
+	avrdude -p $(TARGET_DEVICE) -c $(PROGRAMMER) -U flash:w:$(BUILD_DIR)/main.hex:i -F -v -V
 
 .PHONY: clean
 clean:
