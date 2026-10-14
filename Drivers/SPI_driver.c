@@ -14,7 +14,7 @@ void SPI_Init() {
     // Set MOSI and SCK as output
     DDRB |= (1 << DDB5) | (1 << DDB7);
 
-    // Set SS_AVR, SS_OLED, SS_EMPTY as output
+    // Set SS_AVR, SS_OLED, SS_CAN as output
     DDRB |= (1 << DDB4) | (1 << DDB3) | (1 << DDB2);
 
     // Deselect all SS
