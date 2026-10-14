@@ -24,13 +24,15 @@
 //be raised and then lowered again to
 //invoke another command.
 
-void CAN_Read_Controller(uint8_t address){
+uint8_t CAN_Read_Controller(uint8_t address){
     PORTB &= ~(1 << PB2); 
     SPI_Transmit(0b00000011);
     SPI_Transmit(address);
-    SPI_Receive();
+    uint8_t data = SPI_Receive();
     
+    PORTB |= (1 << PB2);
     SPI_SlaveDeselectAll();
+    return data;
 }
 
 void CAN_Write_Controller(uint8_t address, uint8_t data){
@@ -60,12 +62,21 @@ void CAN_Request_To_Send(uint8_t TXREQ_mask){
     SPI_SlaveDeselectAll();
 }
 
-void CAN_Read_Status(){
+
+
+//if (s & (1 << 0)) { /* message waiting in RXB0 */ }
+//if (s & (1 << 1)) { /* message waiting in RXB1 */ }
+//if (s & (1 << 2)) { /* TXB0 transmission still pending */ }
+//if (s & (1 << 3)) { /* TXB0 finished sending */ }
+
+uint8_t CAN_Read_Status(){
     PORTB &= ~(1 << PB2); 
     SPI_Transmit(0b10100000);
-    SPI_Receive();
+    uint8_t status = SPI_Receive();
 
-    SPI_SlaveDeselectAll();    
+    SPI_SlaveDeselectAll(); 
+    
+    return status;
 }
 
 void CAN_Bit_Modify(uint8_t address, uint8_t mask_byte, uint8_t data){
@@ -75,6 +86,7 @@ void CAN_Bit_Modify(uint8_t address, uint8_t mask_byte, uint8_t data){
     SPI_Transmit(mask_byte);
     SPI_Transmit(data);
 
+     PORTB |= (1 << PB2);
     SPI_SlaveDeselectAll();
 }
 
@@ -83,7 +95,8 @@ void CAN_Controller_RST(){
     SPI_Transmit(0b11000000);
 
     // CS HIGH
-    PORTB   = (1 << PB2);
+    PORTB   |= (1 << PB2);
 
     SPI_SlaveDeselectAll();
+     _delay_ms(1); 
 }

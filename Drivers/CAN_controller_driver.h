@@ -3,8 +3,7 @@
 #include <stdint.h>
 
 
-void CAN_init();
-void CAN_Read_Controller(uint8_t address);
+uint8_t CAN_Read_Controller(uint8_t address);
 void CAN_Write_Controller(uint8_t address, uint8_t data);
 void CAN_Request_To_Send(uint8_t TXREQ_mask);
 void CAN_Read_Status();
