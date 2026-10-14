@@ -25,7 +25,7 @@ void CAN_Read_Controller(char address){
     SPI_SlaveDeselectAll();
 }
 
-void CAN_Write_Controller(char adress, char data){
+void CAN_Write_Controller(char address, char data){
     PORTB &= ~(1 << PB2); 
     SPI_Transmit(0b00000010);
     SPI_Transmit(address);
