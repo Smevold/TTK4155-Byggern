@@ -15,6 +15,8 @@
 #include "Drivers/SPI_driver.h"
 #include "Drivers/OLED_driver.h" 
 #include "Drivers/ISR_driver.h"
+#include "Drivers/CAN_communication_driver.h"
+#include "Drivers/CAN_controller_driver.h"
 #include "Graphics/OLED_graphics.h"
 #include "Graphics/fonts.h"
 #include "Interface/Game_menu.h"
@@ -38,6 +40,8 @@ void main(){
     
     OLED_Clear(&cursor);
     OLED_Print(OV_logo, &cursor);
+
+    
     
     _delay_ms(2000);
     
@@ -55,6 +59,9 @@ void main(){
     //printf("Checkpoint\n");
     Buttons btns;
     while(1) {
+
+
+        /*
         ADC_Read(&joy, &pad);
         JOY_Readable_Pos(&joy);
         JOY_Direction(&joy);
@@ -99,12 +106,13 @@ void main(){
         } else {
             LED_Set(1,0);
         }
+        */
         
         //printf("1: %2X, 2: %2X, 3: %2X\n", btns.right, btns.left, btns.nav);
-        printf("Joy dir: %2X\n", joy.dir);
-        printf("x: %2X, y: %2X\n", joy.x_dig, joy.y_dig);
-        printf("xmax: %2X, xmin: %2X, ymax: %2X, ymin: %2X\n", joy.x_max, joy.x_min, joy.y_max, joy.y_min);
-        printf("JoyBTN: %2X\n", btn);
+        //printf("Joy dir: %2X\n", joy.dir);
+        //printf("x: %2X, y: %2X\n", joy.x_dig, joy.y_dig);
+        //printf("xmax: %2X, xmin: %2X, ymax: %2X, ymin: %2X\n", joy.x_max, joy.x_min, joy.y_max, joy.y_min);
+        //printf("JoyBTN: %2X\n", btn);
         
         _delay_ms(100);
         
