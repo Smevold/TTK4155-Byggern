@@ -32,13 +32,21 @@ void CAN_Init(){
     //Reset 
     CAN_Controller_RST();
 
-    // New command
-    CAN_Write_Controller(MCP_CAN_CRT, MODE_Loopback | (MCP_CAN_ABAT_En << 4) | (MCP_CAN_OSM_Dis << 3) | (MCP_CAN_CLKOut_Dis << 2) | MCP_CAN_CLKPre_1); // CAN Control register
-
     // Bit timing
     CAN_Write_Controller(CNF1, 0x03); 
     CAN_Write_Controller(CNF2, 0xF0); 
     CAN_Write_Controller(CNF3, 0x86); 
+    
+    // Enable interrupt transmit buffer
+    CAN_Write_Controller(0x2b, 0b00011100);
+    DDRD &= ~(1 << DDD2); // Set interrupt pin as input
+
+    // Ignore all mask/filters in RX buffer
+    CAN_Bit_Modify(0x60, 0b01100000, 0b01100000);
+
+    // New command
+    CAN_Write_Controller(MCP_CAN_CRT, MODE_Loopback | (MCP_CAN_ABAT_En << 4) | (MCP_CAN_OSM_Dis << 3) | (MCP_CAN_CLKOut_Dis << 2) | MCP_CAN_CLKPre_1); // CAN Control register
+
 
     // Check if CAN is correct
     uint8_t stat = CAN_Read_Controller(0x0E);
@@ -47,12 +55,6 @@ void CAN_Init(){
     }
 
 
-    // Enable interrupt transmit buffer
-    CAN_Write_Controller(0x2b, 0b00011100);
-    DDRD &= ~(1 << DDD2); // Set interrupt pin as input
-
-    // Ignore all mask/filters in RX buffer
-    CAN_Bit_Modify(0x60, 0b01100000, 0b01100000);
 
 
 }
