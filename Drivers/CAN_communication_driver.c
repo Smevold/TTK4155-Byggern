@@ -22,27 +22,24 @@
 #define MODE_Mask           0xE0
 
 #define EXIDE               0x03
+#define CNF1                0x2A
+#define CNF2                0x29
+#define CNF3                0x28
 
 void CAN_Init(){
-
-    // Slave select
-    SPI_SlaveSelect(SS_CAN);
-     
-    //Reset pin HIGH HUSKER IKKE PIN LOL
-    SPI_Transmit(MCP_CAN_RST);
-
-    SPI_SlaveDeselectAll();
+    //Reset 
+    CAN_Controller_RST();
 
     // New command
-    SPI_SlaveSelect(SS_CAN);
-    SPI_Transmit(MCP_CAN_CRT); // CAN Control register
-    // clk prescaler CLK/1, clk out disable, osm disable, abat request, loop back mode
-    SPI_Transmit((MODE_Loopback << 5) | (MCP_CAN_ABAT_En << 4) | (MCP_CAN_OSM_Dis << 3) | (MCP_CAN_CLKOut_Dis << 2) | MCP_CAN_CLKPre_1);
+    CAN_Write_Controller(MCP_CAN_CRT, MODE_Loopback | (MCP_CAN_ABAT_En << 4) | (MCP_CAN_OSM_Dis << 3) | (MCP_CAN_CLKOut_Dis << 2) | MCP_CAN_CLKPre_1); // CAN Control register
 
-    SPI_SlaveDeselectAll();
+    // Bit timing
+    CAN_Write_Controller(CNF1, 0b01000110); 
+    CAN_Write_Controller(CNF2, 0b00001010); 
+    CAN_Write_Controller(CNF3, 0b00000010); 
 
     // Check if CAN is correct
-    uint8_t stat = CAN_Read_Controller(MCP_CAN_Read_Status);
+    uint8_t stat = CAN_Read_Controller(0x0E);
     if ((stat & MODE_Mask) != MODE_Loopback) {
         // failed
     }
@@ -83,7 +80,7 @@ void CAN_TX_Buffer(uint8_t data, uint8_t adr_mask){
 void CAN_Send_Message(CAN_MSG* msg){
     
     CAN_Write_Controller(0x31, (msg->ID >> 3));
-    CAN_Write_Controller(0x32, ((msg->ID << 8) | (0 <<  EXIDE)));
+    CAN_Write_Controller(0x32, ((msg->ID << 5) | (0 <<  EXIDE)));
     CAN_Write_Controller(0x35, ((0 << 6) | (msg->DLC & 0x0F)));
 
     CAN_Write_Controller(0x36, msg->Data);
@@ -93,6 +90,7 @@ void CAN_Send_Message(CAN_MSG* msg){
 }
 
 void CAN_Receive_Message(CAN_MSG* msg){
+    while (!(CAN_Read_Controller(CANINTF) & 0x01)) {;} // Consider adding a timeout
     msg->ID = (CAN_Read_Controller(0x61) << 3);
     msg->ID = (msg->ID | (CAN_Read_Controller(0x62) >> 5));
     msg->DLC = (CAN_Read_Controller(0x65) & 0x0F);
