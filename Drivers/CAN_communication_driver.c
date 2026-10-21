@@ -9,6 +9,7 @@
 #include "IO_driver.h"
 #include "SPI_driver.h"
 #include "CAN_controller_driver.h"
+#include "CAN_communication_driver.h"
 
 #define MCP_CAN_CRT         0x0F
 #define MCP_CAN_ABAT_En     0x01  
@@ -20,7 +21,10 @@
 #define MODE_Loopback       0x40
 #define MODE_Mask           0xE0
 
-void CAN_init(){
+#define EXIDE               0x03
+
+void CAN_Init(){
+
     // Slave select
     SPI_SlaveSelect(SS_CAN);
      
@@ -38,10 +42,56 @@ void CAN_init(){
     SPI_SlaveDeselectAll();
     SPI_SlaveSelect(SS_CAN);
 
+
+
     // Check if CAN is correct
     uint8_t stat = CAN_Read_Controller(MCP_CAN_Read_Status);
     if ((stat & MODE_Mask) != MODE_Loopback) {
         // failed
     }
     SPI_SlaveDeselectAll();
+
+
+    // Enable interrupt transmit buffer
+    SPI_SlaveSelect(SS_CAN);
+    CAN_Write_Controller(0x2b, 0b00011100);
+    SPI_SlaveDeselectAll();
+
+    DDRD &= ~(1 << DDD2);
+
+
+}
+
+/*
+char CAN_RX_Buffer(uint8_t adr_mask){
+    SPI_SlaveSelect(SS_CAN);
+
+
+    SPI_Transmit(0b10010000 | (adr_mask << 1));
+    char data = SPI_Receive();
+    SPI_SlaveDeselectAll();
+
+    return data;
+}
+
+void CAN_TX_Buffer(uint8_t data, uint8_t adr_mask){
+    SPI_SlaveSelect(SS_CAN);
+    SPI_Transmit(0b01000000 | (adr_mask));
+    SPI_Transmit(data);
+    SPI_SlaveDeselectAll();
+
+}
+*/
+
+
+void CAN_Send_Message(CAN_MSG* msg){
+    
+    CAN_Write_Controller(0x31, (msg->ID >> 3));
+    CAN_Write_Controller(0x32, ((msg->ID << 8) | (0 <<  EXIDE)));
+    CAN_Write_Controller(0x35, ((0 << 6) | (msg->DLC & 0x0F)));
+
+    CAN_Write_Controller(0x36, msg->Data);
+    CAN_Request_To_Send(0x01);
+    CAN_Bit_Modify(0x30, 0x07, 0x07);
+
 }
