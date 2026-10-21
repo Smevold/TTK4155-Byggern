@@ -26,6 +26,8 @@
 #define CNF2                0x29
 #define CNF3                0x28
 
+#define CANINTF             0x2C
+
 void CAN_Init(){
     //Reset 
     CAN_Controller_RST();
@@ -34,9 +36,9 @@ void CAN_Init(){
     CAN_Write_Controller(MCP_CAN_CRT, MODE_Loopback | (MCP_CAN_ABAT_En << 4) | (MCP_CAN_OSM_Dis << 3) | (MCP_CAN_CLKOut_Dis << 2) | MCP_CAN_CLKPre_1); // CAN Control register
 
     // Bit timing
-    CAN_Write_Controller(CNF1, 0b01000110); 
-    CAN_Write_Controller(CNF2, 0b00001010); 
-    CAN_Write_Controller(CNF3, 0b00000010); 
+    CAN_Write_Controller(CNF1, 0x03); 
+    CAN_Write_Controller(CNF2, 0xF0); 
+    CAN_Write_Controller(CNF3, 0x86); 
 
     // Check if CAN is correct
     uint8_t stat = CAN_Read_Controller(0x0E);
