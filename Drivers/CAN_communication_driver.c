@@ -37,7 +37,7 @@ void CAN_Init(){
     CAN_Write_Controller(CNF2, 0xF0); 
     CAN_Write_Controller(CNF3, 0x86); 
     
-    // Enable interrupt transmit buffer
+    // Enable interrupt TX buffer
     CAN_Write_Controller(0x2b, 0b00011100);
     DDRD &= ~(1 << DDD2); // Set interrupt pin as input
 
@@ -45,7 +45,7 @@ void CAN_Init(){
     CAN_Bit_Modify(0x60, 0b01100000, 0b01100000);
 
     // New command
-    CAN_Write_Controller(MCP_CAN_CRT, MODE_Loopback | (MCP_CAN_ABAT_En << 4) | (MCP_CAN_OSM_Dis << 3) | (MCP_CAN_CLKOut_Dis << 2) | MCP_CAN_CLKPre_1); // CAN Control register
+    CAN_Bit_Modify(0x0F, 0xE0, MODE_Loopback);
 
 
     // Check if CAN is correct
@@ -99,7 +99,4 @@ void CAN_Receive_Message(CAN_MSG* msg){
     msg->ID = (msg->ID | (CAN_Read_Controller(0x62) >> 5));
     msg->DLC = (CAN_Read_Controller(0x65) & 0x0F);
     msg->Data = CAN_Read_Controller(0x66);
-
-
-    CAN_Bit_Modify(0x2c, 0x03, 0x00);
 }

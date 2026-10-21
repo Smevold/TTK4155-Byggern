@@ -45,7 +45,7 @@ void main(){
 
     CAN_MSG msg_send;
     msg_send.ID = 0x03;
-    msg_send.DLC = 0x08;
+    msg_send.DLC = 0x01;
     msg_send.Data = 0x13;
 
     CAN_Send_Message(&msg_send);
