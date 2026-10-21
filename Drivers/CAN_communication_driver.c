@@ -40,24 +40,20 @@ void CAN_Init(){
     SPI_Transmit((MODE_Loopback << 5) | (MCP_CAN_ABAT_En << 4) | (MCP_CAN_OSM_Dis << 3) | (MCP_CAN_CLKOut_Dis << 2) | MCP_CAN_CLKPre_1);
 
     SPI_SlaveDeselectAll();
-    SPI_SlaveSelect(SS_CAN);
 
-
-
-    // Check if CAN is correct
+/ Check if CAN is correct
     uint8_t stat = CAN_Read_Controller(MCP_CAN_Read_Status);
     if ((stat & MODE_Mask) != MODE_Loopback) {
         // failed
     }
-    SPI_SlaveDeselectAll();
 
 
     // Enable interrupt transmit buffer
-    SPI_SlaveSelect(SS_CAN);
     CAN_Write_Controller(0x2b, 0b00011100);
-    SPI_SlaveDeselectAll();
+    DDRD &= ~(1 << DDD2); // Set interrupt pin as input
 
-    DDRD &= ~(1 << DDD2);
+    // Ignore all mask/filters in RX buffer
+    CAN_Bit_Modify(0x60, 0b01100000, 0b01100000);
 
 
 }
