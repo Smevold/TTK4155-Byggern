@@ -41,6 +41,8 @@ void main(){
     OLED_Clear(&cursor);
     OLED_Print(OV_logo, &cursor);
 
+    CAN_Init();
+
     CAN_MSG msg_send;
     msg_send.ID = 0x03;
     msg_send.DLC = 0x08;

@@ -41,7 +41,7 @@ void CAN_Init(){
 
     SPI_SlaveDeselectAll();
 
-/ Check if CAN is correct
+    // Check if CAN is correct
     uint8_t stat = CAN_Read_Controller(MCP_CAN_Read_Status);
     if ((stat & MODE_Mask) != MODE_Loopback) {
         // failed
