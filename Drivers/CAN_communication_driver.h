@@ -12,4 +12,4 @@ typedef struct{
 
 void CAN_Init();
 void CAN_Send_Message(CAN_MSG* msg);
-void CAN_Recive_Message(CAN_MSG* msg);
+void CAN_Receive_Message(CAN_MSG* msg);

@@ -41,7 +41,17 @@ void main(){
     OLED_Clear(&cursor);
     OLED_Print(OV_logo, &cursor);
 
-    
+    CAN_MSG msg_send;
+    msg_send.ID = 0x03;
+    msg_send.DLC = 0x08;
+    msg_send.Data = 0x13;
+
+    CAN_Send_Message(&msg_send);
+
+    CAN_MSG msg_receive; 
+    CAN_Receive_Message(&msg_receive);
+
+    printf("msg_send: %2X, msg_receive: %2X\n", msg_send, msg_receive);
     
     _delay_ms(2000);
     

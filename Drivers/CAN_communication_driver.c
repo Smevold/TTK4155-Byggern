@@ -96,7 +96,7 @@ void CAN_Send_Message(CAN_MSG* msg){
 
 }
 
-void CAN_Recive_Message(CAN_MSG* msg){
+void CAN_Receive_Message(CAN_MSG* msg){
     msg->ID = (CAN_Read_Controller(0x61) << 3);
     msg->ID = (msg->ID | (CAN_Read_Controller(0x62) >> 5));
     msg->DLC = (CAN_Read_Controller(0x65) & 0x0F);
