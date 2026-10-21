@@ -20,7 +20,6 @@
 //CAN_Read
 #define MCP_CAN_Read 0b00000011
 #define MCP_CAN_Write 0b00000010
-#define MCP_CAN_Read_Status 0b10100000
 #define MCP_CAN_Bit_Modify 0b00000101
 #define MCP_CAN_RST 0b11000000
 

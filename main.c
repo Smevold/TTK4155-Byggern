@@ -51,7 +51,7 @@ void main(){
     CAN_MSG msg_receive; 
     CAN_Receive_Message(&msg_receive);
 
-    printf("msg_send: %2X, msg_receive: %2X\n", msg_send, msg_receive);
+    printf("msg_send: %2X, msg_receive: %2X\n", msg_send.Data, msg_receive.Data);
     
     _delay_ms(2000);
     
@@ -69,6 +69,13 @@ void main(){
     //printf("Checkpoint\n");
     Buttons btns;
     while(1) {
+
+        CAN_Send_Message(&msg_send);
+
+        CAN_Receive_Message(&msg_receive);
+        printf("--- NEW MESSAGE ---\n");
+        printf("msg_send: ID: %2X, DLC: %2X, Data: %2X\n", msg_send.ID, msg_send.DLC, msg_send.Data);
+        printf("msg_receive: ID: %2X, DLC: %2X, Data: %2X\n", msg_receive.ID, msg_receive.DLC, msg_receive.Data);
 
 
         /*
@@ -124,7 +131,7 @@ void main(){
         //printf("xmax: %2X, xmin: %2X, ymax: %2X, ymin: %2X\n", joy.x_max, joy.x_min, joy.y_max, joy.y_min);
         //printf("JoyBTN: %2X\n", btn);
         
-        _delay_ms(100);
+        _delay_ms(500);
         
     }
 }
