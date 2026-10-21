@@ -95,3 +95,13 @@ void CAN_Send_Message(CAN_MSG* msg){
     CAN_Bit_Modify(0x30, 0x07, 0x07);
 
 }
+
+void CAN_Recive_Message(CAN_MSG* msg){
+    msg->ID = (CAN_Read_Controller(0x61) << 3);
+    msg->ID = (msg->ID | (CAN_Read_Controller(0x62) >> 5));
+    msg->DLC = (CAN_Read_Controller(0x65) & 0x0F);
+    msg->Data = CAN_Read_Controller(0x66);
+
+
+    CAN_Bit_Modify(0x2c, 0x03, 0x00);
+}
