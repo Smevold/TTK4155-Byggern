@@ -17,6 +17,14 @@
 #define MCP_RTS_TX1  0x02
 #define MCP_RTS_TX2  0x04
 
+//CAN_Read
+#define MCP_CAN_Read 0b00000011
+#define MCP_CAN_Write 0b00000010
+#define MCP_CAN_Read_Status 0b10100000
+#define MCP_CAN_Bit_Modify 0b00000101
+#define MCP_CAN_RST 0b11000000
+
+
 
 // The MCP2515 expects the first byte after
 //lowering CS to be the instruction/
@@ -25,36 +33,31 @@
 //invoke another command.
 
 uint8_t CAN_Read_Controller(uint8_t address){
-    PORTB &= ~(1 << PB2); 
-    SPI_Transmit(0b00000011);
+    SPI_SlaveSelect(SS_CAN);
+
+    SPI_Transmit(MCP_CAN_Read);
     SPI_Transmit(address);
     uint8_t data = SPI_Receive();
     
-    PORTB |= (1 << PB2);
     SPI_SlaveDeselectAll();
     return data;
 }
 
 void CAN_Write_Controller(uint8_t address, uint8_t data){
-    PORTB &= ~(1 << PB2); 
-    SPI_Transmit(0b00000010);
+    SPI_SlaveSelect(SS_CAN);
+    SPI_Transmit(MCP_CAN_Write);
     SPI_Transmit(address);
     SPI_Transmit(data);
 
-     // CS HIGH
-    PORTB |= (1 << PB2); 
-    
+     // CS HIGH    
     SPI_SlaveDeselectAll();
 }
 
 
 // RTS
 void CAN_Request_To_Send(uint8_t TXREQ_mask){ 
-    PORTB &= ~(1 << PB2); 
-    SPI_Transmit(MCP_RTS | (txb_mask & 0x07));
-
-
-    PORTB |= (1 << PB2); 
+    SPI_SlaveSelect(SS_CAN);
+    SPI_Transmit(MCP_RTS | (TXREQ_mask & 0x07));
     
     // This command will set the TxBnCTRL.TXREQ bit for
     //the respective buffer(s)
@@ -70,8 +73,8 @@ void CAN_Request_To_Send(uint8_t TXREQ_mask){
 //if (s & (1 << 3)) { /* TXB0 finished sending */ }
 
 uint8_t CAN_Read_Status(){
-    PORTB &= ~(1 << PB2); 
-    SPI_Transmit(0b10100000);
+    SPI_SlaveSelect(SS_CAN);
+    SPI_Transmit(MCP_CAN_Read_Status);
     uint8_t status = SPI_Receive();
 
     SPI_SlaveDeselectAll(); 
@@ -80,23 +83,21 @@ uint8_t CAN_Read_Status(){
 }
 
 void CAN_Bit_Modify(uint8_t address, uint8_t mask_byte, uint8_t data){
-    PORTB &= ~(1 << PB2); 
-    SPI_Transmit(0b00000101);
+    SPI_SlaveSelect(SS_CAN);
+    SPI_Transmit(MCP_CAN_Bit_Modify);
     SPI_Transmit(address);
     SPI_Transmit(mask_byte);
     SPI_Transmit(data);
 
-     PORTB |= (1 << PB2);
-    SPI_SlaveDeselectAll();
+     SPI_SlaveDeselectAll();
 }
 
 void CAN_Controller_RST(){
-    PORTB &= ~(1 << PB2); 
-    SPI_Transmit(0b11000000);
+    SPI_SlaveSelect(SS_CAN);
+    SPI_Transmit(MCP_CAN_RST);
 
     // CS HIGH
-    PORTB   |= (1 << PB2);
-
     SPI_SlaveDeselectAll();
+
      _delay_ms(1); 
 }
