@@ -2,5 +2,14 @@
 
 #include <stdint.h>
 
+typedef struct{
+    uint16_t ID;
+    uint8_t DLC;
+    uint8_t Data;
 
-void CAN_init();
+
+} CAN_MSG;
+
+void CAN_Init();
+void CAN_Send_Message(CAN_MSG* msg);
+void CAN_Recive_Message(CAN_MSG* msg);
