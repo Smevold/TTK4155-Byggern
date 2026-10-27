@@ -99,4 +99,6 @@ void CAN_Receive_Message(CAN_MSG* msg){
     msg->ID = (msg->ID | (CAN_Read_Controller(0x62) >> 5));
     msg->DLC = (CAN_Read_Controller(0x65) & 0x0F);
     msg->Data = CAN_Read_Controller(0x66);
+
+    CAN_Bit_Modify(CANINTF, 0x01, 0x00); // Clear RX0IF
 }
