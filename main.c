@@ -23,22 +23,19 @@
 
 
 void main(){
-
-    SPI_Init();
-    printf("%02X (expect A5)\n", (uint8_t)SPI_Transmit(0xA5));
-
-    /*sei();
+    sei();
     EXTRAM_Init();
     UART_Init (BAUD_PRESCALE);
     JOY_Init(&joy);
     ADC_Init();
     SPI_Init();
-
+    printf("%02X (expect A5)\n", (uint8_t)SPI_Transmit(0xA5));
+    
     DDRD &= ~(1 << DDD4);
 
     OLED_Init();
     ISR_Init();
-
+    /*
     cursor_t cursor;
 
     
