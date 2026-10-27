@@ -133,10 +133,10 @@ void main(){
         //printf("xmax: %2X, xmin: %2X, ymax: %2X, ymin: %2X\n", joy.x_max, joy.x_min, joy.y_max, joy.y_min);
         //printf("JoyBTN: %2X\n", btn);
         
-        /*
+        
         _delay_ms(500);
         
     }
-    */
+    
 }
 
