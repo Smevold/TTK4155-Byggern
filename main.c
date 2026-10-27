@@ -23,7 +23,11 @@
 
 
 void main(){
-    sei();
+
+    SPI_Init();
+    printf("%02X (expect A5)\n", (uint8_t)SPI_Transmit(0xA5));
+
+    /*sei();
     EXTRAM_Init();
     UART_Init (BAUD_PRESCALE);
     JOY_Init(&joy);
@@ -133,8 +137,10 @@ void main(){
         //printf("xmax: %2X, xmin: %2X, ymax: %2X, ymin: %2X\n", joy.x_max, joy.x_min, joy.y_max, joy.y_min);
         //printf("JoyBTN: %2X\n", btn);
         
+        /*
         _delay_ms(500);
         
     }
+    */
 }
 
