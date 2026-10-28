@@ -31,6 +31,7 @@ int main()
     printf("Hello World\n\r");
 
     CanInit init;
+    printf("CanInit pahse2: %2X, propag: %2X, phase1: %2X, sjw: %2X, brp: %2X, smp: %2X", init.phase2, init.propag, init.phase1, init.sjw, init.brp, init.smp);
 
     can_init(init, 0);
 
