@@ -19,6 +19,12 @@ int main()
 
     WDT->WDT_MR = WDT_MR_WDDIS; //Disable Watchdog Timer
 
+    PIOB->PIO_WPMR = 0; // Clear WPEN bit to disable write protect
+
+    PIOB->PIO_PER = 13; // Enable register pin 13
+    PIOB->PIO_OER = 13; // Output enable register pin 13
+    PIOB->PIO_SODR = 13; // Set output data register pin 13
+
     //Uncomment after including uart above
     //uart_init(/*cpufreq*/, /*baud*/);
     //printf("Hello World\n\r");
