@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdarg.h>
+#include<util/delay.h>
 #include "sam.h"
 
 /*
