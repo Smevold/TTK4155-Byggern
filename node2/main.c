@@ -30,12 +30,14 @@ int main()
     uart_init(84000000, 9600);
     printf("Hello World\n\r");
 
-    can_init();
+    CanInit init;
+
+    can_init(init, 0);
 
     CanMsg m_tx;
     m_tx.id = 2;
     m_tx.length = 1;
-    m_tx.byte = 0x04;
+    m_tx.byte[8] = 0x04;
 
     CanMsg m_rx; 
 
