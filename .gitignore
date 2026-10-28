@@ -1,5 +1,9 @@
 # all object files
-build/**
+node1/build/**
+node2/build/**
 
 # all hex files
 *.hex
+
+# all object files
+*.o
