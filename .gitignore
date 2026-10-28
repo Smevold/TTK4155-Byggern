@@ -1,9 +1,7 @@
-# all object files
+# build output
 node1/build/**
 node2/build/**
 
-# all hex files
+# generated files
 *.hex
-
-# all object files
 *.o
