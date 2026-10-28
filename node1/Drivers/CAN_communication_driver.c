@@ -91,7 +91,13 @@ void CAN_Send_Message(CAN_MSG* msg){
 }
 
 void CAN_Receive_Message(CAN_MSG* msg){
-    while (!(CAN_Read_Controller(CANINTF) & 0x01)) {;} // Consider adding a timeout
+    uint8_t timeout = 1000;
+    while (!(CAN_Read_Controller(CANINTF) & 0x01)) {
+        if(--timeout == 0) {
+            printf("Timed out CAN_Receive");
+            return;
+        };
+    } // Consider adding a timeout
     msg->ID = (CAN_Read_Controller(0x61) << 3);
     msg->ID = (msg->ID | (CAN_Read_Controller(0x62) >> 5));
     msg->DLC = (CAN_Read_Controller(0x65) & 0x0F);
