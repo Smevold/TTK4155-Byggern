@@ -69,6 +69,7 @@ struct Byte8 {
 //    };
 //    can_printmsg(m);
 //    // Should print: CanMsg(id:1, length:7, data:{10, 0, 20, 0, 0, 240, 193})
+
 typedef struct CanMsg CanMsg;
 struct CanMsg {
     uint8_t id;

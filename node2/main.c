@@ -29,9 +29,23 @@ int main()
     uart_init(84000000, 9600);
     printf("Hello World\n\r");
 
+    can_init();
+
+    CanMsg m_tx;
+    m_tx.id = 2;
+    m_tx.length = 1;
+    m_tx.byte = 0x04;
+
+    CanMsg m_rx; 
+
     while (1)
     {
-        /* code */
+        can_tx(m_tx);
+        can_rx(&m_rx);
+
+        printf("TX id: %2X, length: %2X, byte: %2X\n RX: id: %2X, length: %2X, byte: %2X\n", m_tx.id, m_tx.length, m_tx.byte, m_rx.id, m_rx.length, m_rx.byte);
+
+        _delay_ms(500);
     }
     
 }
