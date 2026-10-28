@@ -12,6 +12,7 @@
  * apt or your favorite package manager.
  */
 #include "uart.h"
+#include "can.h"
 
 int main()
 {
