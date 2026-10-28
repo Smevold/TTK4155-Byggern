@@ -26,8 +26,8 @@ int main()
     PIOB->PIO_SODR |= PIO_PB13; // Set output data register pin 13
 
     //Uncomment after including uart above
-    //uart_init(/*cpufreq*/, /*baud*/);
-    //printf("Hello World\n\r");
+    uart_init(84000000, 9600);
+    printf("Hello World\n\r");
 
     while (1)
     {
