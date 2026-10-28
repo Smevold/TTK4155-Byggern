@@ -45,17 +45,14 @@ void CAN_Init(){
     CAN_Bit_Modify(0x60, 0b01100000, 0b01100000);
 
     // New command
-    CAN_Bit_Modify(0x0F, 0xE0, MODE_Loopback);
+    CAN_Bit_Modify(0x0F, 0xE0, MODE_Normal);
 
 
     // Check if CAN is correct
     uint8_t stat = CAN_Read_Controller(0x0E);
-    if ((stat & MODE_Mask) != MODE_Loopback) {
+    if ((stat & MODE_Mask) != MODE_Normal) {
         // failed
     }
-
-
-
 
 }
 
