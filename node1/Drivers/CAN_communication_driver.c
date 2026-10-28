@@ -33,9 +33,9 @@ void CAN_Init(){
     CAN_Controller_RST();
 
     // Bit timing
-    CAN_Write_Controller(CNF1, 0x03); 
-    CAN_Write_Controller(CNF2, 0xF0); 
-    CAN_Write_Controller(CNF3, 0x86); 
+    CAN_Write_Controller(CNF1, 0xC8); // 0b11001000
+    CAN_Write_Controller(CNF2, 0xE4); // 0b11100100
+    CAN_Write_Controller(CNF3, 0x84); // 0b10000100
     
     // Enable interrupt TX buffer
     CAN_Write_Controller(0x2b, 0b00011100);
