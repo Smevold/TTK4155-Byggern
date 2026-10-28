@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <stdarg.h>
-#include<util/delay.h>
 #include "sam.h"
 
 /*
@@ -48,8 +47,6 @@ int main()
         can_rx(&m_rx);
 
         printf("TX id: %2X, length: %2X, byte: %2X\n RX: id: %2X, length: %2X, byte: %2X\n", m_tx.id, m_tx.length, m_tx.byte, m_rx.id, m_rx.length, m_rx.byte);
-
-        _delay_ms(500);
     }
     
 }
