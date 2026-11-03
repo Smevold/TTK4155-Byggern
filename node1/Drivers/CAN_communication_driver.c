@@ -82,16 +82,26 @@ void CAN_Send_Message(CAN_MSG* msg){
     
     CAN_Write_Controller(0x31, (msg->ID >> 3));
     CAN_Write_Controller(0x32, ((msg->ID << 5) | (0 <<  EXIDE)));
+    // (0 << 6) does nothing, but RTR is cleared: Transmitted Message will be a Data Frame
+    // (msg->DLC & 0x0F) mask out the 4 most significant bits
     CAN_Write_Controller(0x35, ((0 << 6) | (msg->DLC & 0x0F)));
 
-    CAN_Write_Controller(0x36, msg->Data);
+    // Writes to transmit buffer (usable data sent)
+    // Only writes to relevant buffers
+
+    // PLAN FOR NESTE DAG
+    // Endrer CAN_Send_message for å følge DLC, slik at vi kan sende flere bytes (og motta) i CAN_Joy_Send
+
+    for (uint8_t i = 0; i < msg->DLC; i++) {
+        CAN_Write_Controller(0x36+i, msg->Data[i]);
+    }
     CAN_Request_To_Send(0x01);
     CAN_Bit_Modify(0x30, 0x07, 0x07);
 
 }
 
 void CAN_Receive_Message(CAN_MSG* msg){
-    uint8_t timeout = 1000;
+    uint8_t timeout = 100000;
     while (!(CAN_Read_Controller(CANINTF) & 0x01)) {
         if(--timeout == 0) {
             printf("Timed out CAN_Receive");
@@ -101,7 +111,13 @@ void CAN_Receive_Message(CAN_MSG* msg){
     msg->ID = (CAN_Read_Controller(0x61) << 3);
     msg->ID = (msg->ID | (CAN_Read_Controller(0x62) >> 5));
     msg->DLC = (CAN_Read_Controller(0x65) & 0x0F);
-    msg->Data = CAN_Read_Controller(0x66);
+
+    // IMPORTANT UPDATE for multiple bytes
+    msg->Data[0] = CAN_Read_Controller(0x66);
 
     CAN_Bit_Modify(CANINTF, 0x01, 0x00); // Clear RX0IF
+}
+
+void CAN_Joy_Send(io_joy_t joy) {
+
 }

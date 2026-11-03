@@ -30,22 +30,33 @@ int main()
     uart_init(84000000, 9600);
     printf("Hello World\n\r");
 
+    // Can initlialize struct
     CanInit init;
     init.phase2 = 6;
     init.propag = 0;
     init.phase1 = 6;
     init.sjw = 0;
-    init.brp = 3;
+    init.brp = 41; // brp provided by Claude, because we misunderstood
+    // BRP+1 = MCK / (bitrate * 16) = 84e6 / (125e3 * 16) = 42
     init.smp = 1;
     printf("CanInit pahse2: %2X, propag: %2X, phase1: %2X, sjw: %2X, brp: %2X, smp: %2X\n", init.phase2, init.propag, init.phase1, init.sjw, init.brp, init.smp);
 
     can_init(init, 0);
 
-    CanMsg m_tx;
-    m_tx.id = 2;
-    m_tx.length = 1;
-    m_tx.byte[8] = 0x04;
+    // Can msg struct for transponding
+    CanMsg m_tx; 
+    m_tx.id = 2; // Random id
+    m_tx.length = 1; // Send one byte
+    m_tx.byte[8]; // Not needed?
 
+    m_tx.byte[0] = 0x04; // Set value first byte
+    
+    for (uint8_t i = 1; i < 8; i++) {
+        m_tx.byte[i] = 0x00; // Set all other bytes to zero
+    }
+    // can_tx loads all bytes into registers, but length should choose how many bytes to send
+    
+    // Can msg struct for receiving, should be fine empty?
     CanMsg m_rx; 
 
     while (1)
@@ -53,7 +64,7 @@ int main()
         can_tx(m_tx);
         can_rx(&m_rx);
 
-        printf("TX id: %2X, length: %2X, byte: %2X\n RX: id: %2X, length: %2X, byte: %2X\n", m_tx.id, m_tx.length, m_tx.byte, m_rx.id, m_rx.length, m_rx.byte);
+        printf("TX id: %2X, length: %2X, byte: %2X\n RX: id: %2X, length: %2X, byte: %2X\n", m_tx.id, m_tx.length, m_tx.byte[0], m_rx.id, m_rx.length, m_rx.byte[0]);
     }
     
 }

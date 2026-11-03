@@ -50,12 +50,12 @@ void can_init(CanInit init, uint8_t rxInterrupt){
 
     // Configure mailboxes
     // transmit
-    CAN0->CAN_MB[txMailbox].CAN_MID = CAN_MID_MIDE;
+    CAN0->CAN_MB[txMailbox].CAN_MID = 0; // Standard ID length
     CAN0->CAN_MB[txMailbox].CAN_MMR = CAN_MMR_MOT_MB_TX;
     
     // receive
     CAN0->CAN_MB[rxMailbox].CAN_MAM = 0; // Accept all messages
-    CAN0->CAN_MB[rxMailbox].CAN_MID = CAN_MID_MIDE;
+    CAN0->CAN_MB[rxMailbox].CAN_MID = 0; // Standard ID length
     CAN0->CAN_MB[rxMailbox].CAN_MMR = CAN_MMR_MOT_MB_RX;
     CAN0->CAN_MB[rxMailbox].CAN_MCR |= CAN_MCR_MTCR;
     if(rxInterrupt){
@@ -74,7 +74,7 @@ void can_tx(CanMsg m){
     while(!(CAN0->CAN_MB[txMailbox].CAN_MSR & CAN_MSR_MRDY)){}
     
     // Set message ID and use CAN 2.0B protocol
-    CAN0->CAN_MB[txMailbox].CAN_MID = CAN_MID_MIDvA(m.id) | CAN_MID_MIDE ;
+    CAN0->CAN_MB[txMailbox].CAN_MID = CAN_MID_MIDvA(m.id); // Remove extended ID
         
     // Coerce maximum 8 byte length
     m.length = m.length > 8 ? 8 : m.length;
