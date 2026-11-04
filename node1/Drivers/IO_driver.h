@@ -76,6 +76,7 @@ typedef struct __attribute__((packed)) {
     };
 } Buttons;
 
+// Initialize variables used accross multiple files
 extern io_joy_t joy;
 extern io_pad_t pad;
 
