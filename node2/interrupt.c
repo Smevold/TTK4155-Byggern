@@ -1,6 +1,6 @@
 //
 
-void timer_init() {
+void Timer_Init() {
     // Configure PMC to enable Timer Counter Clock (Power Management Controller)
     // enable Counter clock
     // Waveform mode TC_CMR TIOA Out and TIOB out if ot external triggger
@@ -31,4 +31,22 @@ TC0_Handler(void) {
     if (sr & TC_SR_CPCS){
         ticks++;
     }
+}
+
+
+void PWM_Init(){
+
+Pwm->PWM_ENA = PWM_ENA_CHID1; // enable output for cchannel 1
+
+Pwm->Pwm_WPCR = 0; // protection
+Pwm->Pwm_WPSR = 0; // protection
+
+
+Pwm->Pwm_CLK = 1;
+
+// 0111 for clk divider MCP/128
+Pwm->PWM_CLK = 1 | (7 << PWM_CLK_PREA_Pos); //  turn on clk a and b, choose prescaler
+
+
+
 }
