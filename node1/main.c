@@ -66,13 +66,14 @@ void main(){
         JOY_Direction(&joy);
         joy.btn = PIND & (1 << PIND4);
 
+        
         // -- BEGIN JOY OVER CAN TEST
         CAN_Send_Joy(&joy);
         CAN_Receive_Message(&msg_rx);
         
         printf("--- NEW MESSAGE ---\n");
         printf("msg_send: ID: 02, DLC: 07, Data: %2X, %2X, %2X, %2X, %2X, %2X, %2X\n", joy.x_max, joy.x_min, joy.y_max, joy.y_min, joy.x_dig, joy.y_dig, joy.btn);
-        printf("msg_receive: ID: %2X, DLC: %2X, Data: %2X, %2X, %2X, %2X, %2X, %2X, %2X\n", msg_rx.ID, msg_rx.DLC, msg_tx.Data[0], msg_tx.Data[1], msg_tx.Data[2], msg_tx.Data[3], msg_tx.Data[4], msg_tx.Data[5], msg_tx.Data[6]);
+        printf("msg_receive: ID: %2X, DLC: %2X, Data: %2X, %2X, %2X, %2X, %2X, %2X, %2X\n", msg_rx.ID, msg_rx.DLC, msg_rx.Data[0], msg_rx.Data[1], msg_rx.Data[2], msg_rx.Data[3], msg_rx.Data[4], msg_rx.Data[5], msg_rx.Data[6]);
         // -- END JOY OVER CAN TEST
         
         _delay_ms(2000);
