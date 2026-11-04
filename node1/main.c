@@ -23,118 +23,60 @@
 
 
 void main(){
+    // Enable interrupts service
     sei();
+    
+    // Init functions
     EXTRAM_Init();
     UART_Init (BAUD_PRESCALE);
     JOY_Init(&joy);
     ADC_Init();
     SPI_Init();
-    
-    DDRD &= ~(1 << DDD4);
-
     OLED_Init();
     ISR_Init();
+    CAN_Init();
     
+    // Variables needed
     cursor_t cursor;
+    CAN_MSG msg_tx;
+    CAN_MSG msg_rx; 
+    uint8_t menu_option = 0;
+    Buttons btns;
 
-    
+    // Begin startup - add function? Tilstandsmodell?
     OLED_Clear(&cursor);
     OLED_Print(OV_logo, &cursor);
-
-    CAN_Init();
-
-    CAN_MSG msg_send;
-    msg_send.ID = 0x03;
-    msg_send.DLC = 0x01;
-    msg_send.Data = 0x13;
-
-    CAN_Send_Message(&msg_send);
-
-    CAN_MSG msg_receive; 
-    CAN_Receive_Message(&msg_receive);
-
-    printf("msg_send: %2X, msg_receive: %2X\n", msg_send.Data, msg_receive.Data);
     
     _delay_ms(2000);
     
     Interface_Startup(&cursor, &joy, &pad);
     printf("xmax: %2X, xmin: %2X, ymax: %2X, ymin: %2X\n", joy.x_max, joy.x_min, joy.y_max, joy.y_min);
-
+    
     _delay_ms(2000);
-
+    
     OLED_Clear(&cursor);
     Interface_Print_Menu(&cursor);
-
     
-    uint8_t menu_option = 0;
-    uint8_t btn = 1;
-    //printf("Checkpoint\n");
-    Buttons btns;
+    
     while(1) {
-
-        CAN_Send_Message(&msg_send);
-
-        CAN_Receive_Message(&msg_receive);
-        printf("--- NEW MESSAGE ---\n");
-        printf("msg_send: ID: %2X, DLC: %2X, Data: %2X\n", msg_send.ID, msg_send.DLC, msg_send.Data);
-        printf("msg_receive: ID: %2X, DLC: %2X, Data: %2X\n", msg_receive.ID, msg_receive.DLC, msg_receive.Data);
-
-
-        /*
+        // Read and compute ADC/JOY-values
+        // Add function: readADCandUpdateJOY? / OR interrupt
         ADC_Read(&joy, &pad);
         JOY_Readable_Pos(&joy);
         JOY_Direction(&joy);
+        joy.btn = PIND & (1 << PIND4);
 
-        if (joy.dir == DOWN && menu_option > 0) {
-            menu_option--;
-        } else if (joy.dir == UP && menu_option < 3) {
-            menu_option++;
-        }
-
-        //OLED_Clear(&cursor);
-        //Interface_Print_Menu(&cursor);
-        cursor.column_start = 0;
-        OLED_Goto_Column(&cursor);
-        OLED_Print_Char(font5, ' ', MEDIUM_FONT);
-        switch (menu_option) {
-            case 0:
-                cursor.line_start = 0;
-                break;
-            case 1:
-                cursor.line_start = 8;
-                break;
-            case 2:
-                cursor.line_start = 16;
-                break;
-            }
-            
-            
-        cursor.column_start = 0;
-        OLED_Goto_Pos(&cursor);
         
-        btn = PIND & (1 << PIND4);
-        if (btn) {
-            OLED_Print_Char(font5, 'X', MEDIUM_FONT);
-        } else {
-            OLED_Print_Char(font5, 'O', MEDIUM_FONT);
-        }
+        // -- BEGIN JOY OVER CAN TEST
+        CAN_Send_Joy(&joy);
+        CAN_Receive_Message(&msg_rx);
         
-        btns = BTN_Read();
-        if (btns.R1 == 1) {
-            LED_Set(1, 1);
-        } else {
-            LED_Set(1,0);
-        }
-        */
+        printf("--- NEW MESSAGE ---\n");
+        printf("msg_send: ID: 02, DLC: 07, Data: %2X, %2X, %2X, %2X, %2X, %2X, %2X\n", joy.x_max, joy.x_min, joy.y_max, joy.y_min, joy.x_dig, joy.y_dig, joy.btn);
+        printf("msg_receive: ID: %2X, DLC: %2X, Data: %2X, %2X, %2X, %2X, %2X, %2X, %2X\n", msg_rx.ID, msg_rx.DLC, msg_rx.Data[0], msg_rx.Data[1], msg_rx.Data[2], msg_rx.Data[3], msg_rx.Data[4], msg_rx.Data[5], msg_rx.Data[6]);
+        // -- END JOY OVER CAN TEST
         
-        //printf("1: %2X, 2: %2X, 3: %2X\n", btns.right, btns.left, btns.nav);
-        //printf("Joy dir: %2X\n", joy.dir);
-        //printf("x: %2X, y: %2X\n", joy.x_dig, joy.y_dig);
-        //printf("xmax: %2X, xmin: %2X, ymax: %2X, ymin: %2X\n", joy.x_max, joy.x_min, joy.y_max, joy.y_min);
-        //printf("JoyBTN: %2X\n", btn);
-        
-        
-        _delay_ms(500);
+        _delay_ms(2000);
         
     }
     

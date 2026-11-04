@@ -107,17 +107,33 @@ void CAN_Receive_Message(CAN_MSG* msg){
             printf("Timed out CAN_Receive");
             return;
         };
-    } // Consider adding a timeout
+    } 
     msg->ID = (CAN_Read_Controller(0x61) << 3);
     msg->ID = (msg->ID | (CAN_Read_Controller(0x62) >> 5));
     msg->DLC = (CAN_Read_Controller(0x65) & 0x0F);
 
     // IMPORTANT UPDATE for multiple bytes
-    msg->Data[0] = CAN_Read_Controller(0x66);
+    for (uint8_t i = 0; i < msg->DLC; i++) {
+        msg->Data[i] = CAN_Read_Controller(0x66+i);
+    }
 
     CAN_Bit_Modify(CANINTF, 0x01, 0x00); // Clear RX0IF
 }
 
-void CAN_Joy_Send(io_joy_t joy) {
+// Send Joystick values
+void CAN_Send_Joy(io_joy_t* joy) {
+    CAN_MSG msg;
+    msg.ID = 0x02; // Random ID
+    msg.DLC = 0x07; // Send 7 bytes
 
+    // Fill tx buffers
+    msg.Data[0] = joy->x_max;
+    msg.Data[1] = joy->x_min;
+    msg.Data[2] = joy->y_max;
+    msg.Data[3] = joy->y_min;
+    msg.Data[4] = joy->x_dig;
+    msg.Data[5] = joy->y_dig;
+    msg.Data[6] = joy->btn;
+
+    CAN_Send_Message(&msg);
 }

@@ -63,3 +63,38 @@ void Interface_Print_Menu(cursor_t* cursor) {
     char line3[] = "Option C";
     OLED_Print_Str(font5, line3, MEDIUM_FONT);
 } 
+
+void Interface_Menu_Nav(io_joy_t* joy, cursor_t* cursor, uint8_t* menu_option) {
+        if (joy->dir == DOWN && *menu_option > 0) {
+            *menu_option--;
+        } else if (joy->dir == UP && *menu_option < 3) {
+            *menu_option++;
+        }
+
+        cursor->column_start = 0;
+        OLED_Goto_Column(&cursor);
+        OLED_Print_Char(font5, ' ', MEDIUM_FONT);
+        switch (*menu_option) {
+            case 0:
+                cursor->line_start = 0;
+                break;
+            case 1:
+                cursor->line_start = 8;
+                break;
+            case 2:
+                cursor->line_start = 16;
+                break;
+            }
+            
+            
+        cursor->column_start = 0;
+        OLED_Goto_Pos(&cursor);
+        
+        // Joy btn is connected to pin D 4
+        joy->btn = PIND & (1 << PIND4);
+        if (joy->btn) {
+            OLED_Print_Char(font5, 'X', MEDIUM_FONT);
+        } else {
+            OLED_Print_Char(font5, 'O', MEDIUM_FONT);
+        }
+}

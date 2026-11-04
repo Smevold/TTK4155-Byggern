@@ -53,6 +53,9 @@ void JOY_Init(io_joy_t* joy_extreme) {
     joy_extreme->x_min = 0x80;
     joy_extreme->y_max = 0x80;
     joy_extreme->y_min = 0x80;
+
+    // Set joystick pin as input
+    DDRD &= ~(1 << DDD4);
 }
 
 void ADC_Read(io_joy_t* joy, io_pad_t* pad) {
