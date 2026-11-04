@@ -1,6 +1,7 @@
 //
 
 timer_init() {
+    // Configure PMC to enable Timer Counter Clock (Power Management Controller)
     // enable Counter clock
     // Waveform mode TC_CMR TIOA Out and TIOB out if ot external triggger
     //Need trigger to reset counter
@@ -10,5 +11,5 @@ timer_init() {
     // så PWM etterpå me intterupt så regne t tid?
    
    
-
+    TC_CCR0->CLKEN = 1;
 }
