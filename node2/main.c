@@ -13,6 +13,7 @@
  */
 #include "uart.h"
 #include "can.h"
+#include "interrupt.h"
 
 int main()
 {
@@ -37,6 +38,8 @@ int main()
     CanMsg msg_tx; 
     CanMsg msg_rx; 
     
+    Timer_Init();
+
     while (1)
     {
         // Only update tx and send, if received
