@@ -38,6 +38,7 @@ TC0_Handler(void) {
 void PWM_Init(){
 
     Pwm* pwm;
+    PwmCh_num* pwm_channel_num;
 
 pwm->PWM_ENA = PWM_ENA_CHID1; // enable output for cchannel 1
 
@@ -50,6 +51,12 @@ pwm->PWM_WPCR = 0; // 0 - Disable write protection of register groups, 1 - enabl
 // 0111 for clk divider MCP/128
 pwm->PWM_CLK = 1 | (0b0111 << PWM_CLK_PREA_Pos); //  turn on clk a, and set prescaler to 128
 
-//Page 
+// Page 1044
+// To write to the register, WPSR have to be cleared
+// To clear WPSR, we have to read it, see page 1039, specially the note at the bottom of the page
+uint32_t status = pwm->PWM_WPSR; // <------- Think this is correct, remove if you are sure it is correct
+pwm_channel_num->PWM_CMR[0] = CLKA;
+
+
 
 }
