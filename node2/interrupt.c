@@ -1,4 +1,5 @@
 //
+#include "interrupt.h"
 
 void Timer_Init() {
     // Configure PMC to enable Timer Counter Clock (Power Management Controller)
@@ -8,19 +9,18 @@ void Timer_Init() {
     //This time base is automatically fed back to TIOA of channel 0 when QDEN and SPEEDEN are set.
     // så PWM etterpå me intterupt så regne t tid?
    
-   TC0->CHANNEL[0].TC_CMR = TC_CM_TCCLKS_TIMER_CLOCK4 // Prescaler MCK/128
+   TC0->TC_CHANNEL[0].TC_CMR = TC_CMR_TCCLKS_TIMER_CLOCK4 // Prescaler MCK/128
                             | TC_CMR_WAVE             // WAVE MODE
-                            | TC_CMR_WAVESEL_UP_RC;   // UP mode with auto trig on RC compare
+                            | TC_CMR_WAVSEL_UP_RC;   // UP mode with auto trig on RC compare
     // 20 ms  MCK/128  20 * 656250 Hz
     TC0->TC_CHANNEL[0].TC_RC = 13125;                  // The registers RC value. Used to compare with CV and reset when hit
 
-    TC0->TC_CHANNEL[0].TC_IER = TC_OER_CPCS; //  Enables the RC Compare Interrupt
+    TC0->TC_CHANNEL[0].TC_IER = TC_IER_CPCS; //  Enables the RC Compare Interrupt
     
-    NVIC_EnableIRQ(TC0_IRQn);
+    NVIC_EnableIRQ(TC0_IRQn); // Enable NVIC interrupts for TC0
 
 
-    
-    TC0->TC_CHANNEL[0].TC_CCR = TC_CCR_CLKEN 1 TC_CCR_SWIRG;
+    TC0->TC_CHANNEL[0].TC_CCR = TC_CCR_CLKEN | TC_CCR_SWTRG; // Counter clock enable and software trigger command
 }
 
 volatile uint32_t ticks = 0;
@@ -37,17 +37,19 @@ TC0_Handler(void) {
 
 void PWM_Init(){
 
-Pwm->PWM_ENA = PWM_ENA_CHID1; // enable output for cchannel 1
+    Pwm* pwm;
 
-Pwm->Pwm_WPCR = 0; // protection
-Pwm->Pwm_WPSR = 0; // protection
+pwm->PWM_ENA = PWM_ENA_CHID1; // enable output for cchannel 1
+
+// Page 1001
+pwm->PWM_WPCR = 0; // 0 - Disable write protection of register groups, 1 - enable write protection, 2 - enable write protection but can only be disabled by hardware reset of pwm
+//temp->PWM_WPSR = 0; // Read protected, becomes 0 on reset, see page 1004 in the datasheet
 
 
-Pwm->Pwm_CLK = 1;
-
+// Page 1006
 // 0111 for clk divider MCP/128
-Pwm->PWM_CLK = 1 | (7 << PWM_CLK_PREA_Pos); //  turn on clk a and b, choose prescaler
+pwm->PWM_CLK = 1 | (0b0111 << PWM_CLK_PREA_Pos); //  turn on clk a, and set prescaler to 128
 
-
+//Page 
 
 }
