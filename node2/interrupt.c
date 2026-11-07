@@ -40,28 +40,21 @@ TC0_Handler(void) {
 
 void PWM_Init(){
     // Power Management Controller enable PWM Module
+    PIOB->PIO_ABSR |= PIO_PB13B_PWMH1;
+    PIOB->PIO_PDR |= PIO_PB13B_PWMH1;
+
     PMC->PMC_PCER1 = PMC_PCER1_PID36;
 
-    uint32_t status;
-    PWM->PWM_ENA = PWM_ENA_CHID1; // enable output for cchannel 1
 
     // Page 1001
     PWM->PWM_WPCR = 0; // 0 - Disable write protection of register groups, 1 - enable write protection, 2 - enable write protection but can only be disabled by hardware reset of pwm
-    //temp->PWM_WPSR = 0; // Read protected, becomes 0 on reset, see page 1004 in the datasheet
-
 
     // Page 1006
     // 0111 for clk divider MCK/128
     PWM->PWM_CLK = 1 | (0b0111 << PWM_CLK_PREA_Pos); //  turn on clk a, and set prescaler to 128
 
     // Page 1044
-    // To write to the register, WPSR have to be cleared
-    // To clear WPSR, we have to read it, see page 1039, specially the note at the bottom of the page
-    status = PWM->PWM_WPSR;
     PWM->PWM_CH_NUM[1].PWM_CMR = PWM_CMR_CPRE_CLKA;
-
-    // Uncomment to choose center aligned, leave it for left aligned (0 on the CALG bit means left, 1 means center)
-    //pwm_channel_num->PWM_CMR |= PWM_CMR_CALG; 
 
     // Comment to make output from comparator start low, leave it for it to start high (0 on CPOL bit means start low, 1 means start high)
     PWM->PWM_CH_NUM[1].PWM_CMR |= PWM_CMR_CPOL;
@@ -70,25 +63,18 @@ void PWM_Init(){
     PWM->PWM_CH_NUM[1].PWM_CMR |= PWM_CMR_DTE;
 
     //Page 1048
-    status = PWM->PWM_WPSR;
-    // Might be really wrong, don't know VVVVVVVVVVVVVVVVV
-    PWM->PWM_CH_NUM[1].PWM_CPRD = 1680000; // Assuming it is left aligned, using the formula: CPRD * DIVA / MCK = Period of output signal. For Period = 20 ms, CPRD must be equal to 1680000 in decimal
+    // Set period to 20 ms
+    PWM->PWM_CH_NUM[1].PWM_CPRD = 13125;
 
     // Page 1046
-    // See page 978
-    // Assume fchannel_x_clock is CLKA, or MCK / 128
-    // This might be very wrong, espacially if anything above is wrong
-    PWM->PWM_CH_NUM[1].PWM_CDTY = 12141;
+    // Set duty cycle to 1.5 ms
+    PWM->PWM_CH_NUM[1].PWM_CDTY = 984;
 
     // Page 1014
-    status = PWM->PWM_WPSR;
-    PWM->PWM_SCM = 0; // The channel(s) do not need to be synchronous
+    PWM->PWM_SCM = 0;
 
     // Page 1017
     PWM->PWM_SCUP = 0;
 
-    // Page 1051
-    // No clue here, might be 4??
-    PWM->PWM_CH_NUM[1].PWM_DT = (4 << PWM_DT_DTH_Pos) | (4 << PWM_DT_DTL_Pos);
-
+    PWM->PWM_ENA = PWM_ENA_CHID1; // enable output for channel 1
 }
