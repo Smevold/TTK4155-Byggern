@@ -1,6 +1,11 @@
 //
 #include "interrupt.h"
 
+#define CLKA 65625
+#define PWM_DUTY_CYCLE_MIN_us 900
+#define PWM_DUTY_CYCLE_MAX_us 2100
+#define PWM_DUTY_CYCLE_PERCENTILE_STEP ((PWM_DUTY_CYCLE_MAX_us-PWM_DUTY_CYCLE_MIN_us)/100)
+
 void Timer_Init() {
     // Configure PMC to enable Timer Counter Clock (Power Management Controller)
     // enable Counter clock
@@ -77,4 +82,22 @@ void PWM_Init(){
     PWM->PWM_SCUP = 0;
 
     PWM->PWM_ENA = PWM_ENA_CHID1; // enable output for channel 1
+}
+
+
+// Change duty cycle in microseconds based on input
+void PWM_Set_Duty_Cycle_us(uint16_t us) {
+    if (us >= PWM_DUTY_CYCLE_MAX_us) {us = PWM_DUTY_CYCLE_MAX_us;}
+    if (us <= PWM_DUTY_CYCLE_MIN_us) {us = PWM_DUTY_CYCLE_MIN_us;}
+    uint32_t CDTY_update_value = us*CLKA;
+
+    PWM->PWM_CH_NUM[1].PWM_CDTYUPD = CDTY_update_value;
+}
+
+void PWM_Joy_Duty_Cycle(uint8_t joy_pos) {
+    uint16_t us;
+
+    us = PWM_DUTY_CYCLE_MIN_us + joy_pos * PWM_DUTY_CYCLE_PERCENTILE_STEP;
+
+    PWM_Set_Duty_Cycle_us(us);
 }
