@@ -70,7 +70,7 @@ int main()
 
         printf("--- NEW MESSAGE ---\n");
         printf("msg_receive: ID: %2X, DLC: %2X, Data: %2X, %2X, %2X, %2X, %2X, %2X, %2X\n", msg_rx.id, msg_rx.length, msg_tx.byte[0], msg_tx.byte[1], msg_tx.byte[2], msg_tx.byte[3], msg_tx.byte[4], msg_tx.byte[5], msg_tx.byte[6]);
-        printf("msg_send: ID: %2X, DLC: %2X, Data: %2X, %2X, %2X, %2X, %2X, %2X, %2X\n", msg_tx.id, msg_tx.length, msg_tx.byte[0], msg_tx.byte[1], msg_tx.byte[2], msg_tx.byte[3], msg_tx.byte[4], msg_tx.byte[5], msg_tx.byte[6]);
+        printf("msg_send: ID: %2X, DLC: %2X, Data: %2X\n", msg_tx.id, msg_tx.length, msg_tx.byte[0]);
         }
 
         // --- CAN JOY TO PWM TEST END ---
