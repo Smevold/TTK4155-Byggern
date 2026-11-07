@@ -51,6 +51,8 @@ int main()
 
     PWM_Init();
 
+    printf("Test 1\n");
+
     while (1)
     {
         // --- CAN JOY TO PWM TEST BEGIN ---
