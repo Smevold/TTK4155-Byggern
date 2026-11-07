@@ -44,6 +44,8 @@ int main()
 
     while (1)
     {
+        // --- CAN JOY TEST BEGIN ---
+
         // Only update tx and send, if received
         if(can_rx(&msg_rx)) {
 
@@ -57,6 +59,9 @@ int main()
         msg_tx.byte[4] = msg_rx.byte[4];
         msg_tx.byte[5] = msg_rx.byte[5];
         msg_tx.byte[6] = msg_rx.byte[6];
+
+        joy
+
         can_tx(msg_tx);
 
         printf("--- NEW MESSAGE ---\n");
@@ -64,6 +69,7 @@ int main()
         printf("msg_send: ID: %2X, DLC: %2X, Data: %2X, %2X, %2X, %2X, %2X, %2X, %2X\n", msg_tx.id, msg_tx.length, msg_tx.byte[0], msg_tx.byte[1], msg_tx.byte[2], msg_tx.byte[3], msg_tx.byte[4], msg_tx.byte[5], msg_tx.byte[6]);
         }
 
+        // --- CAN JOY TEST END ---
     }
     
 }
