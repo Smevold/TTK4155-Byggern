@@ -53,6 +53,8 @@ int main()
 
     printf("Test 1\n");
 
+    uint32_t last_tick = 0;
+
     while (1)
     {
         // --- CAN JOY TO PWM TEST BEGIN ---
@@ -60,19 +62,23 @@ int main()
         // Only update tx and send, if received
         if(can_rx(&msg_rx)) {
 
-        joy.x_max = msg_rx.byte[0];
-        joy.x_min = msg_rx.byte[1];
-        joy.y_max = msg_rx.byte[2];
-        joy.y_min = msg_rx.byte[3];
-        joy.x_dig = msg_rx.byte[4];
-        joy.y_dig = msg_rx.byte[5];
-        joy.btn = msg_rx.byte[6];
+            joy.x_max = msg_rx.byte[0];
+            joy.x_min = msg_rx.byte[1];
+            joy.y_max = msg_rx.byte[2];
+            joy.y_min = msg_rx.byte[3];
+            joy.x_dig = msg_rx.byte[4];
+            joy.y_dig = msg_rx.byte[5];
+            joy.btn = msg_rx.byte[6];
+ 
+            printf("--- NEW MESSAGE ---\n");
+            printf("msg_receive: ID: %2X, DLC: %2X, Data: %2X, %2X, %2X, %2X, %2X, %2X, %2X\n", msg_rx.id, msg_rx.length, msg_tx.byte[0], msg_tx.byte[1], msg_tx.byte[2], msg_tx.byte[3], msg_tx.byte[4], msg_tx.byte[5], msg_tx.byte[6]);
+            printf("msg_send: ID: %2X, DLC: %2X, Data: %2X\n", msg_tx.id, msg_tx.length, msg_tx.byte[0]);
+        }
 
-        can_tx(msg_tx);
-
-        printf("--- NEW MESSAGE ---\n");
-        printf("msg_receive: ID: %2X, DLC: %2X, Data: %2X, %2X, %2X, %2X, %2X, %2X, %2X\n", msg_rx.id, msg_rx.length, msg_tx.byte[0], msg_tx.byte[1], msg_tx.byte[2], msg_tx.byte[3], msg_tx.byte[4], msg_tx.byte[5], msg_tx.byte[6]);
-        printf("msg_send: ID: %2X, DLC: %2X, Data: %2X\n", msg_tx.id, msg_tx.length, msg_tx.byte[0]);
+        // Same delay as node1
+        if(ticks - last_tick >= 100) {
+            last_tick = ticks;
+            can_tx(msg_tx);
         }
 
         // --- CAN JOY TO PWM TEST END ---
