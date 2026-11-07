@@ -9,9 +9,10 @@ void Timer_Init() {
     //This time base is automatically fed back to TIOA of channel 0 when QDEN and SPEEDEN are set.
     // så PWM etterpå me intterupt så regne t tid?
 
-    PMC->
+    // Power Management Controller, enable Timer Counter Clock 0
+    PMC->PMC_PCER0 = PMC_PCER0_PID27;
    
-   TC0->TC_CHANNEL[0].TC_CMR = TC_CMR_TCCLKS_TIMER_CLOCK4 // Prescaler MCK/128
+    TC0->TC_CHANNEL[0].TC_CMR = TC_CMR_TCCLKS_TIMER_CLOCK4 // Prescaler MCK/128
                             | TC_CMR_WAVE             // WAVE MODE
                             | TC_CMR_WAVSEL_UP_RC;   // UP mode with auto trig on RC compare
     // 20 ms  MCK/128  20 * 656250 Hz
@@ -38,6 +39,8 @@ TC0_Handler(void) {
 // PWM Initialization page: 996
 
 void PWM_Init(){
+    // Power Management Controller enable PWM Module
+    PMC->PMC_PCER1 = PMC_PCER1_PID36;
 
     uint32_t status;
     PWM->PWM_ENA = PWM_ENA_CHID1; // enable output for cchannel 1
