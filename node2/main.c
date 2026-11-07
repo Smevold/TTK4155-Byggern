@@ -40,6 +40,8 @@ int main()
     
     Timer_Init();
 
+    PWM_Init();
+
     while (1)
     {
         // Only update tx and send, if received
