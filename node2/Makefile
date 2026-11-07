@@ -10,7 +10,8 @@ SOURCE_FILES = \
 	main.c \
 	uart.c \
 	can.c \
-	interrupt.c
+	interrupt.c \
+	io_driver.c
 #   filename1.c \
 #   filename2.c \
 #	filenameN.c
