@@ -38,6 +38,12 @@ int main()
     
     CanMsg msg_tx; 
     CanMsg msg_rx;
+
+    // Send a msg back
+    msg_tx.id = 0x04; 
+    msg_tx.length = 1;
+    msg_tx.byte[0] = 0x14;
+
     
     io_joy_t joy;
     
@@ -47,23 +53,18 @@ int main()
 
     while (1)
     {
-        // --- CAN JOY TEST BEGIN ---
+        // --- CAN JOY TO PWM TEST BEGIN ---
 
         // Only update tx and send, if received
         if(can_rx(&msg_rx)) {
 
-        // Send same msg back
-        msg_tx.id = msg_rx.id; 
-        msg_tx.length = msg_rx.length; 
-        msg_tx.byte[0] = msg_rx.byte[0]; // Set value first byte
-        msg_tx.byte[1] = msg_rx.byte[1];
-        msg_tx.byte[2] = msg_rx.byte[2];
-        msg_tx.byte[3] = msg_rx.byte[3];
-        msg_tx.byte[4] = msg_rx.byte[4];
-        msg_tx.byte[5] = msg_rx.byte[5];
-        msg_tx.byte[6] = msg_rx.byte[6];
-
-        joy
+        joy.x_max = msg_rx.byte[0];
+        joy.x_min = msg_rx.byte[1];
+        joy.y_max = msg_rx.byte[2];
+        joy.y_min = msg_rx.byte[3];
+        joy.x_dig = msg_rx.byte[4];
+        joy.y_dig = msg_rx.byte[5];
+        joy.btn = msg_rx.byte[6];
 
         can_tx(msg_tx);
 
@@ -72,7 +73,7 @@ int main()
         printf("msg_send: ID: %2X, DLC: %2X, Data: %2X, %2X, %2X, %2X, %2X, %2X, %2X\n", msg_tx.id, msg_tx.length, msg_tx.byte[0], msg_tx.byte[1], msg_tx.byte[2], msg_tx.byte[3], msg_tx.byte[4], msg_tx.byte[5], msg_tx.byte[6]);
         }
 
-        // --- CAN JOY TEST END ---
+        // --- CAN JOY TO PWM TEST END ---
     }
     
 }
