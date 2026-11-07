@@ -14,6 +14,7 @@
 #include "uart.h"
 #include "can.h"
 #include "interrupt.h"
+#include "io_driver.h"
 
 int main()
 {
@@ -36,7 +37,9 @@ int main()
     can_init(init, 0);
     
     CanMsg msg_tx; 
-    CanMsg msg_rx; 
+    CanMsg msg_rx;
+    
+    io_joy_t joy;
     
     Timer_Init();
 
