@@ -104,7 +104,7 @@ void CAN_Receive_Message(CAN_MSG* msg){
     uint8_t timeout = 100000;
     while (!(CAN_Read_Controller(CANINTF) & 0x01)) {
         if(--timeout == 0) {
-            printf("Timed out CAN_Receive");
+            printf("Timed out CAN_Receive\n");
             return;
         };
     } 
