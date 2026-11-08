@@ -1,7 +1,7 @@
 #include <adc.h>
 
 #define ADC_Prescaler 3
-#define ADC_Tracktime 10
+#define ADC_Tracktime 5
 
 void ADC_Init() {
     
