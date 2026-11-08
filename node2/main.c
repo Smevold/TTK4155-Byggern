@@ -54,6 +54,7 @@ int main()
     printf("Test 1\n");
 
     uint32_t last_tick = 0;
+    uint16_t last_us = 0;
 
     while (1)
     {
