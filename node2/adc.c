@@ -6,7 +6,11 @@
 void ADC_Init() {
     
     // ADC mode register, find values for prescaler, think rest is fine
-    ADC->ADC_MR = ADC_MR_FREERUN_ON | ADC_MR_PRESCAL(ADC_Prescaler) | ADC_MR_STARTUP_SUT512 | ADC_MR_TRACKTIM(10) | ADC_MR_SETTLING_AST5;
+    ADC->ADC_MR = ADC_MR_FREERUN_ON 
+    | ADC_MR_PRESCAL(ADC_Prescaler) 
+    | ADC_MR_STARTUP_SUT512 
+    | ADC_MR_TRACKTIM(ADC_Tracktime) 
+    | ADC_MR_SETTLING_AST5;
 
     // Enable channels, probably only need channel 0
     ADC->ADC_CHER = ADC_CHER_CH0;
@@ -19,4 +23,6 @@ void ADC_Init() {
 
 }
 
-uint16_t ADC
+uint16_t ADC_Read() {
+    return ADC->ADC_CDR[0];
+}
