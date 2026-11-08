@@ -4,6 +4,9 @@
 #define ADC_Tracktime 5
 
 void ADC_Init() {
+
+    PIOB->PIO_ABSR |= PIO_PB18X1_AD11;
+    PIOB->PIO_PDR |= PIO_PB18X1_AD11;
     
     // ADC mode register, find values for prescaler, think rest is fine
     ADC->ADC_MR = ADC_MR_FREERUN_ON 
@@ -20,6 +23,8 @@ void ADC_Init() {
 
     // Start conversions
     ADC->ADC_CR = ADC_CR_START;
+
+    
 
 }
 
