@@ -2,6 +2,7 @@
 
 #include <stdint.h>
 #include "sam.h"
+#include "adc.h"
 
 typedef enum {
     UP, DOWN, LEFT, RIGHT, NEUTRAL
@@ -37,3 +38,5 @@ void JOY_Readable_Y(io_joy_t* joy);
 
 // Return struct with percentile in both axis'
 void JOY_Readable_Pos(io_joy_t* joy);
+
+uint8_t IR_result();
