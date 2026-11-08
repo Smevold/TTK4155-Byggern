@@ -2,10 +2,20 @@
 #include "interrupt.h"
 
 #define CLKA 656250
-#define PWM_DUTY_CYCLE_MIN_us 900
-#define PWM_DUTY_CYCLE_MAX_us 2100
-#define PWM_DUTY_CYCLE_PERCENTILE_STEP ((PWM_DUTY_CYCLE_MAX_us-PWM_DUTY_CYCLE_MIN_us)/100)
+
+#define PWM_SERVO_DUTY_CYCLE_MIN_us 900
+#define PWM_SERVO_DUTY_CYCLE_MAX_us 2100
+
+// Should be changed later when we know speed of motor
+#define PWM_MOTOR_DUTY_CYCLE_MIN_us 1
+#define PWM_MOTOR_DUTY_CYCLE_MAX_us 10
+
+#define PWM_SERVO_DUTY_CYCLE_PERCENTILE_STEP ((PWM_SERVO_DUTY_CYCLE_MAX_us-PWM_SERVO_DUTY_CYCLE_MIN_us)/100)
+#define PWM_MOTOR_DUTY_CYCLE_PERCENTILE_STEP ((PWM_MOTOR_DUTY_CYCLE_MAX_us-PWM_MOTOR_DUTY_CYCLE_MIN_us)/100)
+
+
 #define PWM_DUTY_CYCLE_HYSTERESIS 100
+
 #define PWM_TOTAL_CHANNELS_EN 2
 
 void Timer_Init() {
@@ -94,17 +104,31 @@ void PWM_Init(){
 
 // Change duty cycle in microseconds based on input
 void PWM_Set_Duty_Cycle_us(uint16_t us, uint8_t channel) {
-    if (us >= PWM_DUTY_CYCLE_MAX_us) {us = PWM_DUTY_CYCLE_MAX_us;}
-    if (us <= PWM_DUTY_CYCLE_MIN_us) {us = PWM_DUTY_CYCLE_MIN_us;}
-    uint32_t CDTY_update_value = us*CLKA/1000000;
+    // Check if given channel is valid / enabled
+    uint32_t CDTY_update_value;
+    if (channel < PWM_TOTAL_CHANNELS_EN) {
+        // Logic given channel is 1, or servo PWM signal
+        if (channel == 1) {
+            if (us >= PWM_SERVO_DUTY_CYCLE_MAX_us) {us = PWM_SERVO_DUTY_CYCLE_MAX_us;}
+            if (us <= PWM_SERVO_DUTY_CYCLE_MIN_us) {us = PWM_SERVO_DUTY_CYCLE_MIN_us;}
+            CDTY_update_value = us*CLKA/1000000;
+        }
 
-    if (channel < PWM_TOTAL_CHANNELS_EN) {PWM->PWM_CH_NUM[channel].PWM_CDTYUPD = CDTY_update_value;}
+        if (channel == 0) {
+            if (us >= PWM_MOTOR_DUTY_CYCLE_MAX_us) {us = PWM_MOTOR_DUTY_CYCLE_MAX_us;}
+            if (us <= PWM_MOTOR_DUTY_CYCLE_MIN_us) {us = PWM_MOTOR_DUTY_CYCLE_MIN_us;}
+            CDTY_update_value = us*CLKA/1000000;
+        }
+
+        PWM->PWM_CH_NUM[channel].PWM_CDTYUPD = CDTY_update_value;
+    }
 }
 
 void PWM_Joy_Duty_Cycle(uint8_t joy_pos, uint16_t* last_us, uint8_t channel) {
     uint16_t us;
+    if (channel == 0) {us = PWM_MOTOR_DUTY_CYCLE_MIN_us + joy_pos * PWM_MOTOR_DUTY_CYCLE_PERCENTILE_STEP;}
 
-    us = PWM_DUTY_CYCLE_MIN_us + joy_pos * PWM_DUTY_CYCLE_PERCENTILE_STEP;
+    if (channel == 1) {us = PWM_SERVO_DUTY_CYCLE_MIN_us + joy_pos * PWM_SERVO_DUTY_CYCLE_PERCENTILE_STEP;}
 
     // Hysteresis functionality to avoid shaking the servo
     if ((us > (*last_us + PWM_DUTY_CYCLE_HYSTERESIS)) | (us < (*last_us - PWM_DUTY_CYCLE_HYSTERESIS))) {
