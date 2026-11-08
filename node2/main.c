@@ -72,17 +72,24 @@ int main()
             joy.btn = msg_rx.byte[6];
  
             printf("--- NEW MESSAGE ---\n");
-            printf("msg_receive: ID: %2X, DLC: %2X, Data: %2X, %2X, %2X, %2X, %2X, %2X, %2X\n", msg_rx.id, msg_rx.length, msg_tx.byte[0], msg_tx.byte[1], msg_tx.byte[2], msg_tx.byte[3], msg_tx.byte[4], msg_tx.byte[5], msg_tx.byte[6]);
+            printf("msg_receive: ID: %2X, DLC: %2X, Data: %2X, %2X, %2X, %2X, %2X, %2X, %2X\n", msg_rx.id, msg_rx.length, joy.x_max, joy.x_min, joy.y_max, joy.y_min, joy.x_dig, joy.y_dig, joy.btn);   
             printf("msg_send: ID: %2X, DLC: %2X, Data: %2X\n", msg_tx.id, msg_tx.length, msg_tx.byte[0]);
+            
         }
+        JOY_Readable_Pos(&joy);
+        
+        PWM_Joy_Duty_Cycle(joy.x);
+        
 
         // Same delay as node1
         if(ticks - last_tick >= 100) {
+            printf("Before last tick\n");
             last_tick = ticks;
+            printf("Before send\n");
             can_tx(msg_tx);
-        }
+            printf("After send\n");
 
+          }
         // --- CAN JOY TO PWM TEST END ---
-    }
-    
+    }    
 }
