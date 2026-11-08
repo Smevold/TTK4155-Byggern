@@ -41,6 +41,7 @@ void OLED_Home(cursor_t* cursor) {
 }
 
 void OLED_Goto_Page(cursor_t* cursor) {
+    SPI_SlaveSelect(SS_OLED);
     // Set command-mode
     PORTB &= ~(1 << PORTB1);
     SPI_Transmit(0x22); // Set Page Address
@@ -54,6 +55,7 @@ void OLED_Goto_Next_Page(cursor_t* cursor) {
 }
 
 void OLED_Goto_Column(cursor_t* cursor) {
+    SPI_SlaveSelect(SS_OLED);
     // Set command-mode
     PORTB &= ~(1 << PORTB1);
     SPI_Transmit(0x21); // Set Column Address
@@ -68,6 +70,7 @@ void OLED_Goto_Pos(cursor_t* cursor) {
 
 void OLED_Clear(cursor_t* cursor) {
     OLED_Home(cursor);
+    SPI_SlaveSelect(SS_OLED);
 
     // Change to data-mode
     PORTB |= (1 << PORTB1); 
@@ -80,6 +83,7 @@ void OLED_Clear(cursor_t* cursor) {
 
 void OLED_Fill(cursor_t* cursor) {
     OLED_Home(cursor);
+    SPI_SlaveSelect(SS_OLED);
 
     // Change to data-mode
     PORTB |= (1 << PORTB1); 
@@ -92,7 +96,7 @@ void OLED_Fill(cursor_t* cursor) {
 
 // Will always clear line_start
 void OLED_Clear_Line(cursor_t* cursor) {
-    OLED_Goto_Pos(cursor);
+    OLED_Goto_Pos(cursor); // Sets SPI_Slave
 
     // Change to data-mode
     PORTB |= (1 << PORTB1); 
@@ -105,7 +109,7 @@ void OLED_Clear_Line(cursor_t* cursor) {
 
 
 void OLED_Print(const uint8_t (*bitmap)[128], cursor_t* cursor){
-    OLED_Goto_Pos(cursor);
+    OLED_Goto_Pos(cursor); // Sets SPI_Slave
 
     // Change to data-mode
     PORTB |= (1 << PORTB1); 
@@ -119,6 +123,7 @@ void OLED_Print(const uint8_t (*bitmap)[128], cursor_t* cursor){
 }
 
 void OLED_Print_Char(const uint8_t* font, char character, uint8_t size){
+    SPI_SlaveSelect(SS_OLED);
     // Change to data-mode
     PORTB |= (1 << PORTB1); 
 
