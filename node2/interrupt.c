@@ -5,6 +5,7 @@
 #define PWM_DUTY_CYCLE_MIN_us 900
 #define PWM_DUTY_CYCLE_MAX_us 2100
 #define PWM_DUTY_CYCLE_PERCENTILE_STEP ((PWM_DUTY_CYCLE_MAX_us-PWM_DUTY_CYCLE_MIN_us)/100)
+#define PWM_DUTY_CYCLE_HYSTERESIS 100
 
 void Timer_Init() {
     // Configure PMC to enable Timer Counter Clock (Power Management Controller)
@@ -100,7 +101,7 @@ void PWM_Joy_Duty_Cycle(uint8_t joy_pos, uint16_t* last_us) {
     us = PWM_DUTY_CYCLE_MIN_us + joy_pos * PWM_DUTY_CYCLE_PERCENTILE_STEP;
 
     // Hysteresis functionality to avoid shaking the servo
-    if ((us > (*last_us + 100)) | (us < (*last_us - 100))) {
+    if ((us > (*last_us + PWM_DUTY_CYCLE_HYSTERESIS)) | (us < (*last_us - PWM_DUTY_CYCLE_HYSTERESIS))) {
         PWM_Set_Duty_Cycle_us(us);
         *last_us = us;
     }
