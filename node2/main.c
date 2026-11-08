@@ -78,7 +78,7 @@ int main()
         }
         JOY_Readable_Pos(&joy);
         
-        PWM_Joy_Duty_Cycle(joy.x);
+        PWM_Joy_Duty_Cycle(joy.x, &last_us);
         
 
         // Same delay as node1

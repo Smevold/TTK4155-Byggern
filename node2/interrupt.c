@@ -94,7 +94,7 @@ void PWM_Set_Duty_Cycle_us(uint16_t us) {
     PWM->PWM_CH_NUM[1].PWM_CDTYUPD = CDTY_update_value;
 }
 
-void PWM_Joy_Duty_Cycle(uint8_t joy_pos, uint16_t last_us) {
+void PWM_Joy_Duty_Cycle(uint8_t joy_pos, uint16_t* last_us) {
     uint16_t us;
 
     us = PWM_DUTY_CYCLE_MIN_us + joy_pos * PWM_DUTY_CYCLE_PERCENTILE_STEP;
