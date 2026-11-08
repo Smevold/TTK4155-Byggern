@@ -11,7 +11,8 @@ SOURCE_FILES = \
 	uart.c \
 	can.c \
 	interrupt.c \
-	io_driver.c
+	io_driver.c \
+	adc.c
 #   filename1.c \
 #   filename2.c \
 #	filenameN.c

@@ -1,7 +1,7 @@
 //
 #include "interrupt.h"
 
-#define CLKA 65625
+#define CLKA 656250
 #define PWM_DUTY_CYCLE_MIN_us 900
 #define PWM_DUTY_CYCLE_MAX_us 2100
 #define PWM_DUTY_CYCLE_PERCENTILE_STEP ((PWM_DUTY_CYCLE_MAX_us-PWM_DUTY_CYCLE_MIN_us)/100)
@@ -89,7 +89,7 @@ void PWM_Init(){
 void PWM_Set_Duty_Cycle_us(uint16_t us) {
     if (us >= PWM_DUTY_CYCLE_MAX_us) {us = PWM_DUTY_CYCLE_MAX_us;}
     if (us <= PWM_DUTY_CYCLE_MIN_us) {us = PWM_DUTY_CYCLE_MIN_us;}
-    uint32_t CDTY_update_value = us*CLKA;
+    uint32_t CDTY_update_value = us*CLKA/1000000;
 
     PWM->PWM_CH_NUM[1].PWM_CDTYUPD = CDTY_update_value;
 }
