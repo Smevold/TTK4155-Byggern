@@ -93,6 +93,9 @@ int main()
         if(ticks - last_tick >= 25) {
             printf("%2X\n", adc);
 
+            uint32_t l = ADC->ADC_LCDR;
+            printf("ch:%lu val:%lu\n", (l >> 12) & 0xF, l & 0xFFF);
+
             //printf("Before last tick\n");
             last_tick = ticks;
             //printf("Before send\n");
