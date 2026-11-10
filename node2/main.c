@@ -78,10 +78,10 @@ int main()
             printf("msg_receive: ID: %2X, DLC: %2X, Data: %2X, %2X, %2X, %2X, %2X, %2X, %2X\n", msg_rx.id, msg_rx.length, joy.x_max, joy.x_min, joy.y_max, joy.y_min, joy.x_dig, joy.y_dig, joy.btn);   
             printf("msg_send: ID: %2X, DLC: %2X, Data: %2X\n", msg_tx.id, msg_tx.length, msg_tx.byte[0]);
             
+            JOY_Readable_Pos(&joy);
+            
+            PWM_Joy_Duty_Cycle(joy.x, &last_us);
         }
-        JOY_Readable_Pos(&joy);
-        
-        PWM_Joy_Duty_Cycle(joy.x, &last_us);
         
 
         // Same delay as node1
