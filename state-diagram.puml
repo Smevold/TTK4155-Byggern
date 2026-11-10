@@ -4,8 +4,9 @@ skinparam backgroundColor white
 [*] --> Startup
 Startup --> Menu
 Menu --> Running : Start_game
-Running --> Game_over
+Running --> Game_over 
 Game_over --> Menu : Back_to_menu
+Game_over --> Running : Restart
 Game_over --> [*] : Exit_game
 Menu --> [*] : Exit_game
 @enduml
