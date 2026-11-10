@@ -57,27 +57,27 @@ void Timer_Init() {
     
 
     TC2->TC_BMR = TC_BMR_POSEN // Enable position measurement
-                | TC_BMR_QDEN
-                | TC_BMR_EDGPHA; // Enable Quadratic Encoder
+                | TC_BMR_QDEN // Enable Quadratic Encoder
+                | TC_BMR_EDGPHA; 
 
-    NVIC_EnableIRQ(TC0_IRQn); // Enable NVIC interrupts for TC2
+    NVIC_EnableIRQ(TC2_IRQn); // Enable NVIC interrupts for TC2
 
-//Channel 0 and 1 must be configured in Capture mode (TC_CMR0.WAVE = 0). ‘Rising edge’ must be selected as
-//the External Trigger Edge (TC_CMR.ETRGEDG = 0x01) and ‘TIOA’ must be selected as the External Trigger
-//(TC_CMR.ABETRG = 0x1)
-
-
+    //Channel 0 and 1 must be configured in Capture mode (TC_CMR0.WAVE = 0). ‘Rising edge’ must be selected as
+    //the External Trigger Edge (TC_CMR.ETRGEDG = 0x01) and ‘TIOA’ must be selected as the External Trigger
+    //(TC_CMR.ABETRG = 0x1)
 
 
-//A compare function (using TC_RC) is available on channel 0 (speed/position) or channel 1 (rotation) and can
-//generate an interrupt by means of the CPCS flag in the TC_SRx
 
-//The position measurement can be read in the TC_CV0 register 
-//channel 0 and 1 must be configured in Capture mode (TC_CMR0.WAVE = 0). ‘Rising edge’ must be selected as
-//the External Trigger Edge (TC_CMR.ETRGEDG = 0x01) and ‘TIOA’ must be selected as the External Trigger
-//(TC_CMR.ABETRG = 0x1
 
-TC2->TC_CHANNEL[0].TC_CCR = TC_CCR_CLKEN | TC_CCR_SWTRG;
+    //A compare function (using TC_RC) is available on channel 0 (speed/position) or channel 1 (rotation) and can
+    //generate an interrupt by means of the CPCS flag in the TC_SRx
+
+    //The position measurement can be read in the TC_CV0 register 
+    //channel 0 and 1 must be configured in Capture mode (TC_CMR0.WAVE = 0). ‘Rising edge’ must be selected as
+    //the External Trigger Edge (TC_CMR.ETRGEDG = 0x01) and ‘TIOA’ must be selected as the External Trigger
+    //(TC_CMR.ABETRG = 0x1
+
+    TC2->TC_CHANNEL[0].TC_CCR = TC_CCR_CLKEN | TC_CCR_SWTRG;
 
 
 }
