@@ -51,13 +51,16 @@ int main()
     Timer_Init();
 
     PWM_Init();
+    ADC_Init();
 
     printf("Test 1\n");
 
     uint32_t last_tick = 0;
     uint16_t last_us = 0;
-    pid_ctrl_t pid = {0}; // Sets all members to zero
-    motor_t motor = {0}; // Sets all members to zero
+    //pid_ctrl_t pid = {0}; // Sets all members to zero
+    //motor_t motor = {0}; // Sets all members to zero
+
+    uint16_t adc = 0;
 
     while (1)
     {
@@ -74,25 +77,35 @@ int main()
             joy.y_dig = msg_rx.byte[5];
             joy.btn = msg_rx.byte[6];
  
-            printf("--- NEW MESSAGE ---\n");
-            printf("msg_receive: ID: %2X, DLC: %2X, Data: %2X, %2X, %2X, %2X, %2X, %2X, %2X\n", msg_rx.id, msg_rx.length, joy.x_max, joy.x_min, joy.y_max, joy.y_min, joy.x_dig, joy.y_dig, joy.btn);   
-            printf("msg_send: ID: %2X, DLC: %2X, Data: %2X\n", msg_tx.id, msg_tx.length, msg_tx.byte[0]);
+            //printf("--- NEW MESSAGE ---\n");
+            //printf("msg_receive: ID: %2X, DLC: %2X, Data: %2X, %2X, %2X, %2X, %2X, %2X, %2X\n", msg_rx.id, msg_rx.length, joy.x_max, joy.x_min, joy.y_max, joy.y_min, joy.x_dig, joy.y_dig, joy.btn);   
+            //printf("msg_send: ID: %2X, DLC: %2X, Data: %2X\n", msg_tx.id, msg_tx.length, msg_tx.byte[0]);
             
             JOY_Readable_Pos(&joy);
             
             PWM_Joy_Duty_Cycle(joy.x, &last_us);
+
         }
         
 
         // Same delay as node1
         if(ticks - last_tick >= 100) {
-            printf("Before last tick\n");
+            //printf("Before last tick\n");
             last_tick = ticks;
-            printf("Before send\n");
+            //printf("Before send\n");
             can_tx(msg_tx);
-            printf("After send\n");
+            //printf("After send\n");
 
         }
+
+
+
+        adc = ADC_Read();
+        printf("%2X\n", adc);
+
+
+
+
         // --- CAN JOY TO PWM TEST END ---
 
         /*
