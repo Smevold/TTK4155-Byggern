@@ -26,12 +26,17 @@ void Timer_Init() {
     //This time base is automatically fed back to TIOA of channel 0 when QDEN and SPEEDEN are set.
     // så PWM etterpå me intterupt så regne t tid?
 
-    // Power Management Controller, enable Timer Counter Clock 0
-    PMC->PMC_PCER0 = PMC_PCER0_PID27;
+    // Power Management Controller, enable Timer Counter Clock 0 and 2
+    PMC->PMC_PCER0 |= PMC_PCER0_PID27;
+    PMC->PMC_PCER0 |= PMC_PCER0_PID29;
+
+    // TC0
    
     TC0->TC_CHANNEL[0].TC_CMR = TC_CMR_TCCLKS_TIMER_CLOCK4 // Prescaler MCK/128
                             | TC_CMR_WAVE             // WAVE MODE
                             | TC_CMR_WAVSEL_UP_RC;   // UP mode with auto trig on RC compare
+    
+
     // 20 ms  MCK/128  20 * 656250 Hz
     TC0->TC_CHANNEL[0].TC_RC = 13125;                  // The registers RC value. Used to compare with CV and reset when hit
 
@@ -41,6 +46,19 @@ void Timer_Init() {
 
 
     TC0->TC_CHANNEL[0].TC_CCR = TC_CCR_CLKEN | TC_CCR_SWTRG; // Counter clock enable and software trigger command
+
+    // TC2
+    TC2->TC_CHANNEL[0].TC_CMR = TC_CMR_TCCLKS_XC0; // Select clock XC0
+    
+    TC2->TC_BMR = TC_BMR_POSEN // Enable position measurement
+                | TC_BMR_QDEN; // Enable Quadratic Encoder
+
+    NVIC_EnableIRQ(TC0_IRQn); // Enable NVIC interrupts for TC2
+
+
+
+
+
 }
 
 volatile uint32_t ticks = 0;
