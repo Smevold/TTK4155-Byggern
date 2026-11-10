@@ -12,7 +12,8 @@ SOURCE_FILES = \
 	can.c \
 	interrupt.c \
 	io_driver.c \
-	adc.c
+	adc.c \
+	motor.c
 #   filename1.c \
 #   filename2.c \
 #	filenameN.c
