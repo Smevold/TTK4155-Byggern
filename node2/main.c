@@ -97,15 +97,14 @@ int main()
         if(ticks - last_tick >= 25) {
             printf("%2X\n", adc);
 
-            uint32_t l = ADC->ADC_LCDR;
-            printf("ch:%lu val:%lu\n", (l >> 12) & 0xF, l & 0xFFF);
-            printf("CHSR:%lX MR:%lX\n", ADC->ADC_CHSR, ADC->ADC_MR);
-            printf("COR:%lX CGR:%lX EMR:%lX\n", ADC->ADC_COR, ADC->ADC_CGR, ADC->ADC_EMR);
+            //uint32_t l = ADC->ADC_LCDR;
+            //printf("ch:%lu val:%lu\n", (l >> 12) & 0xF, l & 0xFFF);
+            //printf("CHSR:%lX MR:%lX\n", ADC->ADC_CHSR, ADC->ADC_MR);
+            //printf("COR:%lX CGR:%lX EMR:%lX\n", ADC->ADC_COR, ADC->ADC_CGR, ADC->ADC_EMR);
 
             // ADC CHIP TEMP CHECK --- REMOVE LATER
-            ADC->ADC_CHER = ADC_CHER_CH15;
             // after a moment:
-            printf("%u\n", ADC->ADC_CDR[15]);
+            printf("%x\n", ADC->ADC_CDR[7]);
 
             //printf("Before last tick\n");
             last_tick = ticks;
