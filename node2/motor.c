@@ -16,13 +16,13 @@ void Motor(io_joy_t* joy, uint16_t* last_us) {
     JOY_Readable_Pos(joy);
 
     // Change PWM
-    PWM_Joy_Duty_Cycle(joy->y, last_us, 0);
+    PWM_Joy_Duty_Cycle(joy->x, last_us, 0);
     
     // Change dir based on input from joystick
-    if (joy.x > 50 + DEADSPACE) {
+    if (joy->x > 50 + DEADSPACE) {
         // SET PIN 23 PORT C HIGH
         PIOB->PIO_SODR |= PIO_PB23;
-    } else if (joy.x < 50 - DEADSPACE) {
+    } else if (joy->x < 50 - DEADSPACE) {
         // SET PIN 23 PORT C LOW
         PIOB->PIO_SODR &= ~PIO_PB23;
     }
