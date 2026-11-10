@@ -62,6 +62,10 @@ int main()
 
     uint16_t adc = 0;
 
+    // ADC CHIP TEMP CHECK --- REMOVE LATER
+    ADC->ADC_ACR |= ADC_ACR_TSON;     // enable the sensor (check macro name in component_adc.h)
+
+
     while (1)
     {
         // --- CAN JOY TO PWM TEST BEGIN ---
@@ -97,6 +101,11 @@ int main()
             printf("ch:%lu val:%lu\n", (l >> 12) & 0xF, l & 0xFFF);
             printf("CHSR:%lX MR:%lX\n", ADC->ADC_CHSR, ADC->ADC_MR);
             printf("COR:%lX CGR:%lX EMR:%lX\n", ADC->ADC_COR, ADC->ADC_CGR, ADC->ADC_EMR);
+
+            // ADC CHIP TEMP CHECK --- REMOVE LATER
+            ADC->ADC_CHER = ADC_CHER_CH15;
+            // after a moment:
+            printf("%u\n", ADC->ADC_CDR[15]);
 
             //printf("Before last tick\n");
             last_tick = ticks;
