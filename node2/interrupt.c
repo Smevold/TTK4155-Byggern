@@ -127,11 +127,11 @@ void PWM_Set_Duty_Cycle_us(uint16_t us, uint8_t channel) {
     }
 }
 
-void PWM_Joy_Duty_Cycle(uint8_t joy_pos, uint16_t* last_us, uint8_t channel) {
+void PWM_Joy_Duty_Cycle(uint8_t duty_cycle_percentile, uint16_t* last_us, uint8_t channel) {
     uint16_t us;
-    if (channel == 0) {us = PWM_MOTOR_DUTY_CYCLE_MIN_us + joy_pos * PWM_MOTOR_DUTY_CYCLE_PERCENTILE_STEP;}
+    if (channel == 0) {us = PWM_MOTOR_DUTY_CYCLE_MIN_us + duty_cycle_percentile * PWM_MOTOR_DUTY_CYCLE_PERCENTILE_STEP;}
 
-    if (channel == 1) {us = PWM_SERVO_DUTY_CYCLE_MIN_us + joy_pos * PWM_SERVO_DUTY_CYCLE_PERCENTILE_STEP;}
+    if (channel == 1) {us = PWM_SERVO_DUTY_CYCLE_MIN_us + duty_cycle_percentile * PWM_SERVO_DUTY_CYCLE_PERCENTILE_STEP;}
 
     // Hysteresis functionality to avoid shaking the servo
     if ((us > (*last_us + PWM_DUTY_CYCLE_HYSTERESIS)) | (us < (*last_us - PWM_DUTY_CYCLE_HYSTERESIS))) {
