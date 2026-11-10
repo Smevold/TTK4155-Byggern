@@ -132,7 +132,7 @@ void PWM_Init(){
     // Page 1046
     // Set duty cycle to 1.5 ms
     PWM->PWM_CH_NUM[1].PWM_CDTY = 984;
-    PWM->PWM_CH_NUM[1].PWM_CDTY = 1;
+    PWM->PWM_CH_NUM[0].PWM_CDTY = 1;
 
     // Page 1014
     PWM->PWM_SCM = 0;

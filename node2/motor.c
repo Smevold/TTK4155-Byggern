@@ -30,8 +30,8 @@ void Motor(io_joy_t* joy, uint16_t* last_us) {
 
 }
 
-uint32_t Motor_Position(){
+void Motor_Position(motor_t* motor){
 
-    uint32_t  position_motor = TC2->TC_CHANNEL[0].TC_CV;
-    return position_motor;
+    motor->p_measured = TC2->TC_CHANNEL[0].TC_CV;
+    
 }
