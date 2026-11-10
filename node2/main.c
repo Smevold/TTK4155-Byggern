@@ -95,6 +95,7 @@ int main()
 
             uint32_t l = ADC->ADC_LCDR;
             printf("ch:%lu val:%lu\n", (l >> 12) & 0xF, l & 0xFFF);
+            printf("CHSR:%lX MR:%lX\n", ADC->ADC_CHSR, ADC->ADC_MR);
 
             //printf("Before last tick\n");
             last_tick = ticks;
