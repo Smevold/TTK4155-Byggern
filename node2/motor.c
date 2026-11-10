@@ -29,3 +29,9 @@ void Motor(io_joy_t* joy, uint16_t* last_us) {
 
 
 }
+
+int32_t position_motor(){
+
+int32_t position_motor = tC2->TC2.T
+
+}

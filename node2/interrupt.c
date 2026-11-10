@@ -56,12 +56,6 @@ void Timer_Init() {
                                 | TC_CMR_ABETRG; // Select clock XC0
     
 
-
-    TC2->TC_CHANNEL[1].TC_CMR = TC_CMR_TCCLKS_XC0
-                                | TC_CMR_ETRGEDG_RISING
-                                | TC_CMR_ABETRG; 
-
-
     TC2->TC_BMR = TC_BMR_POSEN // Enable position measurement
                 | TC_BMR_QDEN
                 | TC_BMR_EDGPHA; // Enable Quadratic Encoder
@@ -84,7 +78,7 @@ void Timer_Init() {
 //(TC_CMR.ABETRG = 0x1
 
 TC2->TC_CHANNEL[0].TC_CCR = TC_CCR_CLKEN | TC_CCR_SWTRG;
-TC2->TC_CHANNEL[1].TC_CCR = TC_CCR_CLKEN | TC_CCR_SWTRG;
+
 
 }
 
