@@ -87,9 +87,12 @@ int main()
 
         }
         
+        adc = ADC_Read();
 
-        // Same delay as node1
-        if(ticks - last_tick >= 100) {
+        // 1/4 delay as node1
+        if(ticks - last_tick >= 25) {
+            printf("%2X\n", adc);
+
             //printf("Before last tick\n");
             last_tick = ticks;
             //printf("Before send\n");
@@ -100,8 +103,6 @@ int main()
 
 
 
-        adc = ADC_Read();
-        printf("%2X\n", adc);
 
 
 
