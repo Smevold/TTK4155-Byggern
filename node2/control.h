@@ -1,11 +1,12 @@
+#pragma once
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include "sam.h"
 #include "motor.h"
 
-typdedef struct{
-    uint8_t Kp;
-    uint8_t Ki;
-    uint8_t Kd; // Possibly not needed
+typedef struct{
+    uint16_t error_sum;
+    uint16_t error_prev;
     uint8_t output; // Just guessed type-size, should check
-}
+} pid_ctrl_t;

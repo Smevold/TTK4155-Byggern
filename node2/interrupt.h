@@ -6,6 +6,7 @@
 void Timer_Init();
 
 extern volatile uint32_t ticks;
+extern volatile uint8_t pid_tick;
 
 void PWM_Init();
 void PWM_Set_Duty_Cycle_us(uint16_t us, uint8_t channel);

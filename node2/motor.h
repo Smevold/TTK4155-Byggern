@@ -10,8 +10,14 @@
 
 // If not more is needed for the position regulator, consider not using a struct
 typedef struct {
-    uint16_t position; // Just guessed type-size, should check what is needed
-    // MORE???
+    // Encoder should be real-time encoder-value
+    uint16_t encoder; // Just guessed type-size
+    // Position should be the calculated position based on encoder
+    uint16_t p_measured; // Just guessed type-size, should check what is needed
+    // Ref should be the reference-value
+    // Calculated by adding together the joystick values?
+    // We should consider changing to the pad, for position based control
+    uint16_t p_ref; 
 } motor_t;
 
 void Motor_Init();

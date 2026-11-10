@@ -55,6 +55,8 @@ int main()
 
     uint32_t last_tick = 0;
     uint16_t last_us = 0;
+    pid_ctrl_t pid;
+    motor_t motor;
 
     while (1)
     {
@@ -89,7 +91,20 @@ int main()
             can_tx(msg_tx);
             printf("After send\n");
 
-          }
+        }
         // --- CAN JOY TO PWM TEST END ---
+
+        
+        // --- PID Controller Call BEGIN ---
+
+        if (pid_tick = 1) {
+            pid_tick = 0;
+            motor.p_measured = 0; // READ MOTOR POS
+            PID_Controller(&pid, &motor);
+            // SET MOTOR SPEED
+        }
+
+        // --- PID Controller Call END ---
+        
     }    
 }

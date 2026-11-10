@@ -10,6 +10,7 @@ void Motor_Init() {
     PIOB->PIO_OER |= PIO_PC23; // Output enable register pin 13
 }
 
+// This function cannot take in joy, must take in throttle_signal
 void Motor(io_joy_t* joy, uint16_t* last_us) {
     // Take in joystick x and y
     JOY_Readable_Pos(joy);
