@@ -18,6 +18,8 @@ void ADC_Init() {
     | ADC_MR_TRACKTIM(ADC_Tracktime) 
     | ADC_MR_SETTLING_AST5;
 
+    ADC->ADC_EMR = ADC_EMR_TAG;
+
     // Enable channels, probably only need channel 11
     ADC->ADC_CHER = ADC_CHER_CH11;
 
