@@ -6,7 +6,7 @@
 #define PID_KI 0.1
 #define PID_KD 1
 
-#define PID_OUT_MAX 1000000 // Figure out value
+#define PID_OUT_MAX 100 // Maximum Motor Duty Cycle, should check
 
 void PID_Controller(pid_ctrl_t* pid, motor_t* motor) {
     // Error
@@ -24,10 +24,10 @@ void PID_Controller(pid_ctrl_t* pid, motor_t* motor) {
     float i = PID_KI * SAMPLING_PERIOD * pid->error_sum;
 
     // Derivative effect
-    uint16_t d = (pid->Kd / SAMPLING_PERIOD) * (error - pid->error_prev);
+    float d = (PID_KD / SAMPLING_PERIOD) * (error - pid->error_prev);
 
     // Save error
-    uint16_t pid->error_prev = error;
+    pid->error_prev = error;
 
     // Collective output
     float u = p + i + d;

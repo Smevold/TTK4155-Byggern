@@ -6,7 +6,9 @@
 #include "motor.h"
 
 typedef struct{
-    uint16_t error_sum;
-    uint16_t error_prev;
-    uint8_t output; // Just guessed type-size, should check
+    float error_sum;
+    float error_prev;
+    float output; 
 } pid_ctrl_t;
+
+void PID_Controller(pid_ctrl_t* pid, motor_t* motor);
