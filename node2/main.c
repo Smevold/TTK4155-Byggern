@@ -66,7 +66,7 @@ int main()
     uint16_t last_us = 0;
     pid_ctrl_t pid = {0}; // Sets all members to zero
     motor_t motor = {0}; // Sets all members to zero
-    motor.p_ref = 40;
+    motor.p_ref = 0x40;
 
     uint16_t adc = 0;
 
@@ -136,7 +136,7 @@ int main()
         }
         
         if(ticks - last_print_tick >= 100) {
-            printf("ref: %d, meas: %d, out: %d\n", motor.p_ref, motor.p_measured, pid.output);
+            printf("ref: %d, meas: %d, out: %.4f\n", motor.p_ref, motor.p_measured, pid.output);
             last_print_tick = ticks;
         }
 
