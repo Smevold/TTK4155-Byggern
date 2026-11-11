@@ -13,7 +13,7 @@ void SM_Startup(cursor_t* cursor, io_joy_t* joy, io_pad_t* pad) {
 }
 
 
-void SM_Menu(io_joy_t* joy, io_joy_t* cursor, io_pad_t* pad) {
+void SM_Menu(io_joy_t* joy, cursor_t* cursor, io_pad_t* pad) {
     OLED_Clear(cursor);
     Interface_Print_Menu(cursor);
 
@@ -25,7 +25,37 @@ void SM_Menu(io_joy_t* joy, io_joy_t* cursor, io_pad_t* pad) {
         JOY_Direction(joy);
         joy->btn = PIND & (1 << PIND4);
 
-        Interface_Menu_Nav(joy, cursor, &menu_option);
+        //Interface_Menu_Nav(joy, cursor, &menu_option);
+        // Logic to keep menu_options within the bounds
+        if (joy->dir == DOWN && menu_option > 0) {
+            menu_option--;
+        } else if (joy->dir == UP && menu_option < 2) {
+            menu_option++;
+        }
+
+        cursor->column_start = 0;
+        OLED_Goto_Column(cursor);
+        OLED_Print_Char(font5, ' ', MEDIUM_FONT);
+        switch (menu_option) {
+            case 0:
+                cursor->line_start = 0;
+                break;
+            case 1:
+                cursor->line_start = 8;
+                break;
+        }
+            
+            
+        cursor->column_start = 0;
+        OLED_Goto_Pos(cursor);
+        
+        // Joy btn is connected to pin D 4
+        joy->btn = PIND & (1 << PIND4);
+        if (joy->btn) {
+            OLED_Print_Char(font5, 'X', MEDIUM_FONT);
+        } else {
+            OLED_Print_Char(font5, 'O', MEDIUM_FONT);
+        }
     }
 }
 
