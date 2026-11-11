@@ -97,6 +97,8 @@ int main()
     uint16_t last_us_servo = 0;
     uint16_t last_us_motor = 0;
     uint16_t solenoid_ticks = 0;
+    uint32_t game_start_ticks = 0;
+    uint32_t game_end_ticks = 0;
     pid_ctrl_t pid = {0}; // Sets all members to zero
     motor_t motor = {0}; // Sets all members to zero
     motor.p_ref = 0x40;
@@ -104,94 +106,30 @@ int main()
     uint16_t adc = 0;
 
     uint8_t startup_wait = 1;
+    uint8_t state = 0;
 
-    // Startup wait
-    while(startup_wait) {
-        if(can_rx(&msg_rx)) {
-            printf("msg_receive: ID: %2X, DLC: %2X, Data: %2X\n\r", msg_rx.id, msg_rx.length, msg_rx.byte[0]);   
-            startup_wait = 0;
-        }
-    }
-
-
-    while (1)
-    {
-
-
-        // --- CAN JOY TO PWM TEST BEGIN ---
-        
-
-        // Only update tx and send, if received
-        if(can_rx(&msg_rx)) {
-
-            joy.x_max = msg_rx.byte[0];
-            joy.x_min = msg_rx.byte[1];
-            joy.y_max = msg_rx.byte[2];
-            joy.y_min = msg_rx.byte[3];
-            joy.x_dig = msg_rx.byte[4];
-            joy.y_dig = msg_rx.byte[5];
-            joy.btn = msg_rx.byte[6];
- 
-            //printf("--- NEW MESSAGE ---\n");
-            //printf("msg_receive: ID: %2X, DLC: %2X, Data: %2X, %2X, %2X, %2X, %2X, %2X, %2X\n\r", msg_rx.id, msg_rx.length, joy.x_max, joy.x_min, joy.y_max, joy.y_min, joy.x_dig, joy.y_dig, joy.btn);   
-            //printf("msg_send: ID: %2X, DLC: %2X, Data: %2X\n\r", msg_tx.id, msg_tx.length, msg_tx.byte[0]);
+    
+    
+    while (1) {
+        switch(state) {
+            case 0:
+                // Startup wait
+                if(can_rx(&msg_rx)) {
+                    printf("msg_receive: ID: %2X, DLC: %2X, Data: %2X\n\r", msg_rx.id, msg_rx.length, msg_rx.byte[0]);   
+                    // Change to game state running when given signal from node 1
+                    state = 1;
+                }
             
-            JOY_Readable_Pos(&joy);
-
-            PID_Update_Ref(&motor, &joy);
-        }
-        
-        adc = ADC_Read();
-
-        // 1/4 delay as node1
-        if(ticks - last_tick >= 2) {
-            can_tx(msg_tx);
-            last_tick = ticks;
-            //printf("%2X\n", adc);
-
-            //uint32_t l = ADC->ADC_LCDR;
-            //printf("ch:%lu val:%lu\n\r", (l >> 12) & 0xF, l & 0xFFF);
-            //printf("CHSR:%lX MR:%lX\n\r", ADC->ADC_CHSR, ADC->ADC_MR);
-            //printf("COR:%lX CGR:%lX EMR:%lX\n\r", ADC->ADC_COR, ADC->ADC_CGR, ADC->ADC_EMR);
-
-            // ADC CHIP TEMP CHECK --- REMOVE LATER
-            // after a moment:
-            //printf("%x\n\r", ADC->ADC_CDR[7]);
-
-            //printf("Before last tick\n\r");
-            //printf("Before send\n\r");
-
-            //Solenoid_Hit(); 
-
-            //printf("After send\n\r");
-
-        }
-        if (ticks - solenoid_ticks >= 500) {
-            solenoid_ticks = ticks;
-            Solenoid_Hit();
-        }
-
-
-        // --- CAN JOY TO PWM TEST END ---
-
-        
-        // --- PID Controller Call BEGIN ---
-        
-        if (pid_tick == 1) {
-            pid_tick = 0;
-            // READ MOTOR POS
-            Motor_Get_Position(&motor);
-            PID_Controller(&pid, &motor);
-            Motor(&pid, &last_us_motor);// SET MOTOR SPEED
-        }
-        
-        if(ticks - last_print_tick >= 100) {
-            printf("adc: %d, ref: %d, meas: %d, out: %.4f\n\r", adc, motor.p_ref, motor.p_measured, pid.output);
-            last_print_tick = ticks;
-        }
-
-        // --- PID Controller Call END ---
-        
-       
-    }    
+            case 1:
+                game_start_ticks = ticks;
+                while (1) {
+                    SM_Game_Running();
+                    if (!IR_result())
+                        state = 0;
+                        break;
+                    
+                game_end_ticks = ticks;
+                }
+            }
+    }  
 }
