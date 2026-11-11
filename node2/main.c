@@ -95,6 +95,7 @@ int main()
     uint32_t last_print_tick = 0;
     uint16_t last_us_servo = 0;
     uint16_t last_us_motor = 0;
+    uint16_t solenoid_ticks = 0;
     pid_ctrl_t pid = {0}; // Sets all members to zero
     motor_t motor = {0}; // Sets all members to zero
     motor.p_ref = 0x40;
@@ -134,7 +135,7 @@ int main()
         adc = ADC_Read();
 
         // 1/4 delay as node1
-        if(ticks - last_tick >= 5) {
+        if(ticks - last_tick >= 2) {
             can_tx(msg_tx);
             last_tick = ticks;
             //printf("%2X\n", adc);
@@ -156,6 +157,10 @@ int main()
             //printf("After send\n");
 
         }
+        if (ticks - solenoid_ticks >= 500) {
+            solenoid_ticks = ticks;
+            Solenoid_Hit();
+        }
 
 
         // --- CAN JOY TO PWM TEST END ---
@@ -172,7 +177,7 @@ int main()
         }
         
         if(ticks - last_print_tick >= 100) {
-            printf("ref: %d, meas: %d, out: %.4f\n", motor.p_ref, motor.p_measured, pid.output);
+            printf("adc: %d, ref: %d, meas: %d, out: %.4f\n", adc, motor.p_ref, motor.p_measured, pid.output);
             last_print_tick = ticks;
         }
 
