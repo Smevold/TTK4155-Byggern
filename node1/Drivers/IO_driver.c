@@ -16,8 +16,9 @@
 io_joy_t joy;
 io_pad_t pad;
 
-// 
+
 void EXTRAM_Init(){ 
+    // Set 
     MCUCR |= (1 << SRE);
     SFIOR |= (1 << XMM2);
     SFIOR &= ~((1 << XMM1) | (1 << XMM0));
@@ -73,11 +74,12 @@ void ADC_Read(io_joy_t* joy, io_pad_t* pad) {
     pad->pad_x = ext_adc[0];
 }
 
-// 
+// X value for joystick readable
 void JOY_Readable_X(io_joy_t* joy) {
     joy->x = (joy->x_dig - joy->x_min) * 100 / (joy->x_max - joy->x_min);
 }
 
+// Y value for joystick readable 
 void JOY_Readable_Y(io_joy_t* joy) {
     joy->y = (joy->y_dig - joy->y_min) * 100 / (joy->y_max - joy->y_min);
 }
@@ -135,12 +137,13 @@ void JOY_Calibrate(io_joy_t* joy) {
 Buttons BTN_Read(){
     Buttons btns;
     //printf("Checkpoint 2\n");
+    // select IO board
     SPI_SlaveSelect(SS_IO_AVR);
     (void)SPI_Transmit(0x04); // ask for button data
     _delay_us(40);
     
 
-    // Gets all the values from the button over SPI
+    // Gets all the values from buttons over SPI
     btns.right = SPI_Receive();
     _delay_us(2);
 
@@ -151,12 +154,12 @@ Buttons BTN_Read(){
 
     // deselect
     SPI_SlaveDeselectAll();
-
+    // return buttons values
     return btns;
 }
 
 void LED_Set(uint8_t led_n, uint8_t on){
-
+    // select IO board
     SPI_SlaveSelect(SS_IO_AVR);
     
     SPI_Transmit(0x05); // Command 
@@ -164,7 +167,7 @@ void LED_Set(uint8_t led_n, uint8_t on){
 
     SPI_Transmit(led_n); // Choose which led
     SPI_Transmit(on); // off = 0 on = everything else
-
+    // deselect
     SPI_SlaveDeselectAll();
 }
 

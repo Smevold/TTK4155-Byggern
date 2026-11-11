@@ -1,6 +1,6 @@
 #include "UART_driver.h"
 
-// Initalize UART
+
 void UART_Init( unsigned int ubrr)
 {
     // Set baud rate for USART

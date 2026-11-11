@@ -15,6 +15,7 @@ void OLED_Init() {
     _delay_us(5);
     PORTB |= (1 << PORTB0);
     _delay_us(3);
+    // select OLED
     SPI_SlaveSelect(SS_OLED);
     SPI_Transmit(0xAF); // Display ON
 
