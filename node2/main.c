@@ -17,6 +17,7 @@
 - Running-state
     - Update servo, motor and servo continuously
     - Send solenoid signal from USER IO BOARD
+    - Send signal to node1, when game ends
     - ON GAME END:
         - SAVE SCORE (GAME_START_TICK - GAME_END_TICK)
 

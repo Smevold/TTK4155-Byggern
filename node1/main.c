@@ -50,7 +50,9 @@ void main(){
     
     while(1) {
         switch(state) {
-            case 0: ;
+            case 0:
+                
+            case 1:
                 uint8_t menu_option = 0;
                 SM_Running(&joy, &pad, &msg_tx, &msg_rx, &btns);
                 break;
