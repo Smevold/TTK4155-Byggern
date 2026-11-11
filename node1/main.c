@@ -45,13 +45,13 @@ void main(){
     uint8_t state = 0;
     
     // Begin startup 
-    SM_Startup(&cursor, &joy, &pad, &msg_tx, &msg_rx);
+    SM_Startup(&cursor, &joy, &pad);
     
     
     while(1) {
         switch(state) {
             case 0:
-                SM_Menu(&joy, &cursor, &pad, &state);
+                SM_Menu(&joy, &cursor, &pad, &state, &msg_tx, &msg_rx);
                 break;
             case 1:
                 SM_Running(&joy, &pad, &cursor, &msg_tx, &msg_rx, &btns, &state);

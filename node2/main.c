@@ -90,7 +90,7 @@ int main()
     Solenoid_Init();
 
 
-    printf("Hello!\n");
+    printf("Hello!\n\r");
 
     uint32_t last_tick = 0;
     uint32_t last_print_tick = 0;
@@ -109,10 +109,10 @@ int main()
     while(startup_wait) {
         if(can_rx(&msg_rx)) {
             printf("msg_receive: ID: %2X, DLC: %2X, Data: %2X\n\r", msg_rx.id, msg_rx.length, msg_rx.byte[0]);   
-            startup_wait = msg_rx.byte[0];
+            startup_wait = 0;
         }
     }
-    
+
 
     while (1)
     {

@@ -29,36 +29,11 @@ void ISR_Init(){
     ETIMSK |= (1 << OCIE3A);
 }
 
-
-// To find the interrupt vectors, look up page Table 24 and 25 on page 57 and 58 in ATmega162 datasheet
-// Also look at lab manual to see how interrupts 
-
-/*
-// Interrupt handler to update Joystick position and direction
-ISR(TIMER1_OVF_vect){
-    // Read from the ADC to update values
-    ADC_Read(&joy, &pad);
-
-    // Update percentile values
-    JOY_Readable_Pos(&joy);
-
-    // Update direction of joystick
-    JOY_Direction(&joy);
-}
-    */
-
 // External variable 
 volatile int loop = 1;
 
 // Interrupt handler to calibrate joystick
+// Stops loop that calibrates joystick
 ISR(TIMER3_COMPA_vect){
-    /*
-    // Update positional data
-    ADC_Read(&joy, &pad);
-
-    // Calibrate extremes of position
-    JOY_Calibrate(&joy);
-    */
-
     loop = 0;
 }

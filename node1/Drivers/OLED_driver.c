@@ -117,7 +117,7 @@ void OLED_Print(const uint8_t (*bitmap)[128], cursor_t* cursor){
     }
 }
 
-// Print character given by character in font given by font at position given by cursor on OLED
+// Print character given by character, in font given by font, at position given by cursor, on OLED
 void OLED_Print_Char(const uint8_t* font, char character, uint8_t size){
     SPI_SlaveSelect(SS_OLED);
     // Change to data-mode
@@ -139,10 +139,13 @@ void OLED_Print_Char(const uint8_t* font, char character, uint8_t size){
     }
 }
 
+// Print string given by list of characters str, in font given by font, at position given by cursor, on OLED
 void OLED_Print_Str(const uint8_t* font, char str[], uint8_t size) {
+    // Finds number of characters in str
     uint8_t str_length = strlen(str);
     char letter;
 
+    // Iterate through all characters, and call OLED_Print_Char to print them
     for (int i = 0; i < str_length; i++) {
         char letter = str[i];
         printf("%s", letter);

@@ -11,9 +11,6 @@
 #include "../Graphics/OLED_graphics.h"
 #include "../Graphics/fonts.h"
 
-
-//#include <string.h>
-
 typedef struct {
     uint8_t column_start;
     uint8_t column_end;
@@ -26,8 +23,6 @@ void OLED_Init() ;
 void OLED_Home(cursor_t* cursor) ;
 
 void OLED_Goto_Page(cursor_t* cursor); 
-
-void OLED_Goto_Next_Page(cursor_t* cursor);
 
 void OLED_Goto_Column(cursor_t* cursor); 
 
@@ -44,6 +39,3 @@ void OLED_Print(const uint8_t (*font)[128], cursor_t* cursor);
 void OLED_Print_Char (const uint8_t* font, char character, uint8_t size);
 
 void OLED_Print_Str(const uint8_t* font, char str[], uint8_t size);
-
-//char print;
-
