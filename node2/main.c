@@ -15,7 +15,7 @@
 #include "can.h"
 #include "interrupt.h"
 #include "io_driver.h"
-//#include "control.h"
+#include "control.h"
 
 int main()
 {
@@ -58,7 +58,7 @@ int main()
     uint32_t last_tick = 0;
     uint16_t last_us = 0;
     //pid_ctrl_t pid = {0}; // Sets all members to zero
-    //motor_t motor = {0}; // Sets all members to zero
+    motor_t motor = {0}; // Sets all members to zero
 
     uint16_t adc = 0;
 
@@ -134,5 +134,12 @@ int main()
 
         // --- PID Controller Call END ---
         */
+       if(p_ref_tick == 1){
+            p_ref_tick = 0;
+            motor.p_ref = 0;
+            PID_Update_Ref(&motor, &joy);
+            
+
+       }
     }    
 }

@@ -38,3 +38,10 @@ void PID_Controller(pid_ctrl_t* pid, motor_t* motor) {
     }
     pid->output = u;
 }
+
+void PID_Update_Ref(motor_t* motor, io_joy_t* joy){
+    // Accumulate joy-stick speed reference (linearized around 0) for positional reference
+    motor->p_ref = motor->p_ref + (joy->x - 50);
+
+    
+}
