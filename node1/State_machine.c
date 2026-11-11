@@ -10,9 +10,6 @@ void SM_Startup(cursor_t* cursor, io_joy_t* joy, io_pad_t* pad, CAN_MSG* msg_tx,
     printf("xmax: %2X, xmin: %2X, ymax: %2X, ymin: %2X\n\r", joy->x_max, joy->x_min, joy->y_max, joy->y_min);
     
     _delay_ms(2000);
-    msg_tx->ID = 0x17;
-    msg_tx->DLC = 0x01;
-    msg_tx->Data[0] = 0x00;
 }
 
 
@@ -63,6 +60,11 @@ void SM_Menu(io_joy_t* joy, cursor_t* cursor, io_pad_t* pad, uint8_t* state) {
             switch (menu_option) {
                 // Start game
                 case 0:
+                    msg_tx->ID = 0x17;
+                    msg_tx->DLC = 0x01;
+                    msg_tx->Data[0] = 0x00;
+                    CAN_Send_Message(msg_tx);
+                    CAN_Receive_Message(msg_rx);
                     *state = 1;
                     return;
                 // Nothing happens
