@@ -130,7 +130,7 @@ int main()
                 can_rx(&msg_rx);
                 msg_tx.length = 1;
                 msg_tx.byte[0] = score;
-                can_tx(msg_tx);
+                can_tx(&msg_tx);
         }
     }
 }  
