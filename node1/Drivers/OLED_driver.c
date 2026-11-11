@@ -22,6 +22,7 @@ void OLED_Init() {
     _delay_us(5);
     PORTB |= (1 << PORTB0);
     _delay_us(3);
+    // select OLED
     SPI_SlaveSelect(SS_OLED);
     SPI_Transmit(0xAF); // Display ON
 
@@ -50,7 +51,7 @@ void OLED_Goto_Page(cursor_t* cursor) {
 }
 
 void OLED_Goto_Next_Page(cursor_t* cursor) {
-    cursor->line_start += 8;
+    cursor->line_start += 8; // page is 8 high
     OLED_Goto_Page(cursor);
 }
 
