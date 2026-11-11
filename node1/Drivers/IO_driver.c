@@ -16,6 +16,7 @@
 io_joy_t joy;
 io_pad_t pad;
 
+// 
 void EXTRAM_Init(){ 
     MCUCR |= (1 << SRE);
     SFIOR |= (1 << XMM2);
@@ -72,6 +73,7 @@ void ADC_Read(io_joy_t* joy, io_pad_t* pad) {
     pad->pad_x = ext_adc[0];
 }
 
+// 
 void JOY_Readable_X(io_joy_t* joy) {
     joy->x = (joy->x_dig - joy->x_min) * 100 / (joy->x_max - joy->x_min);
 }
@@ -134,9 +136,11 @@ Buttons BTN_Read(){
     Buttons btns;
     //printf("Checkpoint 2\n");
     SPI_SlaveSelect(SS_IO_AVR);
-    (void)SPI_Transmit(0x04);
+    (void)SPI_Transmit(0x04); // ask for button data
     _delay_us(40);
     
+
+    // Gets all the values from the button over SPI
     btns.right = SPI_Receive();
     _delay_us(2);
 
@@ -145,6 +149,7 @@ Buttons BTN_Read(){
 
     btns.nav = SPI_Receive();
 
+    // deselect
     SPI_SlaveDeselectAll();
 
     return btns;

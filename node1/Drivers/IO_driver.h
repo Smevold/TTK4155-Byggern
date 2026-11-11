@@ -39,7 +39,7 @@ typedef struct {
     uint8_t btn;
 } io_joy_t;
 
-// button
+// button from lab manual
 typedef struct __attribute__((packed)) {
     union {
         uint8_t right;
@@ -80,12 +80,16 @@ typedef struct __attribute__((packed)) {
 extern io_joy_t joy;
 extern io_pad_t pad;
 
+// Init for external RAM
 void EXTRAM_Init();
 
+// Init ADC
 void ADC_Init();
 
+// Init for joystick, 
 void JOY_Init(io_joy_t* joy_extreme);
 
+// Reads the analog values of jøystick in x and y direction
 void ADC_Read(io_joy_t* joy, io_pad_t* pad);
 
 // Return percentile of joystick position in x direction
@@ -103,6 +107,8 @@ void JOY_Direction(io_joy_t* joy);
 // Change extremes of digital value of joystick position or calibrate joystick
 void JOY_Calibrate(io_joy_t* joy);
 
+// Reads the button values over SPI
 Buttons BTN_Read();
 
+// Turns led on for io board over SPI
 void LED_Set(uint8_t led_n, uint8_t on);
