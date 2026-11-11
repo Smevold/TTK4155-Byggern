@@ -22,7 +22,9 @@ typedef struct motor_t{
 typedef struct pid_ctrl_t pid_ctrl_t;
 
 void Motor_Init();
-//motor dir with regulator
+
+// Motor direction with regulator
 void Motor(pid_ctrl_t* pid , uint16_t* last_us);
-// get motor position measued with quadric encoder
+
+// Get motor position measued with quadric encoder
 void Motor_Get_Position(motor_t* motor);
