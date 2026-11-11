@@ -6,6 +6,9 @@
 #define PID_KI 0.1
 #define PID_KD 1
 
+#define P_MAX 15e1
+#define P_MIN 2
+
 #define PID_OUT_MAX 100 // Maximum Motor Duty Cycle, should check
 
 void PID_Controller(pid_ctrl_t* pid, motor_t* motor) {
@@ -42,17 +45,14 @@ void PID_Controller(pid_ctrl_t* pid, motor_t* motor) {
 void PID_Update_Ref(motor_t* motor, io_joy_t* joy){
     // Accumulate joy-stick speed reference (linearized around 0) for positional reference
     uint16_t p_temp = motor->p_ref + (joy->x - 50);
-    
 
-    if(p_temp > P_max){
-        p_temp = P_max;
+    if(p_temp > P_MAX){
+        p_temp = P_MAX;
 
-    } else if(p_temp < P_min){
-        p_temp = P_min;
+    } else if(p_temp < P_MIN){
+        p_temp = P_MIN;
     } 
     motor->p_ref = p_temp;
-
-    
 
 
 }
