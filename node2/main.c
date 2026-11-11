@@ -17,6 +17,7 @@
 #include "io_driver.h"
 #include "control.h"
 #include "motor.h"
+#include "solenoid.h"
 
 int main()
 {
@@ -54,6 +55,10 @@ int main()
     PWM_Init();
     ADC_Init();
 
+    Motor_Init();
+    Solenoid_Init();
+
+
     printf("Hello!\n");
 
     uint32_t last_tick = 0;
@@ -65,11 +70,12 @@ int main()
 
     // ADC CHIP TEMP CHECK --- REMOVE LATER
     ADC->ADC_ACR |= ADC_ACR_TSON;     // enable the sensor (check macro name in component_adc.h)
-
+    PIOB->PIO_CODR = PIO_PC28;
 
     while (1)
     {
         // --- CAN JOY TO PWM TEST BEGIN ---
+        /*
 
         // Only update tx and send, if received
         if(can_rx(&msg_rx)) {
@@ -91,11 +97,11 @@ int main()
             PWM_Joy_Duty_Cycle(joy.x, &last_us, 0);
 
         }
-        
+            */
         adc = ADC_Read();
 
         // 1/4 delay as node1
-        if(ticks - last_tick >= 25) {
+        if(ticks - last_tick >= 100) {
             //printf("%2X\n", adc);
 
             //uint32_t l = ADC->ADC_LCDR;
@@ -110,7 +116,10 @@ int main()
             //printf("Before last tick\n");
             last_tick = ticks;
             //printf("Before send\n");
-            can_tx(msg_tx);
+            //can_tx(msg_tx);
+
+            //Solenoid_Hit(); 
+
             //printf("After send\n");
 
         }
@@ -120,6 +129,7 @@ int main()
 
         
         // --- PID Controller Call BEGIN ---
+        /*
         if(p_ref_tick == 1) {
             p_ref_tick = 0;
             PID_Update_Ref(&motor, &joy);
@@ -136,6 +146,7 @@ int main()
 
 
         }
+            */
 
         // --- PID Controller Call END ---
         

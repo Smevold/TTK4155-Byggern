@@ -14,7 +14,8 @@ SOURCE_FILES = \
 	io_driver.c \
 	adc.c \
 	motor.c \
-	control.c
+	control.c \
+	solenoid.c
 #   filename1.c \
 #   filename2.c \
 #	filenameN.c

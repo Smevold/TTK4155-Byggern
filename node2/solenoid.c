@@ -2,17 +2,21 @@
 
 void Solenoid_Init(){
     // Change Pin to something else later and uncomment
-    /*
+    
     PIOB->PIO_WPMR = 0; // Clear WPEN bit to disable write protect
 
-    PIOB->PIO_PER |= PIO_PB23; // Enable register pin ??
-    PIOB->PIO_OER |= PIO_PB23; // Output enable register pin ??
-    */
+    PIOC->PIO_PER |= PIO_PC28; // Enable register pin ??
+    PIOC->PIO_OER |= PIO_PC28; // Output enable register pin ??
+    
 }
 
 void Solenoid_Hit(){
-//    PIOB->PIO_SODR |= PIO_PB23;
+    printf("Sett pin high");
+    PIOC->PIO_SODR = PIO_PC28;
+    printf("Ticks");
     uint16_t start_tick = ticks;
-    while (ticks < start_tick + 5) {} // should replace with interrupt
-//    PIOB->PIO_SODR &= ~PIO_PB23;
+    printf("Wait");
+    while (ticks < start_tick + 100) {;} // should replace with interrupt
+    printf("Set pin low");
+    PIOB->PIO_CODR = PIO_PC28;
 }
