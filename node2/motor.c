@@ -11,18 +11,15 @@ void Motor_Init() {
 }
 
 // This function cannot take in joy, must take in throttle_signal
-void Motor(io_joy_t* joy, uint16_t* last_us) {
-    // Take in joystick x and y
-    JOY_Readable_Pos(joy);
-
+void Motor(pid_ctrl_t* pid , uint16_t* last_us) {
     // Change PWM
-    PWM_Joy_Duty_Cycle(joy->x, last_us, 0);
+    PWM_Joy_Duty_Cycle(pid->output, last_us, 0);
     
     // Change dir based on input from joystick
-    if (joy->x > 50 + DEADSPACE) {
+    if (pid->output > 0 + DEADSPACE) {
         // SET PIN 23 PORT C HIGH
         PIOC->PIO_SODR |= PIO_PC23;
-    } else if (joy->x < 50 - DEADSPACE) {
+    } else if (pid->output < 0 - DEADSPACE) {
         // SET PIN 23 PORT C LOW
         PIOC->PIO_SODR &= ~PIO_PC23;
     }

@@ -15,7 +15,7 @@
 #include "can.h"
 #include "interrupt.h"
 #include "io_driver.h"
-//#include "control.h"
+#include "control.h"
 
 int main()
 {
@@ -53,12 +53,12 @@ int main()
     PWM_Init();
     ADC_Init();
 
-    printf("Test 1\n");
+    printf("Hello!\n");
 
     uint32_t last_tick = 0;
     uint16_t last_us = 0;
-    //pid_ctrl_t pid = {0}; // Sets all members to zero
-    //motor_t motor = {0}; // Sets all members to zero
+    pid_ctrl_t pid = {0}; // Sets all members to zero
+    motor_t motor = {0}; // Sets all members to zero
 
     uint16_t adc = 0;
 
@@ -95,7 +95,7 @@ int main()
 
         // 1/4 delay as node1
         if(ticks - last_tick >= 25) {
-            printf("%2X\n", adc);
+            //printf("%2X\n", adc);
 
             //uint32_t l = ADC->ADC_LCDR;
             //printf("ch:%lu val:%lu\n", (l >> 12) & 0xF, l & 0xFFF);
@@ -104,7 +104,7 @@ int main()
 
             // ADC CHIP TEMP CHECK --- REMOVE LATER
             // after a moment:
-            printf("%x\n", ADC->ADC_CDR[7]);
+            //printf("%x\n", ADC->ADC_CDR[7]);
 
             //printf("Before last tick\n");
             last_tick = ticks;
@@ -115,24 +115,29 @@ int main()
         }
 
 
-
-
-
-
-
         // --- CAN JOY TO PWM TEST END ---
 
-        /*
+        
         // --- PID Controller Call BEGIN ---
+        if(p_ref_tick == 1) {
+            p_ref_tick = 0;
+            PID_Update_Ref(&motor, &joy);
+            printf("ref: %d, ", motor.p_ref)
+       }
 
         if (pid_tick == 1) {
             pid_tick = 0;
-            motor.p_measured = 0; // READ MOTOR POS
+            // READ MOTOR POS
+            Motor_Position(&motor);
             PID_Controller(&pid, &motor);
+            printf("meas: %d, out: %d\n", motor.p_measured, pid.output);
             // SET MOTOR SPEED
+
+
         }
 
         // --- PID Controller Call END ---
-        */
+        
+       
     }    
 }
