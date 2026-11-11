@@ -49,6 +49,7 @@
 #include "control.h"
 #include "motor.h"
 #include "solenoid.h"
+#include "game_loop.h"
 
 int main()
 {
