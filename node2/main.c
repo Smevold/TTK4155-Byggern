@@ -63,7 +63,8 @@ int main()
 
     uint32_t last_tick = 0;
     uint32_t last_print_tick = 0;
-    uint16_t last_us = 0;
+    uint16_t last_us_servo = 0;
+    uint16_t last_us_motor = 0;
     pid_ctrl_t pid = {0}; // Sets all members to zero
     motor_t motor = {0}; // Sets all members to zero
     motor.p_ref = 0x40;
@@ -132,7 +133,7 @@ int main()
             // READ MOTOR POS
             Motor_Get_Position(&motor);
             PID_Controller(&pid, &motor);
-            // SET MOTOR SPEED
+            Motor(&pid, &last_us_motor);// SET MOTOR SPEED
         }
         
         if(ticks - last_print_tick >= 100) {
