@@ -13,7 +13,7 @@ void Motor_Init() {
 // This function cannot take in joy, must take in throttle_signal
 void Motor(pid_ctrl_t* pid , uint16_t* last_us) {
     // Change PWM to motor based on absolute value of pid output
-    PWM_Joy_Duty_Cycle_Precentage((abs(pid->output)), last_us, 0);
+    PWM_Set_Duty_Cycle((abs(pid->output)), last_us, 0);
     
     // Change direction based on size of pid output
     // Deadspace to avoid edge case of noisy signal around 0

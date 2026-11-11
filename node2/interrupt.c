@@ -146,7 +146,7 @@ void PWM_Set_Duty_Cycle_us(uint16_t us, uint8_t channel) {
 }
 
 // 
-void PWM_Joy_Duty_cycle_Precentage(uint8_t duty_cycle_percentile, uint16_t* last_us, uint8_t channel) {
+void PWM_Set_Duty_Cycle(uint8_t duty_cycle_percentile, uint16_t* last_us, uint8_t channel) {
     uint16_t us;
     if (channel == 0) {
         // Value to motor PWM is given from an absolute from a range from [-50, 50], so multiply by 2 to have the right width

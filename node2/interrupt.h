@@ -14,4 +14,4 @@ void PWM_Init();
 
 // Change duty cycle in microseconds based on input
 void PWM_Set_Duty_Cycle_us(uint16_t us, uint8_t channel);
-void PWM_Joy_Duty_Cycle_Precentage(uint8_t duty_cycle_percentile, uint16_t* last_us, uint8_t channel);
+void PWM_Set_Duty_Cycle(uint8_t duty_cycle_percentile, uint16_t* last_us, uint8_t channel);
