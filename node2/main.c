@@ -16,6 +16,7 @@
 #include "interrupt.h"
 #include "io_driver.h"
 #include "control.h"
+#include "motor.h"
 
 int main()
 {

@@ -5,8 +5,9 @@
 #include "sam.h"
 #include "motor.h"
 
+typedef struct motor_t motor_t;
 
-typedef struct{
+typedef struct pid_ctrl_t{
     float error_sum;
     float error_prev;
     float output; 

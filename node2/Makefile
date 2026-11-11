@@ -13,7 +13,8 @@ SOURCE_FILES = \
 	interrupt.c \
 	io_driver.c \
 	adc.c \
-	motor.c
+	motor.c \
+	control.c
 #   filename1.c \
 #   filename2.c \
 #	filenameN.c

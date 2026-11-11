@@ -84,6 +84,7 @@ void Timer_Init() {
 
 volatile uint32_t ticks = 0;
 volatile uint8_t pid_tick = 0;
+volatile uint8_t p_ref_tick = 0;
 
 
 void TC0_Handler(void) {
