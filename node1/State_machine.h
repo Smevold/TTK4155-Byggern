@@ -14,5 +14,5 @@
 #include "Graphics/OLED_graphics.h"
 
 void SM_Startup(cursor_t* cursor, io_joy_t* joy, io_pad_t* pad);
-void SM_Menu(io_joy_t* joy, io_joy_t* cursor);
+void SM_Menu(io_joy_t* joy, io_joy_t* cursor, io_pad_t* pad);
 void SM_Running(io_joy_t* joy, io_pad_t* pad, CAN_MSG* msg_tx, CAN_MSG* msg_rx, Buttons* btns);

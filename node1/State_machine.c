@@ -13,7 +13,7 @@ void SM_Startup(cursor_t* cursor, io_joy_t* joy, io_pad_t* pad) {
 }
 
 
-void SM_Menu(io_joy_t* joy, io_joy_t* cursor) {
+void SM_Menu(io_joy_t* joy, io_joy_t* cursor, io_pad_t* pad) {
     OLED_Clear(cursor);
     Interface_Print_Menu(cursor);
 
