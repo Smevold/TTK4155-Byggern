@@ -6,8 +6,8 @@
 void Motor_Init() {
     PIOB->PIO_WPMR = 0; // Clear WPEN bit to disable write protect
 
-    PIOB->PIO_PER |= PIO_PB23; // Enable register pin 13
-    PIOB->PIO_OER |= PIO_PB23; // Output enable register pin 13
+    PIOC->PIO_PER |= PIO_PC23; // Enable register pin 23
+    PIOC->PIO_OER |= PIO_PC23; // Output enable register pin 23
 }
 
 // This function cannot take in joy, must take in throttle_signal
@@ -21,10 +21,10 @@ void Motor(io_joy_t* joy, uint16_t* last_us) {
     // Change dir based on input from joystick
     if (joy->x > 50 + DEADSPACE) {
         // SET PIN 23 PORT C HIGH
-        PIOB->PIO_SODR |= PIO_PB23;
+        PIOC->PIO_SODR |= PIO_PC23;
     } else if (joy->x < 50 - DEADSPACE) {
         // SET PIN 23 PORT C LOW
-        PIOB->PIO_SODR &= ~PIO_PB23;
+        PIOC->PIO_SODR &= ~PIO_PC23;
     }
 
 
