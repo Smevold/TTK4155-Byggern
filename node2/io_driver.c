@@ -1,6 +1,7 @@
 #include "io_driver.h"
 
-// This must be fine tuned later when IR is setup and we can test
+// This value works as the threshold from the converted and filtered IR signal
+// Might need refining
 #define IR_Threshold 1024
 
 void JOY_Readable_X(io_joy_t* joy) {
@@ -17,7 +18,12 @@ void JOY_Readable_Pos(io_joy_t* joy) {
 }
 
 uint8_t IR_result() {
+    // Read from ADC
     uint16_t ir_value = ADC_Read();
+
+    // If value from IR exceeds threshold, return 1
     if (ir_value > IR_Threshold) {return 1;}
+
+    // Otherwise return 0
     return 0;
 }

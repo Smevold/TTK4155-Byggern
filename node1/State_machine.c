@@ -1,6 +1,6 @@
 #include "State_machine.h"
 
-SM_Startup(cursor_t* cursor, io_joy_t* joy, io_pad_t* pad) {
+void SM_Startup(cursor_t* cursor, io_joy_t* joy, io_pad_t* pad) {
     OLED_Clear(cursor);
     OLED_Print(OV_logo, cursor);
     
@@ -16,7 +16,7 @@ SM_Startup(cursor_t* cursor, io_joy_t* joy, io_pad_t* pad) {
 }
 
 
-SM_Running(io_joy_t* joy, io_pad_t* pad, CAN_MSG* msg_tx, CAN_MSG* msg_rx, Buttons* btns) {
+void SM_Running(io_joy_t* joy, io_pad_t* pad, CAN_MSG* msg_tx, CAN_MSG* msg_rx, Buttons* btns) {
     while(1) {
         // Read and compute ADC/JOY-values
         // Add function: readADCandUpdateJOY? / OR interrupt
