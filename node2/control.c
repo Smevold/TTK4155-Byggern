@@ -41,7 +41,18 @@ void PID_Controller(pid_ctrl_t* pid, motor_t* motor) {
 
 void PID_Update_Ref(motor_t* motor, io_joy_t* joy){
     // Accumulate joy-stick speed reference (linearized around 0) for positional reference
-    motor->p_ref = motor->p_ref + (joy->x - 50);
+    uint16_t p_temp = motor->p_ref + (joy->x - 50);
+    
+
+    if(p_temp > P_max){
+        p_temp = P_max;
+
+    } else if(p_temp < P_min){
+        p_temp = P_min;
+    } 
+    motor->p_ref = p_temp;
 
     
+
+
 }
