@@ -11,13 +11,13 @@
 #include "CAN_controller_driver.h"
 
 
-//RTS 
+// RTS 
 #define MCP_RTS      0x80
 #define MCP_RTS_TX0  0x01
 #define MCP_RTS_TX1  0x02
 #define MCP_RTS_TX2  0x04
 
-//CAN_Read
+// Instructions bytes for CAN Controller
 #define MCP_CAN_Read 0b00000011
 #define MCP_CAN_Write 0b00000010
 #define MCP_CAN_Bit_Modify 0b00000101
@@ -25,42 +25,53 @@
 
 
 
-// The MCP2515 expects the first byte after
-//lowering CS to be the instruction/
-//command byte. This implies that CS must
-//be raised and then lowered again to
-//invoke another command.
+
+
+
 
 uint8_t CAN_Read_Controller(uint8_t address){
+    // Slave select CAN
     SPI_SlaveSelect(SS_CAN);
 
+    
+    // Send read command
     SPI_Transmit(MCP_CAN_Read);
+    // Address to register to read from
     SPI_Transmit(address);
+    // Sends the data out on the SO pin
     uint8_t data = SPI_Receive();
     
+    // Deselect
     SPI_SlaveDeselectAll();
     return data;
 }
 
 void CAN_Write_Controller(uint8_t address, uint8_t data){
+    
+    // Slave select CAN
     SPI_SlaveSelect(SS_CAN);
+    // Send write command
     SPI_Transmit(MCP_CAN_Write);
+    // Adress to register to send to
     SPI_Transmit(address);
+    // Sends the data
     SPI_Transmit(data);
 
-     // CS HIGH    
+    // Deselect  
     SPI_SlaveDeselectAll();
 }
 
 
 // RTS
 void CAN_Request_To_Send(uint8_t TXREQ_mask){ 
-    SPI_SlaveSelect(SS_CAN);
-    SPI_Transmit(MCP_RTS | (TXREQ_mask & 0x07));
     
-    // This command will set the TxBnCTRL.TXREQ bit for
-    //the respective buffer(s)
+    // Slave select CAN
+    SPI_SlaveSelect(SS_CAN);
+    //Sends RTS command, last 3 bits (TXREQ_mask)  
+    //indicate which transmit buffer enabled
+    SPI_Transmit(MCP_RTS | (TXREQ_mask & 0x07));
 
+    // Deselect
     SPI_SlaveDeselectAll();
 }
 
@@ -72,31 +83,46 @@ void CAN_Request_To_Send(uint8_t TXREQ_mask){
 //if (s & (1 << 3)) { /* TXB0 finished sending */ }
 
 uint8_t CAN_Read_Status(){
+    
+    // Slave select CAN
     SPI_SlaveSelect(SS_CAN);
+    // Read status command sendt
     SPI_Transmit(MCP_CAN_Read_Status);
+    // status recive
     uint8_t status = SPI_Receive();
 
+    // Deselect
     SPI_SlaveDeselectAll(); 
     
     return status;
 }
 
 void CAN_Bit_Modify(uint8_t address, uint8_t mask_byte, uint8_t data){
+    
+    // Slave select CAN
     SPI_SlaveSelect(SS_CAN);
+    // Bit modify command byte send
     SPI_Transmit(MCP_CAN_Bit_Modify);
+    // Sends Addres to edit, which bits to and 
+    // data what it changes to
     SPI_Transmit(address);
     SPI_Transmit(mask_byte);
     SPI_Transmit(data);
 
+    // Deselect
      SPI_SlaveDeselectAll();
 }
 
 void CAN_Controller_RST(){
+    
+    // Slave select CAN
     SPI_SlaveSelect(SS_CAN);
+
+    // reset  command
     SPI_Transmit(MCP_CAN_RST);
 
-    // CS HIGH
+    // Deselect
     SPI_SlaveDeselectAll();
-
+    // normal delat after reset
      _delay_ms(1); 
 }

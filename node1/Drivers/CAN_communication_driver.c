@@ -86,15 +86,12 @@ void CAN_Send_Message(CAN_MSG* msg){
     // (msg->DLC & 0x0F) mask out the 4 most significant bits
     CAN_Write_Controller(0x35, ((0 << 6) | (msg->DLC & 0x0F)));
 
-    // Writes to transmit buffer (usable data sent)
-    // Only writes to relevant buffers
-
-    // PLAN FOR NESTE DAG
-    // Endrer CAN_Send_message for å følge DLC, slik at vi kan sende flere bytes (og motta) i CAN_Joy_Send
-
+    // Send bytes
     for (uint8_t i = 0; i < msg->DLC; i++) {
         CAN_Write_Controller(0x36+i, msg->Data[i]);
     }
+     // Writes to transmit buffer (usable data sent)
+    // Only writes to relevant buffers
     CAN_Request_To_Send(0x01);
     CAN_Bit_Modify(0x30, 0x07, 0x07);
 
@@ -102,6 +99,7 @@ void CAN_Send_Message(CAN_MSG* msg){
 
 void CAN_Receive_Message(CAN_MSG* msg){
     uint8_t timeout = 100000;
+    //Timeout when no message recived
     while (!(CAN_Read_Controller(CANINTF) & 0x01)) {
         if(--timeout == 0) {
             printf("Timed out CAN_Receive\n");
@@ -112,11 +110,12 @@ void CAN_Receive_Message(CAN_MSG* msg){
     msg->ID = (msg->ID | (CAN_Read_Controller(0x62) >> 5));
     msg->DLC = (CAN_Read_Controller(0x65) & 0x0F);
 
-    // IMPORTANT UPDATE for multiple bytes
+    // Multiple bytes
     for (uint8_t i = 0; i < msg->DLC; i++) {
+        //reads revice message buffer
         msg->Data[i] = CAN_Read_Controller(0x66+i);
     }
-
+    
     CAN_Bit_Modify(CANINTF, 0x01, 0x00); // Clear RX0IF
 }
 
