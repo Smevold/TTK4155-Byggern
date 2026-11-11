@@ -12,19 +12,21 @@
 #include "CAN_communication_driver.h"
 
 
-// 
+// CAN Controll REGISTER
 #define MCP_CAN_CRT         0x0F
 #define MCP_CAN_ABAT_En     0x01  
 #define MCP_CAN_OSM_Dis     0x00
 #define MCP_CAN_CLKOut_Dis  0x00
 #define MCP_CAN_CLKPre_1    0x00
 
-// CAN Tranciver modes
+// CAN Controller modes
 #define MODE_Normal         0x00
 #define MODE_Loopback       0x40
 #define MODE_Mask           0xE0
 
+// transmitt buffer
 #define EXIDE               0x03
+// Bit timing
 #define CNF1                0x2A
 #define CNF2                0x29
 #define CNF3                0x28
@@ -82,18 +84,17 @@ void CAN_TX_Buffer(uint8_t data, uint8_t adr_mask){
 
 
 void CAN_Send_Message(CAN_MSG* msg){
-    
+    // Message ID 
     CAN_Write_Controller(0x31, (msg->ID >> 3));
     CAN_Write_Controller(0x32, ((msg->ID << 5) | (0 <<  EXIDE)));
     // (0 << 6) does nothing, but RTR is cleared: Transmitted Message will be a Data Frame
     // (msg->DLC & 0x0F) mask out the 4 most significant bits
     CAN_Write_Controller(0x35, ((0 << 6) | (msg->DLC & 0x0F)));
 
-    // Send bytes
+    // Writes bytes to transmit register. bytes where DLC is how many bytes to write
     for (uint8_t i = 0; i < msg->DLC; i++) {
         CAN_Write_Controller(0x36+i, msg->Data[i]);
     }
-     // Writes to transmit buffer (usable data sent)
     // Only writes to relevant buffers
     CAN_Request_To_Send(0x01);
     CAN_Bit_Modify(0x30, 0x07, 0x07);
@@ -109,6 +110,7 @@ void CAN_Receive_Message(CAN_MSG* msg){
             return;
         };
     } 
+    // message adress register is read and DLC
     msg->ID = (CAN_Read_Controller(0x61) << 3);
     msg->ID = (msg->ID | (CAN_Read_Controller(0x62) >> 5));
     msg->DLC = (CAN_Read_Controller(0x65) & 0x0F);
@@ -122,7 +124,6 @@ void CAN_Receive_Message(CAN_MSG* msg){
     CAN_Bit_Modify(CANINTF, 0x01, 0x00); // Clear RX0IF
 }
 
-// Send Joystick values
 void CAN_Send_Joy(io_joy_t* joy) {
     CAN_MSG msg;
     msg.ID = 0x02; // Random ID
