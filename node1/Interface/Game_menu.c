@@ -70,7 +70,7 @@ void Interface_Print_Score(cursor_t* cursor, CAN_MSG* msg_rx) {
     OLED_Clear(cursor);
     OLED_Home(cursor);
 
-    char line1[] = "Score: %2X", msg_rx->Data[0];
+    char line1[] = "Score: 0x%2X", msg_rx->Data[0];
     OLED_Print_Str(font5, line1, MEDIUM_FONT);
 
     cursor->column_start = 8;
