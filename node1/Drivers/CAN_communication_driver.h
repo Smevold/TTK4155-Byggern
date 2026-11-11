@@ -12,9 +12,9 @@ typedef struct{
 
 // Initilize CAN controller
 void CAN_Init();
-// Send message to register(s) from CAN controller
+// Send message to trancive buffer from CAN controller
 void CAN_Send_Message(CAN_MSG* msg);
-// Reads buffer(s) for message from CAN controller
+// Reads recive buffer from CAN controller
 void CAN_Receive_Message(CAN_MSG* msg);
 // Sends joystick data from CAN controller
 void CAN_Send_Joy(io_joy_t* joy);
