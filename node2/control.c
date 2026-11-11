@@ -2,16 +2,16 @@
 
 #define SAMPLING_PERIOD 0.02 // Matches our timer-interrupt, should use that to check motor-pos
 
-#define PID_KP 0.1
-#define PID_KI 0.001
-#define PID_KD 0.01
+#define PID_KP 0.1 // Proportional effect scaler
+#define PID_KI 0.001 // Integrative effect scaler
+#define PID_KD 0.01 // Derivative effect scaler
 
-#define P_MAX 5600
-#define P_MIN 0x60
+#define P_MAX 5600 // Maximum value of p_ref
+#define P_MIN 0x60 // Minimum value of p_ref
 
-#define PID_OUT_MAX 50 // Half maximum Motor Duty Cycle, should check
+#define PID_OUT_MAX 50 // Maximum absolute value of pid output, as our output is define as a percentage centered around 0
 
-#define PID_REF_DEADSPACE 5
+#define PID_REF_DEADSPACE 5 // Hysterisis value to prevent p_ref sliding while joystick stands still
 
 void PID_Controller(pid_ctrl_t* pid, motor_t* motor) {
     // Error
