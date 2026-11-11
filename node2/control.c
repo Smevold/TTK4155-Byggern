@@ -2,9 +2,9 @@
 
 #define SAMPLING_PERIOD 0.02 // Matches our timer-interrupt, should use that to check motor-pos
 
-#define PID_KP 1
-#define PID_KI 0.1
-#define PID_KD 1
+#define PID_KP 0.001
+#define PID_KI 0.001
+#define PID_KD 0.001
 
 #define P_MAX 0x15e1
 #define P_MIN 0x40
