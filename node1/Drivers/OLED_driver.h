@@ -2,6 +2,16 @@
 
 #include <stdint.h>
 #include <avr/pgmspace.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <avr/io.h>
+
+#include "SPI_driver.h"
+#include "../Graphics/OLED_graphics.h"
+#include "../Graphics/fonts.h"
+
+
+//#include <string.h>
 
 typedef struct {
     uint8_t column_start;
