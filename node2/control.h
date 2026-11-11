@@ -5,10 +5,13 @@
 #include "sam.h"
 #include "motor.h"
 
-typedef struct{
+typedef struct motor_t motor_t;
+
+typedef struct pid_ctrl_t{
     float error_sum;
     float error_prev;
     float output; 
 } pid_ctrl_t;
 
 void PID_Controller(pid_ctrl_t* pid, motor_t* motor);
+void PID_Update_Ref(motor_t* motor, io_joy_t* joy);

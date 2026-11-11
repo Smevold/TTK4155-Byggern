@@ -2,14 +2,16 @@
 
 #define SAMPLING_PERIOD 0.02 // Matches our timer-interrupt, should use that to check motor-pos
 
-#define PID_KP 1
-#define PID_KI 0.1
-#define PID_KD 1
+#define PID_KP 0.001
+#define PID_KI 0.001
+#define PID_KD 0.001
 
-#define P_MAX 15e1
-#define P_MIN 2
+#define P_MAX 0x15e1
+#define P_MIN 0x40
 
-#define PID_OUT_MAX 100 // Maximum Motor Duty Cycle, should check
+#define PID_OUT_MAX 50 // Half maximum Motor Duty Cycle, should check
+
+#define PID_REF_DEADSPACE 5
 
 void PID_Controller(pid_ctrl_t* pid, motor_t* motor) {
     // Error
@@ -43,8 +45,14 @@ void PID_Controller(pid_ctrl_t* pid, motor_t* motor) {
 }
 
 void PID_Update_Ref(motor_t* motor, io_joy_t* joy){
-    // Accumulate joy-stick speed reference (linearized around 0) for positional reference
-    uint16_t p_temp = motor->p_ref + (joy->x - 50);
+    // Hysteresis
+    if (((50 - PID_REF_DEADSPACE) <= joy->x) && (joy->x <= (50 + PID_REF_DEADSPACE))) {return;}
+
+    // Linearize ref around 0, and flip direction
+    int8_t ref_lin = -(joy->x - 50);
+    
+    // Accumulate joy-stick speed reference for positional reference
+    uint16_t p_temp = motor->p_ref + ref_lin;
 
     if(p_temp > P_MAX){
         p_temp = P_MAX;

@@ -76,7 +76,7 @@ void main(){
         printf("msg_receive: ID: %2X, DLC: %2X, Data: %2X, %2X, %2X\n", msg_rx.ID, msg_rx.DLC, msg_rx.Data[0]);
         // -- END JOY OVER CAN TEST
         
-        _delay_ms(500);
+        _delay_ms(100);
         
     }
     

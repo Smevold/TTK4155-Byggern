@@ -2,15 +2,15 @@
 
 #include "sam.h"
 #include <stdint.h>
+#include <stdlib.h>
 
 #include "io_driver.h"
 #include "adc.h"
 #include "interrupt.h"
-#include "motor.h"
 #include "control.h"
 
 // If not more is needed for the position regulator, consider not using a struct
-typedef struct {
+typedef struct motor_t{
     // Encoder should be real-time encoder-value
     uint16_t encoder; // Just guessed type-size
     // Position should be the calculated position based on encoder
@@ -21,7 +21,9 @@ typedef struct {
     uint16_t p_ref; 
 } motor_t;
 
-void Motor_Init();
-void Motor(io_joy_t* joy, uint16_t* last_us);
+typedef struct pid_ctrl_t pid_ctrl_t;
 
-void Motor_Position(motor_t* motor);
+void Motor_Init();
+void Motor(pid_ctrl_t* pid , uint16_t* last_us);
+
+void Motor_Get_Position(motor_t* motor);

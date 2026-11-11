@@ -13,7 +13,7 @@ void Motor_Init() {
 // This function cannot take in joy, must take in throttle_signal
 void Motor(pid_ctrl_t* pid , uint16_t* last_us) {
     // Change PWM
-    PWM_Joy_Duty_Cycle(pid->output, last_us, 0);
+    PWM_Joy_Duty_Cycle((abs(pid->output)), last_us, 0);
     
     // Change dir based on input from joystick
     if (pid->output > 0 + DEADSPACE) {
@@ -27,7 +27,7 @@ void Motor(pid_ctrl_t* pid , uint16_t* last_us) {
 
 }
 
-void Motor_Position(motor_t* motor){
+void Motor_Get_Position(motor_t* motor){
 
     motor->p_measured = TC2->TC_CHANNEL[0].TC_CV;
     
