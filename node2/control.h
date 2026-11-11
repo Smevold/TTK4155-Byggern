@@ -5,6 +5,7 @@
 #include "sam.h"
 #include "motor.h"
 
+
 typedef struct{
     float error_sum;
     float error_prev;
@@ -12,3 +13,4 @@ typedef struct{
 } pid_ctrl_t;
 
 void PID_Controller(pid_ctrl_t* pid, motor_t* motor);
+void PID_Update_Ref(motor_t* motor, io_joy_t* joy);
