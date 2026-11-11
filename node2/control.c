@@ -6,10 +6,10 @@
 #define PID_KI 0.1
 #define PID_KD 1
 
-#define P_MAX 15e1
-#define P_MIN 2
+#define P_MAX 0x15e1
+#define P_MIN 0x2
 
-#define PID_OUT_MAX 100 // Maximum Motor Duty Cycle, should check
+#define PID_OUT_MAX 50 // Half maximum Motor Duty Cycle, should check
 
 void PID_Controller(pid_ctrl_t* pid, motor_t* motor) {
     // Error
