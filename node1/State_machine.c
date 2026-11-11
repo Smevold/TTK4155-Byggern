@@ -118,4 +118,62 @@ void SM_Game_Over(cursor_t* cursor, CAN_MSG* msg_tx, CAN_MSG* msg_rx) {
     CAN_Receive_Message(msg_rx); // Should receive score
 
     Interface_Print_Score(cursor, msg_rx);
+
+    uint8_t menu_option = 0;
+    while(1) {
+        // Read and compute ADC/JOY-values
+        ADC_Read(joy, pad);
+        JOY_Readable_Pos(joy);
+        JOY_Direction(joy);
+        joy->btn = PIND & (1 << PIND4);
+
+        //Interface_Menu_Nav(joy, cursor, &menu_option);
+        // Logic to keep menu_options within the bounds
+        if (joy->dir == DOWN && menu_option > 0) {
+            menu_option--;
+        } else if (joy->dir == UP && menu_option < 2) {
+            menu_option++;
+        }
+
+        cursor->column_start = 0;
+        OLED_Goto_Column(cursor);
+        OLED_Print_Char(font5, ' ', MEDIUM_FONT);
+        switch (menu_option) {
+            case 0:
+                cursor->line_start = 8;
+                break;
+            case 1:
+                cursor->line_start = 16;
+                break;
+        }
+            
+            
+        cursor->column_start = 0;
+        OLED_Goto_Pos(cursor);
+        
+        // Joy btn is connected to pin D 4
+        joy->btn = PIND & (1 << PIND4);
+        if (joy->btn) {
+            // Button is not pressed, do nothing
+            OLED_Print_Char(font5, 'X', MEDIUM_FONT);
+        } else {
+            // Button is pressed, choose current option
+            OLED_Print_Char(font5, 'O', MEDIUM_FONT);
+            switch (menu_option) {
+                // Start game
+                case 0:
+                    msg_tx->ID = 0x17;
+                    msg_tx->DLC = 0x01;
+                    msg_tx->Data[0] = 0x00;
+                    CAN_Send_Message(msg_tx);
+                    CAN_Receive_Message(msg_rx);
+                    *state = 1;
+                    return;
+                // Nothing happens
+                case 1:
+                    break; 
+
+            }
+        }
+    }
 }
