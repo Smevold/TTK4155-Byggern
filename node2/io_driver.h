@@ -4,6 +4,8 @@
 #include "sam.h"
 #include "adc.h"
 
+
+// IO structs and functions from node 1
 typedef enum {
     UP, DOWN, LEFT, RIGHT, NEUTRAL
 } direction_t;
