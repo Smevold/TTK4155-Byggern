@@ -12,10 +12,11 @@ void Motor_Init() {
 
 // This function cannot take in joy, must take in throttle_signal
 void Motor(pid_ctrl_t* pid , uint16_t* last_us) {
-    // Change PWM
+    // Change PWM to motor based on absolute value of pid output
     PWM_Joy_Duty_Cycle((abs(pid->output)), last_us, 0);
     
-    // Change dir based on input from joystick
+    // Change direction based on size of pid output
+    // Deadspace to avoid edge case of noisy signal around 0
     if (pid->output > 0 + DEADSPACE) {
         // SET PIN 23 PORT C LOW
         PIOC->PIO_CODR |= PIO_PC23;
@@ -29,6 +30,7 @@ void Motor(pid_ctrl_t* pid , uint16_t* last_us) {
 
 void Motor_Get_Position(motor_t* motor){
 
+    // Measure quadratic encoder
     motor->p_measured = TC2->TC_CHANNEL[0].TC_CV;
     
 }
