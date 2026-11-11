@@ -1,6 +1,8 @@
 # TTK4155 Node 2
 
-Starter code for node 2 in TTK4155 Embedded and Industrial Computer Systems Design at NTNU. This repository contains two kinds of files:
+Code for node 2 in TTK4155 Embedded and Industrial Computer Systems Design at NTNU. This repository consists of two parts: starter code given by TTK4155 and code made by group 34, consisting Fredrik S.A., August H.S., Ina M.R., developed in a Linux build environment.
+
+The starter code contains two kinds of files:
 
 ## Cross-platform starter code (Linux and Windows)
 
@@ -14,7 +16,7 @@ Starter code for node 2 in TTK4155 Embedded and Industrial Computer Systems Desi
 - `Makefile` arm-none-eabi-gcc build + openocd flashing
 - `sam/`     CMSIS headers, startup code, linker script, openocd config
 
-## Windows users (Atmel Studio)
+All other files have been created by Group 34, and some others have been modified.
 
-Ignore `Makefile`, `main.c` and `sam/`. Copy `can.*`, `time.*` and `uart.*`
+The tests directory consists of examples of some tests used during development, to be stored for later viewing.
 
