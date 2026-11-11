@@ -1,7 +1,9 @@
 #pragma once
 
 #include <stdint.h>
+#include <avr/io.h>
 
+// Slave select for different units
 #define SS_IO_AVR 0
 #define SS_OLED 1
 #define SS_CAN 2

@@ -1,15 +1,5 @@
 #include "SPI_driver.h"
 
-#include <stdio.h>
-#include <stdlib.h>
-#include<avr/io.h>
-
-#define F_CPU 4915200UL
-#include<util/delay.h>
-
-#include "UART_driver.h"
-#include "IO_driver.h"
-
 void SPI_Init() {
     // Set MOSI and SCK as output
     DDRB |= (1 << DDB5) | (1 << DDB7);
@@ -45,6 +35,7 @@ char SPI_Receive() {
 }
 
 void SPI_Transmit_n_Bytes(char* data, uint8_t n) {
+    // Call SPI_Transmit n-number of times, to transmit n bytes
     for (uint8_t i = 0; i < n; i++) {
         SPI_Transmit(data[i]);
     }
@@ -57,6 +48,7 @@ void SPI_Receive_n_Bytes(char* data, uint8_t n) {
     }
 }
 
+// Select slave for SPI
 void SPI_SlaveSelect(uint8_t slave) {
     switch (slave) {
         case SS_IO_AVR: 
@@ -74,6 +66,7 @@ void SPI_SlaveSelect(uint8_t slave) {
     }
 }
 
+// Deselect all slaves
 void SPI_SlaveDeselectAll() {
     PORTB |= (1 << PB4) | (1 << PB3) | (1 << PB2); // Deselect all
 }
