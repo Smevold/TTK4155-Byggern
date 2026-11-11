@@ -20,6 +20,7 @@ void JOY_Readable_Pos(io_joy_t* joy) {
     JOY_Readable_Y(joy);
 }
 
+// returns 1 if ball is sensed 0 if not. used for game over
 uint8_t IR_result() {
     // Read from ADC
     uint16_t ir_value = ADC_Read();
