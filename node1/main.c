@@ -20,6 +20,7 @@
 #include "Graphics/OLED_graphics.h"
 #include "Graphics/fonts.h"
 #include "Interface/Game_menu.h"
+#include "State_machine.h"
 
 
 void main(){
@@ -40,43 +41,20 @@ void main(){
     cursor_t cursor;
     CAN_MSG msg_tx;
     CAN_MSG msg_rx; 
-    uint8_t menu_option = 0;
     Buttons btns;
-
-    // Begin startup - add function? Tilstandsmodell?
-    OLED_Clear(&cursor);
-    OLED_Print(OV_logo, &cursor);
+    uint8_t state = 0;
     
-    _delay_ms(2000);
-    
-    Interface_Startup(&cursor, &joy, &pad);
-    printf("xmax: %2X, xmin: %2X, ymax: %2X, ymin: %2X\n", joy.x_max, joy.x_min, joy.y_max, joy.y_min);
-    
-    _delay_ms(2000);
-    
-    OLED_Clear(&cursor);
-    Interface_Print_Menu(&cursor);
+    // Begin startup 
+    SM_Startup(&cursor, &joy, &pad);
     
     
     while(1) {
-        // Read and compute ADC/JOY-values
-        // Add function: readADCandUpdateJOY? / OR interrupt
-        ADC_Read(&joy, &pad);
-        JOY_Readable_Pos(&joy);
-        JOY_Direction(&joy);
-        joy.btn = PIND & (1 << PIND4);
-
-        
-        // -- BEGIN JOY OVER CAN TEST
-        CAN_Send_Joy(&joy);
-        CAN_Receive_Message(&msg_rx);
-        
-        printf("--- NEW MESSAGE ---\n");
-        printf("msg_send: ID: 02, DLC: 07, Data: %2X, %2X, %2X, %2X, %2X, %2X, %2X\n", joy.x_max, joy.x_min, joy.y_max, joy.y_min, joy.x_dig, joy.y_dig, joy.btn);
-        printf("msg_receive: ID: %2X, DLC: %2X, Data: %2X, %2X, %2X\n", msg_rx.ID, msg_rx.DLC, msg_rx.Data[0]);
-        // -- END JOY OVER CAN TEST
-        
-        _delay_ms(100);
+        switch(state) {
+            case 0:
+                uint8_t menu_option = 0;
+                SM_Running(&joy, &pad, &msg_tx, &msg_rx, &btns);
+                break;
+        }
         
     }
     
