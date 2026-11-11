@@ -10,9 +10,17 @@ void SM_Startup(cursor_t* cursor, io_joy_t* joy, io_pad_t* pad) {
     printf("xmax: %2X, xmin: %2X, ymax: %2X, ymin: %2X\n", joy->x_max, joy->x_min, joy->y_max, joy->y_min);
     
     _delay_ms(2000);
-    
+}
+
+
+void SM_Menu(io_joy_t* joy, io_joy_t* cursor) {
     OLED_Clear(cursor);
     Interface_Print_Menu(cursor);
+    
+    uint8_t menu_option = 0;
+    while(1) {
+        Interface_Menu_Nav(joy, cursor, &menu_option);
+    }
 }
 
 
@@ -38,3 +46,4 @@ void SM_Running(io_joy_t* joy, io_pad_t* pad, CAN_MSG* msg_tx, CAN_MSG* msg_rx, 
         _delay_ms(100);
     }
 }
+
