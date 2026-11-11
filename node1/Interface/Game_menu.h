@@ -2,6 +2,7 @@
 
 #include <stdint.h>
 #include <avr/pgmspace.h>
+#include "../Drivers/CAN_communication_driver.h"
 
 void Interface_Startup(cursor_t* cursor, io_joy_t* joy, io_pad_t* pad);
 

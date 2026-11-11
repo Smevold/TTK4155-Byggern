@@ -70,7 +70,9 @@ void Interface_Print_Score(cursor_t* cursor, CAN_MSG* msg_rx) {
     OLED_Clear(cursor);
     OLED_Home(cursor);
 
-    char line1[] = "Score: 0x%2X", msg_rx->Data[0];
+    char line1[16];
+    snprintf(line1, sizeof(line1), "Score: %u", (unsigned)msg_rx->Data[0]);
+
     OLED_Print_Str(font5, line1, MEDIUM_FONT);
 
     cursor->column_start = 8;
@@ -83,6 +85,6 @@ void Interface_Print_Score(cursor_t* cursor, CAN_MSG* msg_rx) {
     cursor->line_start = 16;
     OLED_Goto_Pos(cursor);
 
-    char line2[] = "Exit game";
-    OLED_Print_Str(font5, line2, MEDIUM_FONT);
+    char line3[] = "Exit game";
+    OLED_Print_Str(font5, line3, MEDIUM_FONT);
 }

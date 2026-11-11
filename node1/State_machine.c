@@ -95,7 +95,7 @@ void SM_Running(io_joy_t* joy, io_pad_t* pad, cursor_t* cursor, CAN_MSG* msg_tx,
         CAN_Receive_Message(msg_rx);
 
         // Checks if game is over
-        if(msg_rx.Data[0] == 0x0A) {
+        if(msg_rx->Data[0] == 0x0A) {
             *state = 2;
             return;
         }
