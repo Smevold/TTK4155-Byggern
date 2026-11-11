@@ -93,6 +93,12 @@ void SM_Running(io_joy_t* joy, io_pad_t* pad, cursor_t* cursor, CAN_MSG* msg_tx,
         // -- BEGIN JOY OVER CAN TEST
         CAN_Send_Joy(joy);
         CAN_Receive_Message(msg_rx);
+
+        // Checks if game is over
+        if(msg_rx.Data[0] == 0x0A) {
+            *state = 2;
+            return;
+        }
         
         if (print_count == 10) {
             printf("--- NEW MESSAGE ---\n\r");
@@ -107,3 +113,9 @@ void SM_Running(io_joy_t* joy, io_pad_t* pad, cursor_t* cursor, CAN_MSG* msg_tx,
     }
 }
 
+void SM_Game_Over(cursor_t* cursor, CAN_MSG* msg_tx, CAN_MSG* msg_rx) {
+    CAN_Send_Message(msg_tx); // Unimportant what we send
+    CAN_Receive_Message(msg_rx); // Should receive score
+
+    Interface_Print_Score(cursor, msg_rx);
+}
