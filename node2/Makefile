@@ -15,7 +15,8 @@ SOURCE_FILES = \
 	adc.c \
 	motor.c \
 	control.c \
-	solenoid.c
+	solenoid.c \
+	game_loop.c
 #   filename1.c \
 #   filename2.c \
 #	filenameN.c
