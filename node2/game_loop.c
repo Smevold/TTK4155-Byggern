@@ -4,6 +4,10 @@ void SM_game_running(CanMsg* msg_rx, CanMsg* msg_tx, io_joy_t* joy, motor_t* mot
     while (1) {
         if (!IR_result()){
             *state = 0;
+            can_rx(msg_rx);
+            msg_tx->length = 1;
+            msg_tx->byte[0] = 0x0A;
+            can_tx(*msg_tx);
             break;
         }
         if(can_rx(msg_rx)) {
@@ -25,6 +29,8 @@ void SM_game_running(CanMsg* msg_rx, CanMsg* msg_tx, io_joy_t* joy, motor_t* mot
 
             // 1/4 delay as node1
             if(ticks - *can_last_tick >= 2) {
+                msg_tx->length = 1;
+                msg_tx->byte[0] = 0x01;
                 can_tx(*msg_tx);
                 *can_last_tick = ticks;
             }
