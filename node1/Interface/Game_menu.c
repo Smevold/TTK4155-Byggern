@@ -65,3 +65,26 @@ void Interface_Print_Game_Running(cursor_t* cursor) {
     char line[] = "GAME RUNNING";
     OLED_Print_Str(font8, line, LARGE_FONT);
 }
+
+void Interface_Print_Score(cursor_t* cursor, CAN_MSG* msg_rx) {
+    OLED_Clear(cursor);
+    OLED_Home(cursor);
+
+    char line1[16];
+    snprintf(line1, sizeof(line1), "Score: %u", (unsigned)msg_rx->Data[0]);
+
+    OLED_Print_Str(font5, line1, MEDIUM_FONT);
+
+    cursor->column_start = 8;
+    cursor->line_start = 8;
+    OLED_Goto_Pos(cursor);
+
+    char line2[] = "Restart game";
+    OLED_Print_Str(font5, line2, MEDIUM_FONT);
+
+    cursor->line_start = 16;
+    OLED_Goto_Pos(cursor);
+
+    char line3[] = "Exit game";
+    OLED_Print_Str(font5, line3, MEDIUM_FONT);
+}
