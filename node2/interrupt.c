@@ -141,7 +141,7 @@ void PWM_Init(){
     // Page 1017
     PWM->PWM_SCUP = 0;
 
-    PWM->PWM_ENA = PWM_ENA_CHID1; // enable output for channel 1
+    PWM->PWM_ENA = PWM_ENA_CHID1 | PWM_ENA_CHID0; // enable output for channel 1
 }
 
 

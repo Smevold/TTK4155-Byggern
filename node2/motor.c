@@ -21,10 +21,10 @@ void Motor(io_joy_t* joy, uint16_t* last_us) {
     // Change dir based on input from joystick
     if (joy->x > 50 + DEADSPACE) {
         // SET PIN 23 PORT C HIGH
-        PIOB->PIO_SODR |= PIO_PB23;
+        PIOC->PIO_SODR |= PIO_PC23;
     } else if (joy->x < 50 - DEADSPACE) {
         // SET PIN 23 PORT C LOW
-        PIOB->PIO_SODR &= ~PIO_PB23;
+        PIOC->PIO_SODR &= ~PIO_PC23;
     }
 
 
