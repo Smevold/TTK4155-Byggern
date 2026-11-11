@@ -7,7 +7,7 @@
 #define PID_KD 1
 
 #define P_MAX 0x15e1
-#define P_MIN 0x2
+#define P_MIN 0x40
 
 #define PID_OUT_MAX 50 // Half maximum Motor Duty Cycle, should check
 

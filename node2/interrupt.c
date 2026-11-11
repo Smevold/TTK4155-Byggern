@@ -86,13 +86,12 @@ volatile uint32_t ticks = 0;
 volatile uint8_t pid_tick = 0;
 
 
-void TC0_Handler(void) {
+TC0_Handler(void) {
 
     uint32_t sr = TC0->TC_CHANNEL[0].TC_SR;
     if (sr & TC_SR_CPCS){
         ticks++;
         pid_tick = 1;
-        p_ref_tick = 1;
     }
 }
 

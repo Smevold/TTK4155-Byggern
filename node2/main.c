@@ -136,6 +136,7 @@ int main()
         
         if(ticks - last_print_tick >= 100) {
             printf("ref: %d, meas: %d, out: %d\n", motor.p_ref, motor.p_measured, pid.output);
+            last_print_tick = ticks;
         }
 
         // --- PID Controller Call END ---
