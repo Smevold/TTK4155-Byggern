@@ -92,7 +92,7 @@ int main()
 
     printf("Hello!\n\r");
 
-    uint32_t last_tick = 0;
+    uint32_t can_last_tick = 0;
     uint32_t last_print_tick = 0;
     uint16_t last_us_servo = 0;
     uint16_t last_us_motor = 0;
@@ -122,12 +122,7 @@ int main()
             
             case 1:
                 game_start_ticks = ticks;
-                while (1) {
-                    SM_Game_Running();
-                    if (!IR_result())
-                        state = 0;
-                        break;
-                    
+                SM_Game_Running(&msg_rx, &msg_tx, &joy, &motor, &pid, &can_last_tick, &last_us_motor, &state);
                 game_end_ticks = ticks;
                 }
             }
