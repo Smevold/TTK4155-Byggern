@@ -70,7 +70,7 @@ int main()
 
     // ADC CHIP TEMP CHECK --- REMOVE LATER
     ADC->ADC_ACR |= ADC_ACR_TSON;     // enable the sensor (check macro name in component_adc.h)
-    PIOB->PIO_CODR = PIO_PC28;
+    //PIOC->PIO_CODR = PIO_PC28;
 
     while (1)
     {
@@ -101,7 +101,7 @@ int main()
         adc = ADC_Read();
 
         // 1/4 delay as node1
-        if(ticks - last_tick >= 100) {
+        if(ticks - last_tick >= 300) {
             //printf("%2X\n", adc);
 
             //uint32_t l = ADC->ADC_LCDR;
@@ -118,7 +118,7 @@ int main()
             //printf("Before send\n");
             //can_tx(msg_tx);
 
-            //Solenoid_Hit(); 
+            Solenoid_Hit(); 
 
             //printf("After send\n");
 
