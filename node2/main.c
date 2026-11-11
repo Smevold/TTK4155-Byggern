@@ -66,6 +66,7 @@ int main()
     uint16_t last_us = 0;
     pid_ctrl_t pid = {0}; // Sets all members to zero
     motor_t motor = {0}; // Sets all members to zero
+    motor.p_ref = 40;
 
     uint16_t adc = 0;
 
