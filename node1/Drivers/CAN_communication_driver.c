@@ -11,12 +11,15 @@
 #include "CAN_controller_driver.h"
 #include "CAN_communication_driver.h"
 
+
+// 
 #define MCP_CAN_CRT         0x0F
 #define MCP_CAN_ABAT_En     0x01  
 #define MCP_CAN_OSM_Dis     0x00
 #define MCP_CAN_CLKOut_Dis  0x00
 #define MCP_CAN_CLKPre_1    0x00
 
+// CAN Tranciver modes
 #define MODE_Normal         0x00
 #define MODE_Loopback       0x40
 #define MODE_Mask           0xE0
@@ -115,7 +118,7 @@ void CAN_Receive_Message(CAN_MSG* msg){
         //reads revice message buffer
         msg->Data[i] = CAN_Read_Controller(0x66+i);
     }
-    
+
     CAN_Bit_Modify(CANINTF, 0x01, 0x00); // Clear RX0IF
 }
 
@@ -134,5 +137,6 @@ void CAN_Send_Joy(io_joy_t* joy) {
     msg.Data[5] = joy->y_dig;
     msg.Data[6] = joy->btn;
 
+    // Sends tx buffer
     CAN_Send_Message(&msg);
 }

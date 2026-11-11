@@ -11,13 +11,13 @@
 #include "CAN_controller_driver.h"
 
 
-// RTS 
+// RTS command and bit
 #define MCP_RTS      0x80
 #define MCP_RTS_TX0  0x01
 #define MCP_RTS_TX1  0x02
 #define MCP_RTS_TX2  0x04
 
-// Instructions bytes for CAN Controller
+// Commando bytes for CAN Controller
 #define MCP_CAN_Read 0b00000011
 #define MCP_CAN_Write 0b00000010
 #define MCP_CAN_Bit_Modify 0b00000101
