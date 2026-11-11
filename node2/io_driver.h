@@ -41,4 +41,5 @@ void JOY_Readable_Y(io_joy_t* joy);
 // Return struct with percentile in both axis'
 void JOY_Readable_Pos(io_joy_t* joy);
 
+// Return 1 if something is blocking ir
 uint8_t IR_result();
