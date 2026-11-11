@@ -6,7 +6,7 @@
 #define PID_KI 0.001
 #define PID_KD 0.01
 
-#define P_MAX 0x15e1
+#define P_MAX 5600
 #define P_MIN 0x60
 
 #define PID_OUT_MAX 50 // Half maximum Motor Duty Cycle, should check
@@ -49,7 +49,8 @@ void PID_Update_Ref(motor_t* motor, io_joy_t* joy){
     if (((50 - PID_REF_DEADSPACE) <= joy->x) && (joy->x <= (50 + PID_REF_DEADSPACE))) {return;}
 
     // Linearize ref around 0, and flip direction
-    int8_t ref_lin = -(joy->x - 50);
+    int16_t ref_lin = -(joy->x - 50);
+    ref_lin *= 5; 
     
     // Accumulate joy-stick speed reference for positional reference
     uint16_t p_temp = motor->p_ref + ref_lin;
