@@ -62,20 +62,17 @@ int main()
     printf("Hello!\n");
 
     uint32_t last_tick = 0;
+    uint32_t last_print_tick = 0;
     uint16_t last_us = 0;
     pid_ctrl_t pid = {0}; // Sets all members to zero
     motor_t motor = {0}; // Sets all members to zero
 
     uint16_t adc = 0;
 
-    // ADC CHIP TEMP CHECK --- REMOVE LATER
-    ADC->ADC_ACR |= ADC_ACR_TSON;     // enable the sensor (check macro name in component_adc.h)
-    //PIOC->PIO_CODR = PIO_PC28;
-
     while (1)
     {
         // --- CAN JOY TO PWM TEST BEGIN ---
-        /*
+        
 
         // Only update tx and send, if received
         if(can_rx(&msg_rx)) {
@@ -93,15 +90,16 @@ int main()
             //printf("msg_send: ID: %2X, DLC: %2X, Data: %2X\n", msg_tx.id, msg_tx.length, msg_tx.byte[0]);
             
             JOY_Readable_Pos(&joy);
-            
-            PWM_Joy_Duty_Cycle(joy.x, &last_us, 0);
 
+            PID_Update_Ref(&motor, &joy);
         }
-            */
+        
         adc = ADC_Read();
 
         // 1/4 delay as node1
-        if(ticks - last_tick >= 300) {
+        if(ticks - last_tick >= 5) {
+            can_tx(msg_tx);
+            last_tick = ticks;
             //printf("%2X\n", adc);
 
             //uint32_t l = ADC->ADC_LCDR;
@@ -114,11 +112,9 @@ int main()
             //printf("%x\n", ADC->ADC_CDR[7]);
 
             //printf("Before last tick\n");
-            last_tick = ticks;
             //printf("Before send\n");
-            //can_tx(msg_tx);
 
-            Solenoid_Hit(); 
+            //Solenoid_Hit(); 
 
             //printf("After send\n");
 
@@ -129,24 +125,18 @@ int main()
 
         
         // --- PID Controller Call BEGIN ---
-        /*
-        if(p_ref_tick == 1) {
-            p_ref_tick = 0;
-            PID_Update_Ref(&motor, &joy);
-            printf("ref: %d, ", motor.p_ref);
-       }
-
+        
         if (pid_tick == 1) {
             pid_tick = 0;
             // READ MOTOR POS
             Motor_Get_Position(&motor);
             PID_Controller(&pid, &motor);
-            printf("meas: %d, out: %d\n", motor.p_measured, pid.output);
             // SET MOTOR SPEED
-
-
         }
-            */
+        
+        if(ticks - last_print_tick >= 100) {
+            printf("ref: %d, meas: %d, out: %d\n", motor.p_ref, motor.p_measured, pid.output);
+        }
 
         // --- PID Controller Call END ---
         
