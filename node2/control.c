@@ -11,6 +11,8 @@
 
 #define PID_OUT_MAX 50 // Half maximum Motor Duty Cycle, should check
 
+#define PID_REF_DEADSPACE 5
+
 void PID_Controller(pid_ctrl_t* pid, motor_t* motor) {
     // Error
     float error = (float)(motor->p_ref - motor->p_measured);
@@ -43,6 +45,9 @@ void PID_Controller(pid_ctrl_t* pid, motor_t* motor) {
 }
 
 void PID_Update_Ref(motor_t* motor, io_joy_t* joy){
+    // Hysteresis
+    if ((50 - PID_REF_DEADSPACE) < joy->x <= (50 + PID_REF_DEADSPACE)) {return;}
+    
     // Accumulate joy-stick speed reference (linearized around 0) for positional reference
     uint16_t p_temp = motor->p_ref + (joy->x - 50);
 
