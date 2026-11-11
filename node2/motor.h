@@ -2,6 +2,7 @@
 
 #include "sam.h"
 #include <stdint.h>
+#include <stdlib.h>
 
 #include "io_driver.h"
 #include "adc.h"
