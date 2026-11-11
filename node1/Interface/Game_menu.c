@@ -57,3 +57,11 @@ void Interface_Print_Menu(cursor_t* cursor) {
     char line2[] = "Exit game";
     OLED_Print_Str(font5, line2, MEDIUM_FONT);
 } 
+
+void Interface_Print_Game_Running(cursor_t* cursor) {
+    OLED_Clear(cursor);
+    OLED_Home(cursor);
+
+    char line[] = "GAME RUNNING";
+    OLED_Print_Str(font8, line, LARGE_FONT);
+}
