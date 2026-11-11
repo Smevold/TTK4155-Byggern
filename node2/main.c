@@ -107,9 +107,9 @@ int main()
 
     // Startup wait
     while(startup_wait) {
-        if(carn_rx(&msg_rx)) {
+        if(can_rx(&msg_rx)) {
             printf("msg_receive: ID: %2X, DLC: %2X, Data: %2X\n\r", msg_rx.id, msg_rx.length, msg_rx.byte[0]);   
-            startup_wait = msg_rx.byte[0]
+            startup_wait = msg_rx.byte[0];
         }
     }
     
