@@ -35,6 +35,7 @@ void ADC_Init() {
     //ADC->ADC_WPMR |= ADC_WPMR_WPEN;
 }
 
+// reads adc from channel 7
 uint16_t ADC_Read() {
     return ADC->ADC_CDR[7];
 }
