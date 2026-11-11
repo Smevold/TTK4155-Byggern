@@ -99,6 +99,7 @@ int main()
         // 1/4 delay as node1
         if(ticks - last_tick >= 5) {
             can_tx(msg_tx);
+            last_tick = ticks;
             //printf("%2X\n", adc);
 
             //uint32_t l = ADC->ADC_LCDR;
@@ -111,7 +112,6 @@ int main()
             //printf("%x\n", ADC->ADC_CDR[7]);
 
             //printf("Before last tick\n");
-            last_tick = ticks;
             //printf("Before send\n");
 
             //Solenoid_Hit(); 
