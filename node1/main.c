@@ -45,7 +45,7 @@ void main(){
     uint8_t state = 0;
     
     // Begin startup 
-    SM_Startup(&cursor, &joy, &pad);
+    SM_Startup(&cursor, &joy, &pad, &msg_tx, &msg_rx);
     
     
     while(1) {

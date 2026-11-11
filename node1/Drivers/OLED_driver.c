@@ -1,16 +1,9 @@
 #include "OLED_driver.h"
-#include "SPI_driver.h"
-#include "../Graphics/OLED_graphics.h"
-#include "../Graphics/fonts.h"
-
-#include <stdio.h>
-#include <stdlib.h>
-#include<avr/io.h>
-#include <string.h>
 
 #define F_CPU 4915200UL
 #include<util/delay.h>
 
+// Initialize OLED
 void OLED_Init() {
 
     // CS active low PB3 
@@ -30,9 +23,9 @@ void OLED_Init() {
     PORTB &= ~(1 << PORTB1);
     SPI_Transmit(0x20); // Set Memory Addressing Mode
     SPI_Transmit(0b00); // Set Horizontal Addressing Mode
-
 }
 
+// Move cursor on OLED to home / upper left corner
 void OLED_Home(cursor_t* cursor) {
     cursor->line_start = 0;
     cursor->line_end = 63;
@@ -41,6 +34,7 @@ void OLED_Home(cursor_t* cursor) {
     OLED_Goto_Pos(cursor);
 }
 
+// Movo cursor on OLED to page given in cursor
 void OLED_Goto_Page(cursor_t* cursor) {
     SPI_SlaveSelect(SS_OLED);
     // Set command-mode
@@ -50,11 +44,7 @@ void OLED_Goto_Page(cursor_t* cursor) {
     SPI_Transmit((cursor->line_end >> 3)); // Set Page End Address
 }
 
-void OLED_Goto_Next_Page(cursor_t* cursor) {
-    cursor->line_start += 8; // page is 8 high
-    OLED_Goto_Page(cursor);
-}
-
+// Movo cursor on OLED to column given in cursor
 void OLED_Goto_Column(cursor_t* cursor) {
     SPI_SlaveSelect(SS_OLED);
     // Set command-mode
@@ -64,11 +54,13 @@ void OLED_Goto_Column(cursor_t* cursor) {
     SPI_Transmit(cursor->column_end); // Set Column End Address
 }
 
+// Move cursor on OLED to position given in cursor
 void OLED_Goto_Pos(cursor_t* cursor) {
     OLED_Goto_Column(cursor);
     OLED_Goto_Page(cursor);
 }
 
+// Clear entire OLED
 void OLED_Clear(cursor_t* cursor) {
     OLED_Home(cursor);
     SPI_SlaveSelect(SS_OLED);
@@ -82,19 +74,21 @@ void OLED_Clear(cursor_t* cursor) {
     }
 }
 
+// Fill entire OLED
 void OLED_Fill(cursor_t* cursor) {
     OLED_Home(cursor);
     SPI_SlaveSelect(SS_OLED);
 
     // Change to data-mode
     PORTB |= (1 << PORTB1); 
-    for (int j = 0; j < 8; j++) { // Clear all Pages
-        for (int i = 0; i < 128; i++) { // Clear all COL
+    for (int j = 0; j < 8; j++) { // Fill all Pages
+        for (int i = 0; i < 128; i++) { // Fill all COL
             SPI_Transmit(0xFF);
         }
     }
 }
 
+//  Clear line given by cursor on OLED
 // Will always clear line_start
 void OLED_Clear_Line(cursor_t* cursor) {
     OLED_Goto_Pos(cursor); // Sets SPI_Slave
@@ -108,7 +102,7 @@ void OLED_Clear_Line(cursor_t* cursor) {
 
 }
 
-
+// Print figure given by bitmap at position given by cursor on OLED
 void OLED_Print(const uint8_t (*bitmap)[128], cursor_t* cursor){
     OLED_Goto_Pos(cursor); // Sets SPI_Slave
 
@@ -123,16 +117,21 @@ void OLED_Print(const uint8_t (*bitmap)[128], cursor_t* cursor){
     }
 }
 
+// Print character given by character in font given by font at position given by cursor on OLED
 void OLED_Print_Char(const uint8_t* font, char character, uint8_t size){
     SPI_SlaveSelect(SS_OLED);
     // Change to data-mode
     PORTB |= (1 << PORTB1); 
 
+    // Find index of character in font table
+    // Table is a ASCII table with a 32 bit offset
     uint8_t index = (uint8_t)character - 32;
-    //printf("char, %2D, index: %2D", character, index);
+
+    // Find adress of character in font, by taking in the adress of the beginning of the font
+    // and offsetting the adress with the index multiplied by the size of the characters
     const uint8_t *glyph = font + (uint16_t)index * size;
 
-
+    // Print character
     char byte = 0x00;
     for (int j = 0; j < size; j++){
             byte = pgm_read_byte(&glyph[j]);

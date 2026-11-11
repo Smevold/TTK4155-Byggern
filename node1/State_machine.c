@@ -1,6 +1,6 @@
 #include "State_machine.h"
 
-void SM_Startup(cursor_t* cursor, io_joy_t* joy, io_pad_t* pad) {
+void SM_Startup(cursor_t* cursor, io_joy_t* joy, io_pad_t* pad, CAN_MSG* msg_tx, CAN_MSG* msg_rx) {
     OLED_Clear(cursor);
     OLED_Print(OV_logo, cursor);
     
@@ -60,6 +60,11 @@ void SM_Menu(io_joy_t* joy, cursor_t* cursor, io_pad_t* pad, uint8_t* state) {
             switch (menu_option) {
                 // Start game
                 case 0:
+                    msg_tx->ID = 0x17;
+                    msg_tx->DLC = 0x01;
+                    msg_tx->Data[0] = 0x00;
+                    CAN_Send_Message(msg_tx);
+                    CAN_Receive_Message(msg_rx);
                     *state = 1;
                     return;
                 // Nothing happens
@@ -74,6 +79,7 @@ void SM_Menu(io_joy_t* joy, cursor_t* cursor, io_pad_t* pad, uint8_t* state) {
 
 void SM_Running(io_joy_t* joy, io_pad_t* pad, cursor_t* cursor, CAN_MSG* msg_tx, CAN_MSG* msg_rx, Buttons* btns, uint8_t* state) {
     Interface_Print_Game_Running(cursor);
+    uint8_t print_count = 0;
 
     while(1) {
         // Read and compute ADC/JOY-values
@@ -88,9 +94,13 @@ void SM_Running(io_joy_t* joy, io_pad_t* pad, cursor_t* cursor, CAN_MSG* msg_tx,
         CAN_Send_Joy(joy);
         CAN_Receive_Message(msg_rx);
         
-        //printf("--- NEW MESSAGE ---\n");
-        //printf("msg_send: ID: 02, DLC: 07, Data: %2X, %2X, %2X, %2X, %2X, %2X, %2X\n", joy->x_max, joy->x_min, joy->y_max, joy->y_min, joy->x_dig, joy->y_dig, joy->btn);
-        //printf("msg_receive: ID: %2X, DLC: %2X, Data: %2X, %2X, %2X\n", msg_rx->ID, msg_rx->DLC, msg_rx->Data[0]);
+        if (print_count == 10) {
+            printf("--- NEW MESSAGE ---\n\r");
+            printf("msg_send: ID: 02, DLC: 07, Data: %2X, %2X, %2X, %2X, %2X, %2X, %2X\n\r", joy->x_max, joy->x_min, joy->y_max, joy->y_min, joy->x_dig, joy->y_dig, joy->btn);
+            printf("msg_receive: ID: %2X, DLC: %2X, Data: %2X, %2X, %2X\n\r", msg_rx->ID, msg_rx->DLC, msg_rx->Data[0]);
+            print_count = 0;
+        }
+        print_count++;
         // -- END JOY OVER CAN TEST
         
         _delay_ms(100);

@@ -109,11 +109,11 @@ void CAN_Send_Message(CAN_MSG* msg){
 }
 
 void CAN_Receive_Message(CAN_MSG* msg){
-    uint8_t timeout = 100000;
+    uint8_t timeout = 10000000000;
     //Timeout when no message recived
     while (!(CAN_Read_Controller(CANINTF) & 0x01)) {
         if(--timeout == 0) {
-            printf("Timed out CAN_Receive\n");
+            printf("Timed out CAN_Receive\n\r");
             return;
         };
     } 

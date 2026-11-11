@@ -103,8 +103,16 @@ int main()
 
     uint16_t adc = 0;
 
+    uint8_t startup_wait = 1;
+
     // Startup wait
-    while(startupnotfinished) {;}
+    while(startup_wait) {
+        if(can_rx(&msg_rx)) {
+            printf("msg_receive: ID: %2X, DLC: %2X, Data: %2X\n\r", msg_rx.id, msg_rx.length, msg_rx.byte[0]);   
+            startup_wait = msg_rx.byte[0];
+        }
+    }
+    
 
     while (1)
     {
@@ -125,8 +133,8 @@ int main()
             joy.btn = msg_rx.byte[6];
  
             //printf("--- NEW MESSAGE ---\n");
-            //printf("msg_receive: ID: %2X, DLC: %2X, Data: %2X, %2X, %2X, %2X, %2X, %2X, %2X\n", msg_rx.id, msg_rx.length, joy.x_max, joy.x_min, joy.y_max, joy.y_min, joy.x_dig, joy.y_dig, joy.btn);   
-            //printf("msg_send: ID: %2X, DLC: %2X, Data: %2X\n", msg_tx.id, msg_tx.length, msg_tx.byte[0]);
+            //printf("msg_receive: ID: %2X, DLC: %2X, Data: %2X, %2X, %2X, %2X, %2X, %2X, %2X\n\r", msg_rx.id, msg_rx.length, joy.x_max, joy.x_min, joy.y_max, joy.y_min, joy.x_dig, joy.y_dig, joy.btn);   
+            //printf("msg_send: ID: %2X, DLC: %2X, Data: %2X\n\r", msg_tx.id, msg_tx.length, msg_tx.byte[0]);
             
             JOY_Readable_Pos(&joy);
 
@@ -142,20 +150,20 @@ int main()
             //printf("%2X\n", adc);
 
             //uint32_t l = ADC->ADC_LCDR;
-            //printf("ch:%lu val:%lu\n", (l >> 12) & 0xF, l & 0xFFF);
-            //printf("CHSR:%lX MR:%lX\n", ADC->ADC_CHSR, ADC->ADC_MR);
-            //printf("COR:%lX CGR:%lX EMR:%lX\n", ADC->ADC_COR, ADC->ADC_CGR, ADC->ADC_EMR);
+            //printf("ch:%lu val:%lu\n\r", (l >> 12) & 0xF, l & 0xFFF);
+            //printf("CHSR:%lX MR:%lX\n\r", ADC->ADC_CHSR, ADC->ADC_MR);
+            //printf("COR:%lX CGR:%lX EMR:%lX\n\r", ADC->ADC_COR, ADC->ADC_CGR, ADC->ADC_EMR);
 
             // ADC CHIP TEMP CHECK --- REMOVE LATER
             // after a moment:
-            //printf("%x\n", ADC->ADC_CDR[7]);
+            //printf("%x\n\r", ADC->ADC_CDR[7]);
 
-            //printf("Before last tick\n");
-            //printf("Before send\n");
+            //printf("Before last tick\n\r");
+            //printf("Before send\n\r");
 
             //Solenoid_Hit(); 
 
-            //printf("After send\n");
+            //printf("After send\n\r");
 
         }
         if (ticks - solenoid_ticks >= 500) {
@@ -178,7 +186,7 @@ int main()
         }
         
         if(ticks - last_print_tick >= 100) {
-            printf("adc: %d, ref: %d, meas: %d, out: %.4f\n", adc, motor.p_ref, motor.p_measured, pid.output);
+            printf("adc: %d, ref: %d, meas: %d, out: %.4f\n\r", adc, motor.p_ref, motor.p_measured, pid.output);
             last_print_tick = ticks;
         }
 
