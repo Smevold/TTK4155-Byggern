@@ -1,6 +1,6 @@
 #include "State_machine.h"
 
-void SM_Startup(cursor_t* cursor, io_joy_t* joy, io_pad_t* pad, CAN_MSG* msg_tx, CAN_MSG* msg_rx) {
+void SM_Startup(cursor_t* cursor, io_joy_t* joy, io_pad_t* pad) {
     OLED_Clear(cursor);
     OLED_Print(OV_logo, cursor);
     
@@ -13,7 +13,7 @@ void SM_Startup(cursor_t* cursor, io_joy_t* joy, io_pad_t* pad, CAN_MSG* msg_tx,
 }
 
 
-void SM_Menu(io_joy_t* joy, cursor_t* cursor, io_pad_t* pad, uint8_t* state) {
+void SM_Menu(io_joy_t* joy, cursor_t* cursor, io_pad_t* pad, uint8_t* state, CAN_MSG* msg_tx, CAN_MSG* msg_rx) {
     OLED_Clear(cursor);
     Interface_Print_Menu(cursor);
 
