@@ -21,7 +21,7 @@ void Motor(pid_ctrl_t* pid , uint16_t* last_us) {
         PIOC->PIO_SODR |= PIO_PC23;
     } else if (pid->output < 0 - DEADSPACE) {
         // SET PIN 23 PORT C LOW
-        PIOC->PIO_SODR &= ~PIO_PC23;
+        PIOC->PIO_CODR |= PIO_PC23;
     }
 
 
