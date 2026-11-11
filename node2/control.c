@@ -47,9 +47,12 @@ void PID_Controller(pid_ctrl_t* pid, motor_t* motor) {
 void PID_Update_Ref(motor_t* motor, io_joy_t* joy){
     // Hysteresis
     if (((50 - PID_REF_DEADSPACE) <= joy->x) && (joy->x <= (50 + PID_REF_DEADSPACE))) {return;}
+
+    // Linearize ref around 0, and flip direction
+    ref_lin = -(joy->x - 50);
     
-    // Accumulate joy-stick speed reference (linearized around 0) for positional reference
-    uint16_t p_temp = motor->p_ref + (joy->x - 50);
+    // Accumulate joy-stick speed reference for positional reference
+    uint16_t p_temp = motor->p_ref + ref_lin;
 
     if(p_temp > P_MAX){
         p_temp = P_MAX;
