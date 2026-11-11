@@ -49,7 +49,7 @@ void PID_Update_Ref(motor_t* motor, io_joy_t* joy){
     if (((50 - PID_REF_DEADSPACE) <= joy->x) && (joy->x <= (50 + PID_REF_DEADSPACE))) {return;}
 
     // Linearize ref around 0, and flip direction
-    ref_lin = -(joy->x - 50);
+    int8_t ref_lin = -(joy->x - 50);
     
     // Accumulate joy-stick speed reference for positional reference
     uint16_t p_temp = motor->p_ref + ref_lin;
