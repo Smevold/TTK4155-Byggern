@@ -107,6 +107,7 @@ int main()
 
     uint8_t startup_wait = 1;
     uint8_t state = 0;
+    uint8_t score = 0;
 
     
     
@@ -124,7 +125,11 @@ int main()
                 game_start_ticks = ticks;
                 SM_Game_Running(&msg_rx, &msg_tx, &joy, &motor, &pid, &can_last_tick, &last_us_motor, &state);
                 game_end_ticks = ticks;
-                }
-            }
-    }  
-}
+                score = (game_end_ticks - game_start_ticks) / 25;
+                can_rx(&msg_rx);
+                msg_tx.length = 1;
+                msg_tx.byte[0] = score;
+                can_tx(msg_tx);
+        }
+    }
+}  
