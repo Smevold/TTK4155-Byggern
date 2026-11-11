@@ -28,7 +28,7 @@ void Timer_Init() {
 
     // Power Management Controller, enable Timer Counter Clock 0 and 2
     PMC->PMC_PCER0 |= PMC_PCER0_PID27;
-    PMC->PMC_PCER0 |= PMC_PCER0_PID29;
+    PMC->PMC_PCER1 |= PMC_PCER1_PID33;
 
     // TC0
    
@@ -105,7 +105,8 @@ void PWM_Init(){
     PIOB->PIO_ABSR |= PIO_PB12B_PWMH0;
     PIOB->PIO_PDR |= PIO_PB12B_PWMH0;
 
-    PMC->PMC_PCER1 = PMC_PCER1_PID36;
+    PMC->PMC_PCER1 |= PMC_PCER1_PID36;
+    PMC->PMC_PCER0 |= PMC_PCER0_PID12;
 
 
     // Page 1001
