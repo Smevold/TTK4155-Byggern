@@ -13,5 +13,8 @@ typedef struct pid_ctrl_t{
     float output; 
 } pid_ctrl_t;
 
+// PID controller used for the motor
 void PID_Controller(pid_ctrl_t* pid, motor_t* motor);
+
+// update p_ref value wih hyseisis and max min values
 void PID_Update_Ref(motor_t* motor, io_joy_t* joy);
