@@ -93,6 +93,7 @@ void TC0_Handler(void) {
     if (sr & TC_SR_CPCS){
         ticks++;
         pid_tick = 1;
+        p_ref_tick = 1;
     }
 }
 
