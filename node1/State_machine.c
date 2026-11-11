@@ -10,9 +10,9 @@ void SM_Startup(cursor_t* cursor, io_joy_t* joy, io_pad_t* pad, CAN_MSG* msg_tx,
     printf("xmax: %2X, xmin: %2X, ymax: %2X, ymin: %2X\n\r", joy->x_max, joy->x_min, joy->y_max, joy->y_min);
     
     _delay_ms(2000);
-    msg_tx.ID = 0x17;
-    msg_tx.DLC = 0x01;
-    msg_tx.Data[0] = 0x00;
+    msg_tx->ID = 0x17;
+    msg_tx->DLC = 0x01;
+    msg_tx->Data[0] = 0x00;
 }
 
 
