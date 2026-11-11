@@ -1,31 +1,22 @@
 #include "UART_driver.h"
 
-#define F_CPU 4915200UL		/* Define frequency here its 8MHz */
-
-#include<avr/io.h>
-#include<util/delay.h>
-#include <stdlib.h>
-#include <stdio.h>
-
-#define UART_BAUDRATE 9600
-#define BAUD_PRESCALE (((F_CPU / (UART_BAUDRATE * 16UL))) - 1)	
-
-
+// Initalize UART
 void UART_Init( unsigned int ubrr)
 {
+    // Set baud rate for USART
     UBRR0H = (unsigned char)(ubrr>>8);
     UBRR0L = (unsigned char) ubrr;
-    //Transmit enable
-    // receiver enable
+    
+    // Enable receiver and transmitter
     UCSR0B = (1 << RXEN0)|(1 << TXEN0);
 
-    // frame = 8 data, 2 stop
-    
+    // Enable writing to UCSR0C, select 2 stop bits, select 8 bits for character size / data size
     UCSR0C = (1 << URSEL0) | (1 << USBS0) | (3 << UCSZ00);
 
     fdevopen(UART_Transmitter, UART_Receiver);
 }
 
+// Transmit data over UART
 void UART_Transmitter( unsigned char data)
 {
     // Data register empty
@@ -35,43 +26,23 @@ void UART_Transmitter( unsigned char data)
     UDR0 = data; 
 }
 
+// Receive data over UART
 unsigned char UART_Receiver()
 {
     while (( UCSR0A &(1 << RXC0)) == 0); // wait for data
     return (UDR0);
 }
 
+// Transmit a list of data
 void UART_Send (char *str)
 {
+    // Initalize index to iterate over list of input data in str
     unsigned char j = 0;
 
+    // Iterate over str and transmit untill it reaches the end
     while (str[j] != 0)
     {
         UART_Transmitter(str[j]);
         j++;
     }
 }
-
-/*
-void main (void)
-{
-    char c;
-    
-    UART_Init (BAUD_PRESCALE);
-    fdevopen(UART_Transmitter, UART_Receiver);
-    printf("Start");
-    
-    while (1)
-    {
-        //UART_Send("\n\t E");
-        c = UART_Receiver();
-        printf(c);
-        printf("Received");
-        //UART_Transmitter(c); 
-        //printf("Hello");
-        
-        _delay_ms(100);
-    }
-
-}
-*/

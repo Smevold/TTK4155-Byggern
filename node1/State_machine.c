@@ -7,13 +7,13 @@ void SM_Startup(cursor_t* cursor, io_joy_t* joy, io_pad_t* pad) {
     _delay_ms(2000);
     
     Interface_Startup(cursor, joy, pad);
-    printf("xmax: %2X, xmin: %2X, ymax: %2X, ymin: %2X\n", joy->x_max, joy->x_min, joy->y_max, joy->y_min);
+    printf("xmax: %2X, xmin: %2X, ymax: %2X, ymin: %2X\n\r", joy->x_max, joy->x_min, joy->y_max, joy->y_min);
     
     _delay_ms(2000);
 }
 
 
-void SM_Menu(io_joy_t* joy, cursor_t* cursor, io_pad_t* pad) {
+void SM_Menu(io_joy_t* joy, cursor_t* cursor, io_pad_t* pad, uint8_t* state) {
     OLED_Clear(cursor);
     Interface_Print_Menu(cursor);
 
@@ -52,15 +52,27 @@ void SM_Menu(io_joy_t* joy, cursor_t* cursor, io_pad_t* pad) {
         // Joy btn is connected to pin D 4
         joy->btn = PIND & (1 << PIND4);
         if (joy->btn) {
+            // Button is not pressed, do nothing
             OLED_Print_Char(font5, 'X', MEDIUM_FONT);
         } else {
+            // Button is pressed, choose current option
             OLED_Print_Char(font5, 'O', MEDIUM_FONT);
+            switch (menu_option) {
+                // Start game
+                case 0:
+                    *state = 1;
+                    return;
+                // Nothing happens
+                case 1:
+                    break; 
+
+            }
         }
     }
 }
 
 
-void SM_Running(io_joy_t* joy, io_pad_t* pad, CAN_MSG* msg_tx, CAN_MSG* msg_rx, Buttons* btns) {
+void SM_Running(io_joy_t* joy, io_pad_t* pad, CAN_MSG* msg_tx, CAN_MSG* msg_rx, Buttons* btns, uint8_t* state) {
     while(1) {
         // Read and compute ADC/JOY-values
         // Add function: readADCandUpdateJOY? / OR interrupt

@@ -51,9 +51,10 @@ void main(){
     while(1) {
         switch(state) {
             case 0:
-                SM_Menu(&joy, &cursor);
+                SM_Menu(&joy, &cursor, &pad, &state);
+                break;
             case 1:
-                SM_Running(&joy, &pad, &msg_tx, &msg_rx, &btns);
+                SM_Running(&joy, &pad, &msg_tx, &msg_rx, &btns, &state);
                 break;
         }
         
