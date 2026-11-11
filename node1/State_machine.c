@@ -16,9 +16,15 @@ void SM_Startup(cursor_t* cursor, io_joy_t* joy, io_pad_t* pad) {
 void SM_Menu(io_joy_t* joy, io_joy_t* cursor) {
     OLED_Clear(cursor);
     Interface_Print_Menu(cursor);
-    
+
     uint8_t menu_option = 0;
     while(1) {
+        // Read and compute ADC/JOY-values
+        ADC_Read(joy, pad);
+        JOY_Readable_Pos(joy);
+        JOY_Direction(joy);
+        joy->btn = PIND & (1 << PIND4);
+
         Interface_Menu_Nav(joy, cursor, &menu_option);
     }
 }
