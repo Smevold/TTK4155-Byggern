@@ -54,7 +54,7 @@ void main(){
                 SM_Menu(&joy, &cursor, &pad, &state);
                 break;
             case 1:
-                SM_Running(&joy, &pad, &msg_tx, &msg_rx, &btns, &state);
+                SM_Running(&joy, &pad, &cursor, &msg_tx, &msg_rx, &btns, &state);
                 break;
         }
         
