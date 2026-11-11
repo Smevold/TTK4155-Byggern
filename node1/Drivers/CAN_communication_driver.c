@@ -26,9 +26,13 @@
 
 // transmitt buffer
 #define EXIDE               0x03
-// Bit timing
+// Bit timing config reg
+// config 1 
+//Sync jump width length bits
 #define CNF1                0x2A
+//Bit time length bit, Sample point config bit, PS1 length bit, Propagation segment lenght bits
 #define CNF2                0x29
+// sets start of frame signal bit, wake-up filter bit PS2 length bit
 #define CNF3                0x28
 
 #define CANINTF             0x2C
@@ -38,8 +42,11 @@ void CAN_Init(){
     CAN_Controller_RST();
 
     // Bit timing
+    // writes to config 1, length 4 x Tq
     CAN_Write_Controller(CNF1, 0x03); // 0b00000011
+    // writes to config 2, 
     CAN_Write_Controller(CNF2, 0xF0); // 0b11110000
+    // writes to config 3, CLKOUT pin enable for SOF sig PS2 length bit
     CAN_Write_Controller(CNF3, 0x86); // 0b10000110
     
     // Enable interrupt TX buffer
@@ -91,7 +98,7 @@ void CAN_Send_Message(CAN_MSG* msg){
     // (msg->DLC & 0x0F) mask out the 4 most significant bits
     CAN_Write_Controller(0x35, ((0 << 6) | (msg->DLC & 0x0F)));
 
-    // Writes bytes to transmit register. bytes where DLC is how many bytes to write
+    // Writes bytes to transmit buffer(s). bytes where DLC is how many bytes to write
     for (uint8_t i = 0; i < msg->DLC; i++) {
         CAN_Write_Controller(0x36+i, msg->Data[i]);
     }
@@ -115,9 +122,9 @@ void CAN_Receive_Message(CAN_MSG* msg){
     msg->ID = (msg->ID | (CAN_Read_Controller(0x62) >> 5));
     msg->DLC = (CAN_Read_Controller(0x65) & 0x0F);
 
-    // Multiple bytes
+    // loop for reading of multiple bytes
     for (uint8_t i = 0; i < msg->DLC; i++) {
-        //reads revice message buffer
+        //reads revice buffer(s)
         msg->Data[i] = CAN_Read_Controller(0x66+i);
     }
 
