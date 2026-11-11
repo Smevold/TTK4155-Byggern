@@ -22,6 +22,6 @@ typedef struct {
 } motor_t;
 
 void Motor_Init();
-void Motor(io_joy_t* joy, uint16_t* last_us);
+void Motor(pid_ctrl_t* pid , uint16_t* last_us);
 
-void Motor_Position(motor_t* motor);
+void Motor_Get_Position(motor_t* motor);

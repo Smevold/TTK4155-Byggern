@@ -122,13 +122,13 @@ int main()
         if(p_ref_tick == 1) {
             p_ref_tick = 0;
             PID_Update_Ref(&motor, &joy);
-            printf("ref: %d, ", motor.p_ref)
+            printf("ref: %d, ", motor.p_ref);
        }
 
         if (pid_tick == 1) {
             pid_tick = 0;
             // READ MOTOR POS
-            Motor_Position(&motor);
+            Motor_Get_Position(&motor);
             PID_Controller(&pid, &motor);
             printf("meas: %d, out: %d\n", motor.p_measured, pid.output);
             // SET MOTOR SPEED
