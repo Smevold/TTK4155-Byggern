@@ -7,6 +7,7 @@
 #include "adc.h"
 #include "interrupt.h"
 #include "motor.h"
+#include "control.h"
 
 // If not more is needed for the position regulator, consider not using a struct
 typedef struct {
