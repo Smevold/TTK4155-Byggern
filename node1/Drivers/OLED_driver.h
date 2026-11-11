@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <avr/io.h>
+#include <string.h>
 
 #include "SPI_driver.h"
 #include "../Graphics/OLED_graphics.h"
