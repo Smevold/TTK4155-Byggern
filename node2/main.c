@@ -3,6 +3,36 @@
 #include "sam.h"
 
 /*
+------------- TODO --------------
+- Cleanup
+- Add switch state in main
+
+- Startup-state
+    - Send startup finished over CAN
+
+- Menu-state
+    - Change menu-options
+    - Make menu-options change to correct state
+
+- Running-state
+    - Update servo, motor and servo continuously
+    - Send solenoid signal from USER IO BOARD
+    - ON GAME END:
+        - SAVE SCORE (GAME_START_TICK - GAME_END_TICK)
+
+- Game-over-state
+    - Display score
+    - Add menu-options
+    - (Optional) tune controller better, game should be playable
+
+- Exit
+    - Break out of game loop?
+
+*/
+
+
+
+/*
  * Remember to update the Makefile with the (relative) path to the uart.c file.
  * This starter code will not compile until the UART file has been included in the Makefile. 
  * If you get somewhat cryptic errors referencing functions such as _sbrk, 
@@ -72,8 +102,13 @@ int main()
 
     uint16_t adc = 0;
 
+    // Startup wait
+    while(startupnotfinished) {;}
+
     while (1)
     {
+
+
         // --- CAN JOY TO PWM TEST BEGIN ---
         
 
