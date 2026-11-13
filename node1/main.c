@@ -57,7 +57,7 @@ void main(){
                 SM_Running(&joy, &pad, &cursor, &msg_tx, &msg_rx, &btns, &state);
                 break;
             case 2:
-                SM_Game_Over(&cursor, &msg_tx, &msg_rx);
+                SM_Game_Over(&joy, &pad, &cursor, &msg_tx, &msg_rx, &state);
                 break;
         }
         
