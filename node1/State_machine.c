@@ -113,7 +113,7 @@ void SM_Running(io_joy_t* joy, io_pad_t* pad, cursor_t* cursor, CAN_MSG* msg_tx,
     }
 }
 
-void SM_Game_Over(cursor_t* cursor, CAN_MSG* msg_tx, CAN_MSG* msg_rx) {
+void SM_Game_Over(io_joy_t* joy, io_pad_t* pad, cursor_t* cursor, CAN_MSG* msg_tx, CAN_MSG* msg_rx, uint8_t* state) {
     CAN_Send_Message(msg_tx); // Unimportant what we send
     CAN_Receive_Message(msg_rx); // Should receive score
 

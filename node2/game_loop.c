@@ -1,6 +1,6 @@
 #include "game_loop.h"
 
-void SM_Game_Running(CanMsg* msg_rx, CanMsg* msg_tx, io_joy_t* joy, motor_t* motor, pid_ctrl_t* pid, uint32_t* can_last_tick, uint32_t* last_us_motor, uint8_t* state){
+void SM_Game_Running(CanMsg* msg_rx, CanMsg* msg_tx, io_joy_t* joy, motor_t* motor, pid_ctrl_t* pid, uint32_t* can_last_tick, uint32_t* last_us_motor, uint8_t* state, uint32_t* last_us_servo){
     while (1) {
         if (!IR_result()){
             *state = 0;
@@ -38,6 +38,8 @@ void SM_Game_Running(CanMsg* msg_rx, CanMsg* msg_tx, io_joy_t* joy, motor_t* mot
         if (!joy->btn) {
             Solenoid_Hit();
         }
+
+        
         
         if (pid_tick == 1) {
             pid_tick = 0;
@@ -45,6 +47,7 @@ void SM_Game_Running(CanMsg* msg_rx, CanMsg* msg_tx, io_joy_t* joy, motor_t* mot
             Motor_Get_Position(motor);
             PID_Controller(pid, motor);
             Motor(pid, last_us_motor);// SET MOTOR SPEED
+            PWM_Set_Duty_Cycle(joy->y, last_us_servo, 1);
         }
         /*
         if(ticks - last_print_tick >= 100) {

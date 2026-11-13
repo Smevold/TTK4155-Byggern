@@ -17,4 +17,4 @@
 void SM_Startup(cursor_t* cursor, io_joy_t* joy, io_pad_t* pad);
 void SM_Menu(io_joy_t* joy, cursor_t* cursor, io_pad_t* pad, uint8_t* state, CAN_MSG* msg_tx, CAN_MSG* msg_rx);
 void SM_Running(io_joy_t* joy, io_pad_t* pad, cursor_t* cursor, CAN_MSG* msg_tx, CAN_MSG* msg_rx, Buttons* btns, uint8_t* state);
-void SM_Game_Over(cursor_t* cursor, CAN_MSG* msg_tx, CAN_MSG* msg_rx);
+void SM_Game_Over(io_joy_t* joy, io_pad_t* pad, cursor_t* cursor, CAN_MSG* msg_tx, CAN_MSG* msg_rx, uint8_t* state);
